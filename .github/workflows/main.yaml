@@ -1,0 +1,38 @@
+name: Main Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r requirements.txt
+
+    - name: Configure AWS profile
+      run: |
+        aws configure set region eu-central-1 --profile cloud-outdated-deploy-dev
+        aws configure set output json --profile cloud-outdated-deploy-dev
+        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile cloud-outdated-deploy-dev
+        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}  --profile cloud-outdated-deploy-dev
+
+    - name: Zappa deployments
+      run: |
+        source venv/bin/activate
+        python manage.py collectstatic
+        zappa update dev
