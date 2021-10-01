@@ -1,0 +1,14 @@
+{
+    "dev": {
+        "aws_region": "eu-central-1",
+        "django_settings": "app.settings",
+        "profile_name": "cloud-outdated-deploy-dev",
+        "project_name": "cloud-outdated",
+        "runtime": "python3.8",
+        "s3_bucket": "cloud-outdated-dev",
+        "events": [{
+            "function": "app.tasks.task_one",
+            "expression": "rate(1 minute)"
+        }]
+    }
+}

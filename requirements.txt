@@ -1,0 +1,6 @@
+Django
+zappa
+black
+whitenoise
+troposphere<3
+google-api-python-client

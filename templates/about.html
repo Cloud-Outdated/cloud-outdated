@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class="bg-light py-5 border-bottom">
+            <div class="container px-5 my-5">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bolder">About our services</h2>
+                    <p class="lead mb-0">Pricing plans</p>
+                </div>
+                <div class="row gx-5 justify-content-center">
+                    <!-- Pricing card free-->
+                    <div class="col-lg-6 col-xl-4">
+                        <div class="card mb-5 mb-xl-0">
+                            <div class="card-body p-5">
+                                <div class="small text-uppercase fw-bold text-muted">Free</div>
+                                <div class="mb-3">
+                                    <span class="display-4 fw-bold">$0</span>
+                                    <span class="text-muted">/ mo.</span>
+                                </div>
+                                <ul class="list-unstyled mb-4">
+                                    <li class="mb-2">
+                                        <i class="bi bi-check text-primary"></i>
+                                        <strong>1 users</strong>
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-check text-primary"></i>
+                                        Subscribe to any service
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-check text-primary"></i>
+                                        Weekly report
+                                    </li>
+                                    <li class="mb-2">
+                                        <i class="bi bi-x"></i>
+                                        Request new services
+                                    </li>
+                                    <li class="mb-2 text-muted">
+                                        <i class="bi bi-x"></i>
+                                        *In the future we might charge all users
+                                    </li>
+                                </ul>
+                                <div class="d-grid"><a class="btn btn-outline-primary" href="#!">Choose plan</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+{% endblock %}
