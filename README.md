@@ -29,3 +29,16 @@ The code is that matters here.
 - not tested
     - RDS connection
         - there might be some issues with psycopg2 driver
+
+## Infrastructure
+
+Infrastructure is managed via Terraform and [Terraform Cloud](https://app.terraform.io/) is used as the executor.
+
+There are two workspaces: `dev` and `prod`.
+
+Use aws-vault and an admin user to switch to desired workspace and apply changes:
+
+```
+aws-vault exec cloud-outdated-x -- terraform workspace select dev
+aws-vault exec cloud-outdated-x -- terraform apply
+```
