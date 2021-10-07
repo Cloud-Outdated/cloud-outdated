@@ -35,10 +35,10 @@ COMPANY_NAME = "Cloud Outdated"
 # SECRET_KEY = ENV.str("DJANGO_SECRET_KEY")
 SECRET_KEY = "foo243249832749832798fsfkjsdhf-3333"
 # DUMMY_VALUE = ENV.str("DUMMY_VALUE")
-DUMMY_VALUE = "foo-bar-hardcoded"
+DUMMY_VALUE = env("DUMMY_VALUE")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = [
     "b4eu57c6a2.execute-api.eu-central-1.amazonaws.com",
