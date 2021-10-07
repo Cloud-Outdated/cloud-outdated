@@ -33,6 +33,7 @@ DEBUG = env("DEBUG")
 ALLOWED_HOSTS = [
     "b4eu57c6a2.execute-api.eu-central-1.amazonaws.com",
     "127.0.0.1",
+    "localhost",
 ]
 
 DATABASES = {
