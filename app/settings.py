@@ -26,7 +26,7 @@ COMPANY_NAME = "Cloud Outdated"
 SECRET_KEY = "django-insecure-u$jn)q-)i87^*ff=67w#-@lgd%ql0oy^(7e$u$ubjpx%h7ci@a"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "b4eu57c6a2.execute-api.eu-central-1.amazonaws.com",
