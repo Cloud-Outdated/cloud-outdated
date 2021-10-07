@@ -1,6 +1,16 @@
 # cloud-outdated
 Service that tracks cloud products versions and releases
 
+## Local Development
+
+Requires docker, docker-compose and make
+
+Commands:
+- `make start`, to start server
+- `make stop`, to stop server
+- `make rebuild`, to rebuild docker images
+- `make destroy`, to stop server and delete volumes
+
 ## Zappa Django + periodic tasks
 
 Please note that this is using my local AWS credentials and deploying in my personal AWS account.

@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:13
+    restart: always
+    env_file:
+      - .env.local
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+
+  django:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    restart: always
+    expose:
+      - "8020"
+    ports:
+      - "8020:8020"
+    links:
+      - postgres:postgres
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+      - /usr/src/app/staticfiles
+    entrypoint: ./start_app.sh
+    env_file:
+      - .env.local
+
+volumes:
+  database-data:
