@@ -29,3 +29,43 @@ resource "aws_ssm_parameter" "app-secret-key" {
     value       = random_string.app-secret-key.result
     overwrite   = true
 }
+
+resource "aws_ssm_parameter" "postgres-db-name" {
+    name        = "/${local.project}/${var.environment}/POSTGRES_DB"
+    description = "DB name"
+    type        = "SecureString"
+    value       = module.rds.db_instance_name
+    overwrite   = true
+}
+
+resource "aws_ssm_parameter" "postgres-db-host" {
+    name        = "/${local.project}/${var.environment}/POSTGRES_HOST"
+    description = "DB host"
+    type        = "SecureString"
+    value       = module.rds.db_instance_endpoint
+    overwrite   = true
+}
+
+resource "aws_ssm_parameter" "postgres-db-post" {
+    name        = "/${local.project}/${var.environment}/POSTGRES_PORT"
+    description = "DB port"
+    type        = "SecureString"
+    value       = module.rds.db_instance_port
+    overwrite   = true
+}
+
+resource "aws_ssm_parameter" "postgres-db-user" {
+    name        = "/${local.project}/${var.environment}/POSTGRES_USER"
+    description = "DB user"
+    type        = "SecureString"
+    value       = module.rds.db_instance_username
+    overwrite   = true
+}
+
+resource "aws_ssm_parameter" "postgres-db-password" {
+    name        = "/${local.project}/${var.environment}/POSTGRES_PASSWORD"
+    description = "DB password"
+    type        = "SecureString"
+    value       = module.rds.db_instance_password
+    overwrite   = true
+}

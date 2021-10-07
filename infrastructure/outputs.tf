@@ -17,7 +17,7 @@ output "rds_username" {
 }
 
 output "rds_password" {
-  description = "RDS instance root password"
-  value       = module.rds.db_master_password
+  description = "RDS instance password"
+  value       = module.rds.db_instance_password
   sensitive   = true
 }
