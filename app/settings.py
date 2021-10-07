@@ -20,9 +20,9 @@ env = environ.Env(
 )
 
 # BASE_DIR = environ.Path(__file__) - 2
-# BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 # ENV.read_env(str(BASE_DIR.path(ENV.str("ENV_PATH", ".env.dev"))))
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 environ.Env.read_env(os.path.join(BASE_DIR, ".env.dev"))
 
 COMPANY_NAME = "Cloud Outdated"
