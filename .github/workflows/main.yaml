@@ -33,7 +33,7 @@ jobs:
 
     - name: Build .env file
       run: |
-        curl -s https://packagecloud.io/install/repositories/segment/chamber/script.deb.sh | sudo bash apt-get install -y chamber
+        curl -LOs https://github.com/segmentio/chamber/releases/download/v2.10.6/chamber-v2.10.6-linux-amd64
         chamber export cloud-outdated/dev --format dotenv >> .env.dev
 
     - name: Zappa deployments
