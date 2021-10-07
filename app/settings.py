@@ -10,16 +10,20 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import environ
 import os
 from pathlib import Path
-import environ
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-ENV = environ.Env()
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 
-BASE_DIR = environ.Path(__file__) - 2
+# BASE_DIR = environ.Path(__file__) - 2
 # BASE_DIR = Path(__file__).resolve().parent.parent
-ENV.read_env(str(BASE_DIR.path(ENV.str("ENV_PATH", ".env.dev"))))
+# ENV.read_env(str(BASE_DIR.path(ENV.str("ENV_PATH", ".env.dev"))))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+environ.Env.read_env(os.path.join(BASE_DIR, ".env.dev"))
 
 COMPANY_NAME = "Cloud Outdated"
 
