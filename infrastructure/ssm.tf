@@ -29,11 +29,3 @@ resource "aws_ssm_parameter" "app-secret-key" {
     value       = random_string.app-secret-key.result
     overwrite   = true
 }
-
-resource "aws_ssm_parameter" "dummy-value" {
-    name        = "/${local.project}/${var.environment}/DUMMY_VALUE"
-    description = "dummy value to test dotenv loading"
-    type        = "SecureString"
-    value       = "foo-bar-baz"
-    overwrite   = true
-}

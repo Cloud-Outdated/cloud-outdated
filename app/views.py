@@ -4,7 +4,7 @@ from django.views.generic.base import TemplateView
 
 class PageTitleMixin:
     def get_page_title(self, context):
-        return getattr(self, "page_title", f"{settings.COMPANY_NAME} - {settings.DUMMY_VALUE}")
+        return getattr(self, "page_title", settings.COMPANY_NAME)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
