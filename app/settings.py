@@ -30,7 +30,8 @@ COMPANY_NAME = "Cloud Outdated"
 # SECURITY WARNING: keep the secret key used in production secret!
 # SECRET_KEY = ENV.str("DJANGO_SECRET_KEY")
 SECRET_KEY = "foo243249832749832798fsfkjsdhf-3333"
-DUMMY_VALUE = ENV.str("DUMMY_VALUE")
+# DUMMY_VALUE = ENV.str("DUMMY_VALUE")
+DUMMY_VALUE = "foo-bar-hardcoded"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
