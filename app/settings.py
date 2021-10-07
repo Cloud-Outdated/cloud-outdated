@@ -12,9 +12,14 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 from pathlib import Path
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+ENV = environ.Env()
+
+BASE_DIR = environ.Path(__file__) - 2
+# BASE_DIR = Path(__file__).resolve().parent.parent
+ENV.read_env(str(BASE_DIR.path(ENV.str("ENV_PATH", ".env"))))
 
 COMPANY_NAME = "Cloud Outdated"
 
@@ -23,7 +28,8 @@ COMPANY_NAME = "Cloud Outdated"
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-u$jn)q-)i87^*ff=67w#-@lgd%ql0oy^(7e$u$ubjpx%h7ci@a"
+SECRET_KEY = ENV.str("DJANGO_SECRET_KEY")
+DUMMY_VALUE = ENV.str("DUMMY_VALUE")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False

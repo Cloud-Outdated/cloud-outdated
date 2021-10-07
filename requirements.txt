@@ -5,3 +5,4 @@ whitenoise
 troposphere<3
 google-api-python-client
 psycopg2-binary
+django-environ
