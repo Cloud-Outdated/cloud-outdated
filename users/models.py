@@ -1,9 +1,9 @@
 from django.contrib.auth.models import (
-    AbstractBaseUser,
-    PermissionsMixin,
+    AbstractUser,
     BaseUserManager,
 )
 from django.db import models
+from django.utils import timezone
 
 
 class UserProfileManager(BaseUserManager):
@@ -33,14 +33,16 @@ class UserProfileManager(BaseUserManager):
         return user
 
 
-class UserProfile(AbstractBaseUser, PermissionsMixin):
+class UserProfile(AbstractUser):
     """Database model for users in the system"""
 
     email = models.EmailField(max_length=255, unique=True)
+    created = models.DateTimeField(default=timezone.now)
 
     objects = UserProfileManager()
 
     USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         """Return string representation of our user"""
