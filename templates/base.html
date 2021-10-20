@@ -13,48 +13,125 @@
 
 
     <!-- Required Stylesheets -->
-    <link
-      type="text/css"
-      rel="stylesheet"
-      href="https://unpkg.com/bootstrap@5.1.1/dist/css/bootstrap.min.css"
-    />
-    <link
-      type="text/css"
-      rel="stylesheet"
-      href="https://unpkg.com/bootstrap-vue@2.21.2/dist/bootstrap-vue.css"
-    />
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 
     <!-- Load polyfills to support older browsers -->
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"></script>
 
     <!-- Required scripts -->
     <script src="https://unpkg.com/vue@2.6.14/dist/vue.js"></script>
-    <script src="https://unpkg.com/bootstrap-vue@2.21.2/dist/bootstrap-vue.js"></script>
 
     <!-- Load utilities -->
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+
+    <style>
+      .gradient {
+        background: linear-gradient(90deg, #3d33d5 0%, #5188da 100%);
+      }
+    </style>
   </head>
-  <body>
+  <body class="leading-normal tracking-normal text-white gradient">
     <!-- Our application root element -->
     <div id="app">
       <!-- Responsive navbar-->
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-          <div class="container px-5">
-              <a class="navbar-brand" href="#!">{{company_name}}</a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                      <li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
-                      <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
-                  </ul>
-              </div>
+      <nav id="header" class="fixed w-full z-30 top-0 text-white bg-white shadow">
+        <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2">
+          <div class="pl-4 flex items-center">
+            <a class="text-gray-900 no-underline hover:no-underline font-bold text-2xl lg:text-4xl" href="#">
+              {{page_title}}
+            </a>
           </div>
+          <div class="block lg:hidden pr-4">
+            <button id="nav-toggle" class="flex items-center p-1 text-pink-800 hover:text-gray-900 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+            </button>
+          </div>
+          <div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden mt-2 lg:mt-0 bg-white lg:bg-transparent text-black p-4 lg:p-0 z-20" id="nav-content">
+            <ul class="list-reset lg:flex justify-end flex-1 items-center">
+              <li class="mr-3">
+                <a class="inline-block py-2 px-4 text-black font-bold no-underline" href="#">Home</a>
+              </li>
+              <li class="mr-3">
+                <a class="inline-block text-black no-underline hover:text-gray-800 hover:text-underline py-2 px-4" href="/about">About</a>
+              </li>
+            </ul>
+            <button
+              id="navAction"
+              class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full mt-4 lg:mt-0 py-4 px-8 shadow opacity-75 focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+            >
+              Sign Up
+            </button>
+          </div>
+        </div>
+        <hr class="border-b border-gray-100 opacity-25 my-0 py-0" />
       </nav>
       {% block content %}
       {% endblock %}
-      <!-- Footer-->
-      <footer class="py-5 bg-dark">
-          <div class="container px-5"><p class="m-0 text-center text-white">Copyright &copy; {{company_name}} 2021</p></div>
+      <div class="relative -mt-12 lg:-mt-24">
+      </div>
+      <!--Footer-->
+      <footer class="bg-white">
+        <div class="container mx-auto px-8">
+          <div class="w-full flex flex-col md:flex-row py-6">
+            <div class="flex-1 mb-6 text-black">
+              <a class="text-pink-600 no-underline hover:no-underline font-bold text-2xl lg:text-4xl" href="#">
+                {{company_name}}
+              </a>
+            </div>
+            <div class="flex-1">
+              <p class="uppercase text-gray-500 md:mb-6">Links</p>
+              <ul class="list-reset mb-6">
+                <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                  <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">FAQ</a>
+                </li>
+                <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                  <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">Help</a>
+                </li>
+                <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                  <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">Support</a>
+                </li>
+              </ul>
+            </div>
+            <div class="flex-1">
+              <p class="uppercase text-gray-500 md:mb-6">Legal</p>
+              <ul class="list-reset mb-6">
+                <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                  <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">Terms</a>
+                </li>
+                <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                  <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">Privacy</a>
+                </li>
+              </ul>
+            </div>
+            <div class="flex-1">
+              <p class="uppercase text-gray-500 md:mb-6">Social</p>
+              <ul class="list-reset mb-6">
+                <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                  <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">Facebook</a>
+                </li>
+                <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                  <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">Linkedin</a>
+                </li>
+                <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                  <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">Twitter</a>
+                </li>
+              </ul>
+            </div>
+            <div class="flex-1">
+              <p class="uppercase text-gray-500 md:mb-6">Company</p>
+              <ul class="list-reset mb-6">
+                <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                  <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">Official Blog</a>
+                </li>
+                <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                  <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">About Us</a>
+                </li>
+                <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+                  <a href="#" class="no-underline hover:underline text-gray-800 hover:text-pink-500">Contact</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   </body>

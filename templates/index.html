@@ -1,60 +1,112 @@
 {% extends 'base.html' %}
 
 {% block content %}
-        <!-- Header-->
-        <header class="bg-dark py-5">
-            <div class="container px-5">
-                <div class="row gx-5 justify-content-center">
-                    <div class="col-lg-6">
-                        <div class="text-center my-5">
-                            <h1 class="display-5 fw-bolder text-white mb-2">Personalized digest of updates for cloud services</h1>
-                            <p class="lead text-white-50 mb-4">Get notified when an updated version of a cloud service you use is available gently nudging you to plan an update!</p>
-                            <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-                                <a class="btn btn-primary btn-lg px-4 me-sm-3" href="#features">Get Started</a>
-                            </div>
-                        </div>
-                    </div>
+    <!--Hero-->
+    <div class="pt-24">
+    <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
+        <!--Left Col-->
+        <div class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
+        <p class="uppercase tracking-loose w-full">Personalized digest of updates for cloud services</p>
+        <h1 class="my-4 text-5xl font-bold leading-tight">
+            Stay up to date
+        </h1>
+        <p class="leading-normal text-2xl mb-8">
+            Get notified when an updated version of a cloud service you use is available gently nudging you to plan an update!
+        </p>
+        <button class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+            Get Started
+        </button>
+        </div>
+        <!--Right Col-->
+        <div class="w-full md:w-3/5 py-6 text-center">
+        </div>
+    </div>
+    <!-- Features section-->
+    <section class="bg-white border-b py-8">
+        <div class="container mx-auto flex flex-wrap pt-4 pb-12">
+          <h1 class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800">
+            Supported services
+          </h1>
+          <div class="w-full mb-4">
+            <div class="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
+          </div>
+          <div class="w-full md:w-1/4 p-6 flex flex-col flex-grow flex-shrink">
+            <div class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow">
+              <a href="#" class="flex flex-wrap no-underline hover:no-underline">
+                <div class="w-full font-bold text-xl text-gray-800 px-6">
+                  AWS
                 </div>
+                <p class="text-gray-800 text-base px-6 mb-5">
+                  RDS, Elasticache, Kafka, DocDB, Memory, MQ, Redshift, Athena, ElasticBeanstalk, ES, (ElasticSearch), OpenSearch, Neptune, EKS, Fargate.
+                </p>
+              </a>
             </div>
-        </header>
-        <!-- Features section-->
-        <section class="py-5 border-bottom" id="features">
-            <div class="container px-5 my-5">
-                <div class="row gx-5">
-                    <div class="col-lg-3 mb-5 mb-lg-0">
-                        <h2 class="h4 fw-bolder">AWS</h2>
-                        <p>Supported services: RDS, Elasticache, Kafka, DocDB, Memory, MQ, Redshift, Athena, ElasticBeanstalk, ES, (ElasticSearch), OpenSearch, Neptune, EKS, Fargate.</p>
-                        <a class="text-decoration-none" href="#!">
-                            Subscribe
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 mb-5 mb-lg-0">
-                        <h2 class="h4 fw-bolder">Azure</h2>
-                        <p>Supported services: Databricks, HDInsight, Kubernetes, MariaDB, Postgres, Redis, MySQL.</p>
-                        <a class="text-decoration-none" href="#!">
-                            Subscribe
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-                    <div class="col-lg-3">
-                        <h2 class="h4 fw-bolder">Google Cloud</h2>
-                        <p>Supported services: Cloud, SQL, Dataproc, Kubernetes, Composer, MemoryStore, Spanner, Apigee, VMware, Engine.</p>
-                        <a class="text-decoration-none" href="#!">
-                            Subscribe
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
-                    <div class="col-lg-3">
-                        <h2 class="h4 fw-bolder">Personalized</h2>
-                        <p>Make a request for a personalized report. If you need a service that is not listed, submit a request and we'll add that for you.</p>
-                        <a class="text-decoration-none" href="#!">
-                            Make a request
-                            <i class="bi bi-arrow-right"></i>
-                        </a>
-                    </div>
+            <div class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
+              <div class="flex items-center justify-start">
+                <button class="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+                  Subscribe
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="w-full md:w-1/4 p-6 flex flex-col flex-grow flex-shrink">
+            <div class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow">
+              <a href="#" class="flex flex-wrap no-underline hover:no-underline">
+                <div class="w-full font-bold text-xl text-gray-800 px-6">
+                  Azure
                 </div>
+                <p class="text-gray-800 text-base px-6 mb-5">
+                  Databricks, HDInsight, Kubernetes, MariaDB, Postgres, Redis, MySQL.
+                </p>
+              </a>
             </div>
-        </section>
-        <!-- Pricing section-->
+            <div class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
+              <div class="flex items-center justify-center">
+                <button class="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+                  Subscribe
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="w-full md:w-1/4 p-6 flex flex-col flex-grow flex-shrink">
+            <div class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow">
+              <a href="#" class="flex flex-wrap no-underline hover:no-underline">
+                <div class="w-full font-bold text-xl text-gray-800 px-6">
+                  Google Cloud
+                </div>
+                <p class="text-gray-800 text-base px-6 mb-5">
+                  Cloud, SQL, Dataproc, Kubernetes, Composer, MemoryStore, Spanner, Apigee, VMware, Engine.
+                </p>
+              </a>
+            </div>
+            <div class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
+              <div class="flex items-center justify-end">
+                <button class="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+                  Subscribe
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="w-full md:w-1/4 p-6 flex flex-col flex-grow flex-shrink">
+            <div class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow">
+              <a href="#" class="flex flex-wrap no-underline hover:no-underline">
+                <div class="w-full font-bold text-xl text-gray-800 px-6">
+                  Personalized
+                </div>
+                <p class="text-gray-800 text-base px-6 mb-5">
+                  Make a request for a personalized report. If you need a service that is not listed, submit a request and we'll add that for you.
+                </p>
+              </a>
+            </div>
+            <div class="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow p-6">
+              <div class="flex items-center justify-end">
+                <button class="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+                  Make a request
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
 {% endblock %}
