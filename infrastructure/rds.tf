@@ -27,7 +27,7 @@ module "rds" {
   vpc_security_group_ids = [module.security_group.security_group_id]
 
   # Database Deletion Protection
-  # deletion_protection = true
+  deletion_protection = true
 
   parameters = [
     {
