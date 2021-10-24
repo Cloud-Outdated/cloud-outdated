@@ -5,6 +5,8 @@ from django.contrib.auth.models import (
 from django.db import models
 from django.utils import timezone
 
+from core.models import BaseModelMixin
+
 
 class UserProfileManager(BaseUserManager):
     """Manager for user profiles"""
@@ -33,11 +35,10 @@ class UserProfileManager(BaseUserManager):
         return user
 
 
-class UserProfile(AbstractUser):
+class UserProfile(AbstractUser, BaseModelMixin):
     """Database model for users in the system"""
 
     email = models.EmailField(max_length=255, unique=True)
-    created = models.DateTimeField(default=timezone.now)
 
     objects = UserProfileManager()
 
