@@ -7,9 +7,8 @@ from .base import service_choices
 class Version(BaseModelMixin):
     """Service version as reported by the provider."""
 
-    created = models.DateTimeField(...)
     service = models.CharField(choices=service_choices, max_length=255)
-    version = models.CharField()
+    version = models.CharField(max_length=100)
     released = models.DateField(
         null=True,
         blank=True,
