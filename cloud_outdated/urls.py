@@ -21,5 +21,5 @@ from core.views import AboutView, IndexView
 urlpatterns = [
     path("", IndexView.as_view()),
     path("about/", AboutView.as_view()),
-    path("admin/", admin.site.urls),
+    path("dlxusdprq-uzbdhomvw/", admin.site.urls),
 ]
