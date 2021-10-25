@@ -44,3 +44,4 @@ jobs:
         source venv/bin/activate
         python manage.py collectstatic
         zappa update dev
+        zappa manage dev showmigrations
