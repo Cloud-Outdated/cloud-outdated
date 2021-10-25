@@ -8,7 +8,7 @@
         "s3_bucket": "cloud-outdated-dev",
         "events": [{
             "function": "core.tasks.task_one",
-            "expression": "rate(1 minute)"
+            "expression": "rate(2 hours)"
         }]
     }
 }
