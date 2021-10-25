@@ -6,6 +6,14 @@
         "project_name": "cloud-outdated",
         "runtime": "python3.8",
         "s3_bucket": "cloud-outdated-dev",
+        "vpc_config" : {
+            "SubnetIds": [
+                "subnet-0962206a87ad2be1d",
+                "subnet-0c994abd4ba90d866",
+                "subnet-008c38712dbb65866"
+            ],
+            "SecurityGroupIds": ["sg-0a939621e2e320416"]
+        },
         "events": [{
             "function": "core.tasks.task_one",
             "expression": "rate(2 hours)"
