@@ -29,7 +29,7 @@ The code is that matters here.
     - use Zappa to deploy django app - test single view and template
         - https://b4eu57c6a2.execute-api.eu-central-1.amazonaws.com/dev & https://b4eu57c6a2.execute-api.eu-central-1.amazonaws.com/dev/about/
     - use Zappa with [whitenoise](http://whitenoise.evans.io/en/stable/)
-        - https://b4eu57c6a2.execute-api.eu-central-1.amazonaws.com/dev/admin/
+        - https://b4eu57c6a2.execute-api.eu-central-1.amazonaws.com/dev/dlxusdprq-uzbdhomvw/
         - for staticfiles to work:
             - see `STATIC_X` settings in `settings.py`
             - run locally `./manage.py collectstatic` and then deploy
