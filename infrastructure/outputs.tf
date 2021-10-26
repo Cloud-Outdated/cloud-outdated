@@ -1,7 +1,7 @@
 output "rds_endpoint" {
   description = "RDS instance endpoint"
   value       = module.rds.db_instance_endpoint
-  sensitive   = true
+  sensitive   = false
 }
 
 output "rds_port" {
@@ -34,4 +34,8 @@ output "rds_vpc_security_group_ids" {
   sensitive = false
 }
 
-  
+output "acm_certificate_arn" {
+  description = "ACM certificate ARN for the website"
+  value = aws_acm_certificate.main.arn
+  sensitive = false
+}

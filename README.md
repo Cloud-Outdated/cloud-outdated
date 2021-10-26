@@ -52,3 +52,7 @@ Use aws-vault and an admin user to switch to desired workspace and apply changes
 aws-vault exec cloud-outdated-x -- terraform workspace select dev
 aws-vault exec cloud-outdated-x -- terraform apply
 ```
+
+### Zappa config from infra changes
+
+After terraform changes have been applied `zappa_settings.json` file can be populated with appropriate values.
