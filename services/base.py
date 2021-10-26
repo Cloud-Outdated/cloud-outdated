@@ -61,6 +61,12 @@ services = {
         label="GKE",
         name_alternatives=["Google Kubernetes Engine"],
     ),
+    "aks": Service(
+        platform=azure,
+        name="aks",
+        label="AKS",
+        name_alternatives=["Azure Kubernetes Service"],
+    ),
     # ...
 }
 

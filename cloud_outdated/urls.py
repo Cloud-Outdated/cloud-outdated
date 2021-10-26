@@ -17,9 +17,11 @@ from django.contrib import admin
 from django.urls import path
 
 from core.views import AboutView, IndexView
+from users.views import UserSubscriptionsView
 
 urlpatterns = [
     path("", IndexView.as_view()),
     path("about/", AboutView.as_view()),
+    path("user-subscriptions/", UserSubscriptionsView.as_view()),
     path("dlxusdprq-uzbdhomvw/", admin.site.urls),
 ]

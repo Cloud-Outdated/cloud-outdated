@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="pt-24">
+    <!-- Features section-->
+    <section class="bg-white border-b py-8">
+        <div class="container mx-auto flex flex-wrap pt-4 pb-12">
+          <h1 class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800">
+            Sign up
+          </h1>
+          <div class="w-full mb-4">
+            <div class="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
+          </div>
+          <div class="w-full max-w-4xl mx-auto">
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+              <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="email">
+                  Email
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="email" type="text" placeholder="Email">
+              </div>
+              <hr>
+              <div class="flex items-center justify-between">
+                <h3 class="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">
+                  AWS
+                </h3>
+                <div class="w-full text-gray-700">
+                  {% for s in aws_services %}
+                    <label class="inline-flex items-center">
+                      <input type="checkbox" class="form-checkbox" value="{{ s.0 }}">
+                      <span class="ml-2">{{ s.1.label }}</span>
+                    </label>
+                  {% endfor %}
+                </div>
+              </div>
+              <hr>
+              <div class="flex items-center justify-between">
+                <h3 class="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">
+                  GCP
+                </h3>
+                <div class="w-full text-gray-700">
+                  {% for s in gcp_services %}
+                    <label class="inline-flex items-center">
+                      <input type="checkbox" class="form-checkbox" value="{{ s.0 }}">
+                      <span class="ml-2">{{ s.1.label }}</span>
+                    </label>
+                  {% endfor %}
+                </div>
+              </div>
+              <hr>
+              <div class="flex items-center justify-between">
+                <h3 class="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">
+                  Azure
+                </h3>
+                <div class="w-full text-gray-700">
+                  {% for s in azure_services %}
+                    <label class="inline-flex items-center">
+                      <input type="checkbox" class="form-checkbox" value="{{ s.0 }}">
+                      <span class="ml-2">{{ s.1.label }}</span>
+                    </label>
+                  {% endfor %}
+                </div>
+              </div>
+              <hr>
+              <div class="flex items-center justify-between">
+                <button class="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out" type="submit">
+                  Subscribe
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+{% endblock %}
