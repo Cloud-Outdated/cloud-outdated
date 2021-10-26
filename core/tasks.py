@@ -6,3 +6,5 @@ def task_one():
     # here we can define periodic tasks
     # and call them in zappa_settings.json
     print(f"test event printout - {datetime.datetime.now().isoformat()}")
+    print(settings.DATABASES["default"]["POSTGRES_HOST"])
+    print(settings.DATABASES["default"]["PORT"])

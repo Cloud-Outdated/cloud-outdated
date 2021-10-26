@@ -7,7 +7,7 @@
         "runtime": "python3.8",
         "events": [{
             "function": "core.tasks.task_one",
-            "expression": "rate(2 hours)"
+            "expression": "rate(1 minute)"
         }]
     },
     "dev": {
