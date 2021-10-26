@@ -42,7 +42,7 @@ resource "aws_ssm_parameter" "postgres-db-host" {
     name        = "/${local.project}/${var.environment}/POSTGRES_HOST"
     description = "DB host"
     type        = "SecureString"
-    value       = module.rds.db_instance_endpoint
+    value       = module.rds.db_instance_address
     overwrite   = true
 }
 
