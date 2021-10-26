@@ -3,6 +3,8 @@ from django.shortcuts import render
 from core.views import BaseView
 from services.base import services, aws, gcp, azure
 
+from .email import UserRegistrationEmail
+
 
 class UserSubscriptionsView(BaseView):
     template_name = "user-subscriptions.html"
@@ -25,3 +27,11 @@ class UserSubscriptionsView(BaseView):
             if service.platform == azure
         ]
         return context
+
+    def post(self, request, *args, **kwargs):
+        post_data = request.POST
+
+        UserRegistrationEmail().send(to=[post_data.get("email")])
+        # return HttpResponseRedirect("/thanks/")
+
+        return render(request, self.template_name, {})
