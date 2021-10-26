@@ -58,11 +58,28 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "anymail",
     "core",
     "services",
     "subscriptions",
     "users",
 ]
+
+EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"
+
+ANYMAIL = {
+    "AMAZON_SES_CLIENT_PARAMS": {
+        # example: override normal Boto credentials specifically for Anymail
+        "aws_access_key_id": env("AWS_ACCESS_KEY_ID"),
+        "aws_secret_access_key": env("AWS_SECRET_ACCESS_KEY"),
+        "region_name": "eu-central-1",
+        # override other default options
+        "config": {
+            "connect_timeout": 30,
+            "read_timeout": 30,
+        },
+    },
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

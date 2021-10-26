@@ -69,3 +69,19 @@ resource "aws_ssm_parameter" "postgres-db-password" {
     value       = module.rds.db_instance_password
     overwrite   = true
 }
+
+resource "aws_ssm_parameter" "backend-user-access-key-id" {
+  name        = "/${local.project}/${var.environment}/AWS_ACCESS_KEY_ID"
+  description = "Backend user's AWS_ACCESS_KEY_ID for internal services"
+  type        = "SecureString"
+  value       = aws_iam_access_key.backend.id
+  overwrite   = true
+}
+
+resource "aws_ssm_parameter" "backend-user-aws-secret-access-key" {
+  name        = "/${local.project}/${var.environment}/AWS_SECRET_ACCESS_KEY"
+  description = "Backend user's AWS_SECRET_ACCESS_KEY for internal services"
+  type        = "SecureString"
+  value       = aws_iam_access_key.backend.secret
+  overwrite   = true
+}

@@ -134,3 +134,6 @@ staticfiles/
 
 # Vscode
 .vscode
+
+#Terraform
+infrastructure/.terraform
