@@ -24,6 +24,6 @@
             "SecurityGroupIds": ["sg-0a939621e2e320416"]
         },
         "domain": "dev.cloud-outdated.com",
-        "certificate_arn": "arn:aws:acm:eu-central-1:291218224580:certificate/75922ed8-3f63-4c4f-9d08-7c083daa2216"
+        "certificate_arn": "arn:aws:acm:us-east-1:291218224580:certificate/50424608-de86-444c-9812-09c84388b83e"
     }
 }
