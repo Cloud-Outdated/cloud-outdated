@@ -65,6 +65,8 @@ INSTALLED_APPS = [
     "users",
 ]
 
+DEFAULT_FROM_EMAIL = "hello@cloud-outdated.com"
+
 EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"
 
 ANYMAIL = {
