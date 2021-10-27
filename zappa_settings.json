@@ -5,6 +5,19 @@
         "django_settings": "cloud_outdated.settings",
         "project_name": "cloud-outdated",
         "runtime": "python3.8",
+        "exclude": [
+            "*.pyc",
+            ".dockerignore",
+            ".env.local",
+            ".github",
+            ".gitignore",
+            "__pycache__",
+            "*black*",
+            "chamber",
+            "Dockerfile",
+            "Makefile",
+            "README.md"
+        ],
         "events": [{
             "function": "core.tasks.task_one",
             "expression": "rate(2 hours)"
