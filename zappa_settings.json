@@ -38,6 +38,6 @@
         },
         "domain": "dev.cloud-outdated.com",
         "certificate_arn": "arn:aws:acm:us-east-1:291218224580:certificate/50424608-de86-444c-9812-09c84388b83e",
-        "timeout": 180
+        "timeout_seconds": 180
     }
 }
