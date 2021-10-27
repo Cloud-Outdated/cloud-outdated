@@ -21,7 +21,7 @@ class Command(BaseCommand):
         con = None
         con = connect(dbname="postgres", user=user, host=host, password=password)
         
-        self.stdout.write(self.style.NOTICE(con.info))
+        self.stdout.write(self.style.NOTICE(con.status))
         
         con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         cur = con.cursor()
