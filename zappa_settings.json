@@ -21,7 +21,8 @@
         "events": [{
             "function": "core.tasks.task_one",
             "expression": "rate(2 hours)"
-        }]
+        }],
+        "slim_handler": false
     },
     "dev": {
         "extends": "common",
