@@ -45,6 +45,6 @@ jobs:
         set -o allexport
         source .env.dev
         set +o allexport
-        python manage.py collectstatic
+        python manage.py collectstatic --noinput
         zappa update dev
         zappa manage dev "migrate --noinput"
