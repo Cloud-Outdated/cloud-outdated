@@ -15,8 +15,14 @@ class Command(BaseCommand):
         password = settings.DATABASES["default"]["PASSWORD"]
         host = settings.DATABASES["default"]["HOST"]
 
+        self.stdout.write(self.style.NOTICE(f"host: {host}"))
+        self.stdout.write(self.style.NOTICE(f"user: {user}"))
+
         con = None
         con = connect(dbname="postgres", user=user, host=host, password=password)
+        
+        self.stdout.write(self.style.NOTICE(con.info))
+        
         con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         cur = con.cursor()
         cur.execute("CREATE DATABASE " + dbname)
