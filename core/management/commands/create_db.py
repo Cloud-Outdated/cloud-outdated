@@ -14,12 +14,15 @@ class Command(BaseCommand):
         user = settings.DATABASES["default"]["USER"]
         password = settings.DATABASES["default"]["PASSWORD"]
         host = settings.DATABASES["default"]["HOST"]
+        port = settings.DATABASES["default"]["PORT"]
 
-        self.stdout.write(self.style.NOTICE(f"host: {host}"))
+        self.stdout.write(self.style.NOTICE(f"dbname: {dbname}"))
         self.stdout.write(self.style.NOTICE(f"user: {user}"))
+        self.stdout.write(self.style.NOTICE(f"host: {host}"))
+        self.stdout.write(self.style.NOTICE(f"port: {port}"))
 
         con = None
-        con = connect(dbname="postgres", user=user, host=host, password=password)
+        con = connect(dbname=dbname, user=user, host=host, password=password, port=port)
         
         self.stdout.write(self.style.NOTICE(con.status))
         
