@@ -100,7 +100,9 @@ MIDDLEWARE = [
 # will probably be just `/static/` when deploying to {env}.domain.com
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# not using whitenoise storage engine because of some issue with lambda
+# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 WHITENOISE_STATIC_PREFIX = "/static/"
 
 ROOT_URLCONF = "cloud_outdated.urls"
