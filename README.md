@@ -56,3 +56,11 @@ aws-vault exec cloud-outdated-x -- terraform apply
 ### Zappa config from infra changes
 
 After terraform changes have been applied `zappa_settings.json` file can be populated with appropriate values.
+
+After `zappa_settings.json` is populated run locally:
+
+```
+zappa certify <env>
+```
+
+to configure API Gateway to honor the domain name specified. Changes can take up to 40 minutes to get applied.
