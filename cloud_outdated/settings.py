@@ -98,7 +98,7 @@ MIDDLEWARE = [
 
 # dev in this path is name of deployment env,
 # will probably be just `/static/` when deploying to {env}.domain.com
-STATIC_URL = "/dev/static/"
+STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 WHITENOISE_STATIC_PREFIX = "/static/"
