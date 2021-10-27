@@ -37,9 +37,6 @@
             "SecurityGroupIds": ["sg-0a939621e2e320416"]
         },
         "domain": "dev.cloud-outdated.com",
-        "certificate_arn": "arn:aws:acm:us-east-1:291218224580:certificate/50424608-de86-444c-9812-09c84388b83e",
-        "environment_variables": {
-            "POSTGRES_PORT": "1234"
-        }
+        "certificate_arn": "arn:aws:acm:us-east-1:291218224580:certificate/50424608-de86-444c-9812-09c84388b83e"
     }
 }
