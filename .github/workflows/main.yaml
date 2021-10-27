@@ -42,6 +42,9 @@ jobs:
     - name: Zappa deployments
       run: |
         source venv/bin/activate
+        set -o allexport
+        source .env.dev
+        set +o allexport
         python manage.py collectstatic
         zappa update dev
-        # zappa manage dev showmigrations
+        zappa manage dev "migrate --noinput"
