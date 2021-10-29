@@ -38,6 +38,7 @@ class UserProfileManager(BaseUserManager):
 class UserProfile(AbstractUser, BaseModelMixin):
     """Database model for users in the system"""
 
+    username = None
     email = models.EmailField(max_length=255, unique=True)
 
     objects = UserProfileManager()
