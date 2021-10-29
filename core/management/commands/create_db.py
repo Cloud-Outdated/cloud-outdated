@@ -23,9 +23,9 @@ class Command(BaseCommand):
 
         con = None
         con = connect(dbname=dbname, user=user, host=host, password=password, port=port)
-        
+
         self.stdout.write(self.style.NOTICE(con.status))
-        
+
         con.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
         cur = con.cursor()
         cur.execute("CREATE DATABASE " + dbname)

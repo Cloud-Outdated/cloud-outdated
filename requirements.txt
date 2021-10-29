@@ -9,3 +9,4 @@ django-environ
 django-structlog
 django-anymail[amazon_ses]
 django-templated-mail
+django-sesame[ua]
