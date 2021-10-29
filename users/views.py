@@ -5,7 +5,7 @@ from sesame.utils import get_query_string
 from core.views import BaseView
 from services.base import services, aws, gcp, azure
 
-from .email import UserRegistrationEmail
+from .email import UserLoginEmail, UserRegistrationEmail
 
 
 User = get_user_model()
@@ -34,18 +34,35 @@ class UserSubscriptionsView(BaseView):
         return context
 
     def post(self, request, *args, **kwargs):
+
+        context_data = self.get_context_data(**kwargs)
+
+        if request.user.is_authenticated:
+            return render(request, self.template_name, context_data)
+
         post_data = request.POST
         email = post_data.get("email")
+        protocol = "https" if request.is_secure() else "http"
 
         user = User.objects.filter(email=email).first()
         if not user:
             user = User.objects.create(email=email)
 
             ctx = {
-                "link": request.get_host() + request.path + get_query_string(user),
+                "link": f"{protocol}://"
+                + request.get_host()
+                + request.path
+                + get_query_string(user),
             }
 
             UserRegistrationEmail(context=ctx).send(to=[user.email])
-        # return HttpResponseRedirect("/thanks/")
+        else:
+            ctx = {
+                "link": f"{protocol}://"
+                + request.get_host()
+                + request.path
+                + get_query_string(user),
+            }
+            UserLoginEmail(context=ctx).send(to=[user.email])
 
-        return render(request, self.template_name, {})
+        return render(request, self.template_name, context_data)

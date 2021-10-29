@@ -84,6 +84,8 @@ ANYMAIL = {
     },
 }
 
+LOGOUT_REDIRECT_URL = "/"
+
 AUTHENTICATION_BACKENDS = [
     "sesame.backends.ModelBackend",
 ]

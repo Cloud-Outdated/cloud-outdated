@@ -1,0 +1,15 @@
+{% load i18n %}
+
+{% block subject %}
+{% blocktrans %}Login to Cloud Outdated{% endblocktrans %}
+{% endblock subject %}
+
+{% block text_body %}
+{% blocktrans %}Click the following link to login to Cloud Outdated:{% endblocktrans %}
+{{ link }}
+{% endblock text_body %}
+
+{% block html_body %}
+{% blocktrans %}Click the following link to login to Cloud Outdated:{% endblocktrans %}
+<a href="{{ link }}">{{ link }}</a>
+{% endblock html_body %}
