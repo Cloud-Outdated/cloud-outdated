@@ -20,7 +20,7 @@ module "rds" {
 
   maintenance_window              = "Mon:01:00-Mon:04:00"
   backup_window                   = "05:00-08:00"
-  backup_retention_period         = 30
+  backup_retention_period         = 10
   enabled_cloudwatch_logs_exports = ["postgresql", "upgrade"]
 
   subnet_ids             = module.vpc.database_subnets
