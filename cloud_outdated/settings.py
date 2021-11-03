@@ -17,7 +17,6 @@ import structlog
 
 env = environ.Env(
     # set casting, default value
-    DOTENV_FILE=(str, ".env.local"),
     DEBUG=(bool, False),
     DB_HOST=(str, "cockroach"),
     DB_PORT=(str, "26257"),
@@ -25,7 +24,7 @@ env = environ.Env(
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-environ.Env.read_env(os.path.join(BASE_DIR, env("DOTENV_FILE")))
+environ.Env.read_env(os.path.join(BASE_DIR, env.str("DOTENV_FILE", ".env")))
 
 COMPANY_NAME = "Cloud Outdated"
 
