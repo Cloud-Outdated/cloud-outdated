@@ -85,3 +85,63 @@ resource "aws_ssm_parameter" "backend-user-aws-secret-access-key" {
   value       = aws_iam_access_key.backend.secret
   overwrite   = true
 }
+
+resource "aws_ssm_parameter" "db-name" {
+    name        = "/${local.project}/${var.environment}/DB_NAME"
+    description = "DB name"
+    type        = "SecureString"
+    value       = " "
+
+    # This ^ is manually populated, therefore the lifecycle rule below:
+    lifecycle {
+        ignore_changes = [value]
+    }
+}
+
+resource "aws_ssm_parameter" "db-host" {
+    name        = "/${local.project}/${var.environment}/DB_HOST"
+    description = "DB host"
+    type        = "SecureString"
+    value       = " "
+
+    # This ^ is manually populated, therefore the lifecycle rule below:
+    lifecycle {
+        ignore_changes = [value]
+    }
+}
+
+resource "aws_ssm_parameter" "db-port" {
+    name        = "/${local.project}/${var.environment}/DB_PORT"
+    description = "DB port"
+    type        = "SecureString"
+    value       = " "
+
+    # This ^ is manually populated, therefore the lifecycle rule below:
+    lifecycle {
+        ignore_changes = [value]
+    }
+}
+
+resource "aws_ssm_parameter" "db-user" {
+    name        = "/${local.project}/${var.environment}/DB_USER"
+    description = "DB user"
+    type        = "SecureString"
+    value       = " "
+
+    # This ^ is manually populated, therefore the lifecycle rule below:
+    lifecycle {
+        ignore_changes = [value]
+    }
+}
+
+resource "aws_ssm_parameter" "db-password" {
+    name        = "/${local.project}/${var.environment}/DB_PASSWORD"
+    description = "DB password"
+    type        = "SecureString"
+    value       = " "
+
+    # This ^ is manually populated, therefore the lifecycle rule below:
+    lifecycle {
+        ignore_changes = [value]
+    }
+}
