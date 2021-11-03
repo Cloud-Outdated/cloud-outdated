@@ -47,6 +47,7 @@ class UserSubscriptionsView(BaseView):
         user = User.objects.filter(email=email).first()
         if not user:
             user = User.objects.create(email=email)
+            user.set_unusable_password()
 
             ctx = {
                 "link": f"{protocol}://"
