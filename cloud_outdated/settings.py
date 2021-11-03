@@ -87,6 +87,7 @@ ANYMAIL = {
 LOGOUT_REDIRECT_URL = "/"
 
 AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",  # used by Django admin
     "sesame.backends.ModelBackend",
 ]
 
