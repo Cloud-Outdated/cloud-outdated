@@ -30,46 +30,6 @@ resource "aws_ssm_parameter" "app-secret-key" {
     overwrite   = true
 }
 
-resource "aws_ssm_parameter" "postgres-db-name" {
-    name        = "/${local.project}/${var.environment}/POSTGRES_DB"
-    description = "DB name"
-    type        = "SecureString"
-    value       = module.rds.db_instance_name
-    overwrite   = true
-}
-
-resource "aws_ssm_parameter" "postgres-db-host" {
-    name        = "/${local.project}/${var.environment}/POSTGRES_HOST"
-    description = "DB host"
-    type        = "SecureString"
-    value       = module.rds.db_instance_address
-    overwrite   = true
-}
-
-resource "aws_ssm_parameter" "postgres-db-post" {
-    name        = "/${local.project}/${var.environment}/POSTGRES_PORT"
-    description = "DB port"
-    type        = "SecureString"
-    value       = module.rds.db_instance_port
-    overwrite   = true
-}
-
-resource "aws_ssm_parameter" "postgres-db-user" {
-    name        = "/${local.project}/${var.environment}/POSTGRES_USER"
-    description = "DB user"
-    type        = "SecureString"
-    value       = module.rds.db_instance_username
-    overwrite   = true
-}
-
-resource "aws_ssm_parameter" "postgres-db-password" {
-    name        = "/${local.project}/${var.environment}/POSTGRES_PASSWORD"
-    description = "DB password"
-    type        = "SecureString"
-    value       = module.rds.db_instance_password
-    overwrite   = true
-}
-
 resource "aws_ssm_parameter" "backend-user-access-key-id" {
   name        = "/${local.project}/${var.environment}/AWS_ACCESS_KEY_ID"
   description = "Backend user's AWS_ACCESS_KEY_ID for internal services"
