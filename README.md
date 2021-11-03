@@ -36,9 +36,6 @@ The code is that matters here.
     - call Zappa _event_ (periodi task)
         - see `zappa_settings.json -> dev.events.0.function`
         - can be seen that it is running using `zappa tail dev` command
-- not tested
-    - RDS connection
-        - there might be some issues with psycopg2 driver
 
 ## Infrastructure
 
@@ -64,3 +61,10 @@ zappa certify <env>
 ```
 
 to configure API Gateway to honor the domain name specified. Changes can take up to 40 minutes to get applied.
+
+### CockroachDB
+
+CockroachDB database needs to be created manually since there is no terraform provider for it.
+
+- go to [cockroachlabs.cloud](https://cockroachlabs.cloud/clusters) and create a cluster for the environment
+- get connection info and store it to SSM

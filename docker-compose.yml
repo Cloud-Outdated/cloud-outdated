@@ -1,13 +1,17 @@
 version: "3"
 
 services:
-  postgres:
-    image: postgres:13
+  cockroach:
+    image: cockroachdb/cockroach:latest-v21.1
     restart: always
     env_file:
       - .env.local
+    ports:
+     - "26257:26257"
+     - "8080:8080"  # visit localhost:8080 for web ui
+    command: start-single-node --insecure
     volumes:
-      - database-data:/var/lib/postgresql/data/
+      - database-data:/cockroach/cockroach-data
 
   django:
     build:

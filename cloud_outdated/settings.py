@@ -18,8 +18,9 @@ import structlog
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
-    POSTGRES_HOST=(str, "postgres"),
-    POSTGRES_PORT=(str, "5432"),
+    DB_HOST=(str, "cockroach"),
+    DB_PORT=(str, "26257"),
+    DB_NAME=(str, "defaultdb"),
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,12 +43,12 @@ ALLOWED_HOSTS = [
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": env("POSTGRES_DB"),
-        "USER": env("POSTGRES_USER"),
-        "PASSWORD": env("POSTGRES_PASSWORD"),
-        "HOST": env("POSTGRES_HOST"),
-        "PORT": env("POSTGRES_PORT"),
+        "ENGINE": "django_cockroachdb",
+        "NAME": env("DB_NAME"),
+        "USER": env("DB_USER"),
+        "PASSWORD": env("DB_PASSWORD"),
+        "HOST": env("DB_HOST"),
+        "PORT": env("DB_PORT"),
     }
 }
 
