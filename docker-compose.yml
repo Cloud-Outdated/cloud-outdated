@@ -23,9 +23,9 @@ services:
     ports:
       - "8020:8020"
     links:
-      - postgres:postgres
+      - cockroach:cockroach
     depends_on:
-      - postgres
+      - cockroach
     volumes:
       - .:/app
       - /usr/src/app/staticfiles

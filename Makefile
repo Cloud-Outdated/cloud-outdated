@@ -3,10 +3,10 @@ start:
 
 stop:
 	docker-compose stop django
-	docker-compose stop postgres
+	docker-compose stop cockroach
 
 rebuild:
-	docker-compose up -d --no-deps --build postgres
+	docker-compose up -d --no-deps --build cockroach
 	docker-compose up -d --no-deps --build django
 
 destroy:
