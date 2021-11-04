@@ -41,6 +41,7 @@ jobs:
 
     - name: Zappa deployments
       run: |
+        export ENV_PATH=.env.dev
         source venv/bin/activate
         python manage.py collectstatic --noinput
         zappa update dev
