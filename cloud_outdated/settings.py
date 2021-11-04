@@ -18,6 +18,7 @@ import structlog
 
 # TODO - read .env.<env> specific dotfile
 # DOTENV_FILE = ".env.dev"
+print(os.environ.keys())
 
 env = environ.Env(
     # set casting, default value
@@ -26,6 +27,10 @@ env = environ.Env(
     DB_PORT=(str, "26257"),
     DB_NAME=(str, "defaultdb"),
 )
+
+print("\t\twoooo")
+print(env("ENV_PATH"))
+print(os.getenv("ENV_PATH", "    nope in os.getenv"))
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, env.str("ENV_PATH", ".env")))
