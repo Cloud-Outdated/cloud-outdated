@@ -16,12 +16,14 @@ from pathlib import Path
 import structlog
 
 
-if os.environ.get("STAGE", "") == "dev":
-    DOTENV_FILE = ".env.dev"
-elif os.environ.get("STAGE", "") == "prod":
-    DOTENV_FILE = ".env.prod"
-else:
-    DOTENV_FILE = ".env.local"
+# get this info before loading from a dotenv file
+DOTENV_FILE = os.getenv("DOTENV_FILE", ".env.local")
+# if os.environ.get("STAGE", "") == "dev":
+#     DOTENV_FILE = ".env.dev"
+# elif os.environ.get("STAGE", "") == "prod":
+#     DOTENV_FILE = ".env.prod"
+# else:
+#     DOTENV_FILE = ".env.local"
 
 env = environ.Env(
     # set casting, default value
