@@ -16,16 +16,8 @@ from pathlib import Path
 import structlog
 
 
-# get this info before loading from a dotenv file
-# DOTENV_FILE = os.getenv("DOTENV_FILE", ".env.local")
-if "-dev" in os.getenv("AWS_LAMBDA_FUNCTION_NAME", ""):
-    DOTENV_FILE = ".env.dev"
-else:
-    DOTENV_FILE = ".env.local"
-# if os.environ.get("STAGE", "") == "dev":
-#     DOTENV_FILE = ".env.dev"
-# elif os.environ.get("STAGE", "") == "prod":
-#     DOTENV_FILE = ".env.prod"
+# TODO
+# DOTENV_FILE = ".env.dev"
 
 env = environ.Env(
     # set casting, default value
@@ -36,7 +28,7 @@ env = environ.Env(
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-environ.Env.read_env(os.path.join(BASE_DIR, DOTENV_FILE))
+environ.Env.read_env(os.path.join(BASE_DIR, env.str("ENV_PATH", ".env")))
 
 COMPANY_NAME = "Cloud Outdated"
 
