@@ -24,8 +24,10 @@ env = environ.Env(
     DB_NAME=(str, "defaultdb"),
 )
 
-if env("STAGE") == "dev":
+if os.environ.get("STAGE", "") == "dev":
     DOTENV_FILE = ".env.dev"
+elif os.environ.get("STAGE", "") == "prod":
+    DOTENV_FILE = ".env.prod"
 else:
     DOTENV_FILE = ".env.local"
 
