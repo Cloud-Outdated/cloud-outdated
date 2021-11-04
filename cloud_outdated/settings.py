@@ -16,8 +16,8 @@ from pathlib import Path
 import structlog
 
 
-# TODO
-# DOTENV_FILE = ".env.dev"
+# TODO - read .env.<env> specific dotfile
+DOTENV_FILE = ".env.dev"
 
 env = environ.Env(
     # set casting, default value
@@ -28,7 +28,7 @@ env = environ.Env(
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-environ.Env.read_env(os.path.join(BASE_DIR, env.str("ENV_PATH", ".env")))
+environ.Env.read_env(os.path.join(BASE_DIR, DOTENV_FILE))
 
 COMPANY_NAME = "Cloud Outdated"
 
