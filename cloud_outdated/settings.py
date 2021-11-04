@@ -17,13 +17,15 @@ import structlog
 
 
 # get this info before loading from a dotenv file
-DOTENV_FILE = os.getenv("DOTENV_FILE", ".env.local")
+# DOTENV_FILE = os.getenv("DOTENV_FILE", ".env.local")
+if "-dev" in os.getenv("AWS_LAMBDA_FUNCTION_NAME", ""):
+    DOTENV_FILE = ".env.dev"
+else:
+    DOTENV_FILE = ".env.local"
 # if os.environ.get("STAGE", "") == "dev":
 #     DOTENV_FILE = ".env.dev"
 # elif os.environ.get("STAGE", "") == "prod":
 #     DOTENV_FILE = ".env.prod"
-# else:
-#     DOTENV_FILE = ".env.local"
 
 env = environ.Env(
     # set casting, default value
