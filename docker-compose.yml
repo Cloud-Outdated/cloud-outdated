@@ -32,6 +32,8 @@ services:
     entrypoint: ./start_app.sh
     env_file:
       - .env.local
+    environment:
+      - ENV_PATH=.env.local
 
 volumes:
   database-data:
