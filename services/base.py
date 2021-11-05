@@ -67,6 +67,12 @@ services = {
         label="AKS",
         name_alternatives=["Azure Kubernetes Service"],
     ),
+    "gcp_cloud_sql": Service(
+        platform=gcp,
+        name="gcp_cloud_sql",
+        label="Cloud SQL",
+        name_alternatives=["PostgreSQL", "MySQL", "SQL Server", "MSSQL"],
+    )
     # ...
 }
 

@@ -19,10 +19,12 @@
             "Makefile",
             "README.md"
         ],
-        "events": [{
-            "function": "core.tasks.task_one",
-            "expression": "rate(2 hours)"
-        }]
+        "events": [
+            {
+                "function": "services.tasks.poll_gcp",
+                "expression": "rate(12 hours)"
+            }
+        ]
     },
     "dev": {
         "extends": "common",

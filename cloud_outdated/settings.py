@@ -10,11 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-import environ
 import os
 from pathlib import Path
-import structlog
 
+import environ
+import structlog
 
 env = environ.Env(
     # set casting, default value
@@ -223,3 +223,8 @@ structlog.configure(
     wrapper_class=structlog.stdlib.BoundLogger,
     cache_logger_on_first_use=True,
 )
+
+# Service polling configurations
+POLLING_THREADS = 4
+NOTIFICATIONS_MAX_RETRIES = 10
+NOTIFICATIONS_MAX_TIME = 60 * 5
