@@ -1,0 +1,37 @@
+{% load i18n %}
+
+{% block subject %}
+{% blocktrans %}Notification about services Cloud Outdated{% endblocktrans %}
+{% endblock subject %}
+
+{% block text_body %}
+{% for s in subscriptions %}
+Service: {{s.service}}
+New versions:
+    {% for v in s.added %}
+    - {{ v }}
+    {% endfor %}
+Deprecated versions:
+    {% for v in s.deprecated %}
+    - {{ v }}
+    {% endfor %}
+{% endfor %}
+{% endblock text_body %}
+
+{% block html_body %}
+{% for s in subscriptions %}
+<h3>{{s.service}}</h3>
+New versions:
+<ul>
+    {% for v in s.added %}
+    <li> {{ v }} </li>
+    {% endfor %}
+</ul>
+Deprecated versions:
+<ul>
+    {% for v in s.deprecated %}
+    <li> {{ v }} </li>
+    {% endfor %}
+</ul>
+{% endfor %}
+{% endblock html_body %}

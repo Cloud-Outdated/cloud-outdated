@@ -2,13 +2,15 @@ import logging
 import multiprocessing
 from collections import defaultdict
 from functools import reduce
-from typing import Callable
+from typing import Callable, List
 
 import backoff
 from django.conf import settings
 from googleapiclient.discovery import build
+from subscriptions.models import Subscription
 
 from services.base import Service, services
+from services.email import NotificationEmail
 from services.models import Version
 
 logger = logging.getLogger(__name__)
@@ -111,7 +113,7 @@ def poll_gcp():
     max_time=settings.NOTIFICATIONS_MAX_TIME,
     backoff_log_level=logging.WARN,
 )
-def send_notifications(polled_services):
+def send_notifications(polled_services: List[PollService]):
     notifications = defaultdict(list)
 
     for ps in polled_services:
@@ -120,6 +122,20 @@ def send_notifications(polled_services):
                 (ps.added_versions, ps.deprecated_versions)
             )
 
-    # TODO: send email notifications to subscribed users
-    # TODO: add notification model to avoid sending email twice
-    # or generate idempotency key for emails
+    subscriptions = Subscription.objects.filter(
+        service__in=notifications.keys(), disabled=None
+    ).prefetch_related("user")
+
+    users_subscriptions = defaultdict(list)
+    for sub in subscriptions:
+        users_subscriptions[sub.user].append(
+            {
+                "service": sub.service,
+                "added": notifications[sub.service][0],
+                "deprecated": notifications[sub.service][1],
+            }
+        )
+
+    for user, subs in users_subscriptions.items():
+        ctx = {"subscriptions": subs}
+        NotificationEmail(context=ctx).send(to=[user.email])
