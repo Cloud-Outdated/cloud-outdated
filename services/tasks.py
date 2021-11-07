@@ -1,5 +1,4 @@
 import logging
-import multiprocessing
 from collections import defaultdict
 from functools import reduce
 from typing import Callable, List
@@ -100,8 +99,9 @@ def poll_gcp():
         PollService(service=services["gcp_cloud_sql"], poll_fn=gcloud_sql),
     ]
 
-    with multiprocessing.Pool(settings.POLLING_THREADS) as p:
-        polled_services = p.map(do_polling, gcp_services)
+    # with multiprocessing.Pool(settings.POLLING_THREADS) as p:
+    #    polled_services = p.map(do_polling, gcp_services)
+    polled_services = map(do_polling, gcp_services)
 
     send_notifications(polled_services)
 
