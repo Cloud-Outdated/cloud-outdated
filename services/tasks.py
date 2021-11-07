@@ -1,10 +1,12 @@
 import logging
 from collections import defaultdict
 from functools import reduce
+from os import environ
 from typing import Callable, List
 
 import backoff
 from django.conf import settings
+from google.auth import load_credentials_from_file
 from googleapiclient.discovery import build
 from subscriptions.models import Subscription
 
@@ -19,7 +21,13 @@ logger = logging.getLogger(__name__)
 
 
 def gcloud_sql():
-    with build("sqladmin", "v1") as sqladmin:
+    with open("/tmp/credentials.json", "w") as cred:
+        cred.write(environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
+    with build(
+        "sqladmin",
+        "v1",
+        credentials=load_credentials_from_file("/tmp/credentials.json"),
+    ) as sqladmin:
         flags = sqladmin.flags().list().execute()
     return list(
         reduce(
