@@ -37,19 +37,30 @@ class PollService:
         self.added_versions = []
 
     def poll(self):
+        logger.info(f"Polling service {self.service.name}")
         try:
             supported_versions = self.poll_fn()
+
+            logger.info(
+                f"Service: {self.service.name} - Supported versions {supported_versions}"
+            )
+
             current_versions = self.get_current_versions()
+
+            logger.info(
+                f"Service: {self.service.name} - Current stored versions {current_versions}"
+            )
+
             self.deprecated_versions = self.process_deprecated_versions(
                 current_versions, supported_versions
             )
+
             self.added_versions = self.process_added_versions(
                 current_versions, supported_versions
             )
         except:
             logger.error(
-                "Error ocurred while polling service",
-                service=self.service,
+                f"Error ocurred while polling service {self.service.name}",
                 exc_info=True,
             )
 
@@ -65,9 +76,7 @@ class PollService:
                 service=self.service.name, version__in=to_deprecate
             ).update(deprecated=True)
             logger.info(
-                "These versions have been deprecated",
-                versions=to_deprecate,
-                service=self.service,
+                f"Service: {self.service.name} - These versions have been deprecated: {to_deprecate}",
             )
 
         return list(to_deprecate)
@@ -81,9 +90,7 @@ class PollService:
                 [Version(service=self.service.name, version=v) for v in added_versions]
             )
             logger.info(
-                "These versions have been added",
-                versions=added_versions,
-                service=self.service,
+                f"Service: {self.service.name} - These versions have been added {added_versions}",
             )
 
         return list(added_versions)
