@@ -1,3 +1,4 @@
+import json
 import logging
 from collections import defaultdict
 from functools import reduce
@@ -21,8 +22,11 @@ logger = logging.getLogger(__name__)
 
 
 def gcloud_sql():
+    # TODO: just for testing, make implementation better
     with open("/tmp/credentials.json", "w") as cred:
-        cred.write(environ.get("GOOGLE_APPLICATION_CREDENTIALS"))
+        cred.write(
+            json.dumps(json.loads(environ.get("GOOGLE_APPLICATION_CREDENTIALS")))
+        )
     with build(
         "sqladmin",
         "v1",
