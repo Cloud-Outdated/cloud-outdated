@@ -6,6 +6,13 @@ variable "environment" {
 }
 
 terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~>2.0"
+    }
+  }
+
   backend "remote" {
     hostname     = "app.terraform.io"
     organization = "cloud-outdated"
@@ -39,3 +46,15 @@ provider "google" {
   project = local.project
   region  = local.gcp_region
 }
+
+# Configure the Microsoft Azure Provider
+provider "azurerm" {
+  features {}
+}
+
+# Create a resource group
+resource "azurerm_resource_group" "cloud_outdated" {
+  name     = "cloud-outdated"
+  location = "Germany West Central"
+}
+
