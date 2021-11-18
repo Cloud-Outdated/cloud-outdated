@@ -40,8 +40,8 @@ def get_aws_session():
     logger.warning(f"AWS_SECRET_ACCESS_KEY end: {settings.AWS_SECRET_ACCESS_KEY[-5:]}")
 
     return boto3.session.Session(
-        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        # aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        # aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
     )
 
 
