@@ -43,7 +43,6 @@ def get_aws_session():
         aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
         aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
         region_name="eu-central-1",
-        profile_name="default",
     )
 
 
