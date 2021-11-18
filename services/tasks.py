@@ -119,6 +119,19 @@ def aws_neptune():
     return [version["EngineVersion"] for version in versions]
 
 
+def aws_docdb():
+    """Get AWS DocDB versions.
+
+    DocumentDB is managed Mongo compatible DB.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("docdb")
+    versions = client.describe_db_engine_versions(Engine="docdb")["DBEngineVersions"]
+    return [version["EngineVersion"] for version in versions]
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -232,6 +245,10 @@ def poll_aws():
         PollService(
             service=services["aws_neptune"],
             poll_fn=aws_neptune,
+        ),
+        PollService(
+            service=services["aws_docdb"],
+            poll_fn=aws_docdb,
         ),
     ]
 

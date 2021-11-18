@@ -129,6 +129,18 @@ services = {
             "Graph Database",
         ],
     ),
+    "aws_docdb": Service(
+        platform=aws,
+        name="aws_docdb",
+        label="DocumentDB",
+        name_alternatives=[
+            "DocumentDB",
+            "AWS DocumentDB",
+            "DocDB",
+            "AWS DocDB",
+            "Mongo compatible",
+        ],
+    ),
     # ...
 }
 
