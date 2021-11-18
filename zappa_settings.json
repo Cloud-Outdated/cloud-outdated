@@ -33,7 +33,8 @@
             {
                 "Effect": "Allow",
                 "Action": [
-                    "elasticache:DescribeCacheEngineVersions"
+                    "elasticache:DescribeCacheEngineVersions",
+                    "kafka:ListKafkaVersions"
                 ],
                 "Resource": "*"
             }
