@@ -6,13 +6,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('services', '0001_initial'),
+        ("services", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='version',
-            name='service',
-            field=models.CharField(choices=[('eks', 'EKS'), ('gke', 'GKE'), ('aks', 'AKS'), ('gcp_cloud_sql', 'Cloud SQL')], max_length=255),
+            model_name="version",
+            name="service",
+            field=models.CharField(
+                choices=[
+                    ("eks", "EKS"),
+                    ("gke", "GKE"),
+                    ("aks", "AKS"),
+                    ("gcp_cloud_sql", "Cloud SQL"),
+                ],
+                max_length=255,
+            ),
         ),
     ]

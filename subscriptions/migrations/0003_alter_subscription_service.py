@@ -6,13 +6,21 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('subscriptions', '0002_subscription_user'),
+        ("subscriptions", "0002_subscription_user"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='subscription',
-            name='service',
-            field=models.CharField(choices=[('eks', 'EKS'), ('gke', 'GKE'), ('aks', 'AKS'), ('gcp_cloud_sql', 'Cloud SQL')], max_length=255),
+            model_name="subscription",
+            name="service",
+            field=models.CharField(
+                choices=[
+                    ("eks", "EKS"),
+                    ("gke", "GKE"),
+                    ("aks", "AKS"),
+                    ("gcp_cloud_sql", "Cloud SQL"),
+                ],
+                max_length=255,
+            ),
         ),
     ]

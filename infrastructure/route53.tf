@@ -7,11 +7,11 @@ resource "aws_route53_zone" "main" {
 
 resource "aws_route53_record" "dev_ns" {
   # only in prod workspace
-  count = var.environment == "prod" ? 1 : 0
-  name = "dev.${local.project}.com"
-  ttl             = 60  # TODO increase this to 24 hours: 86400
-  type            = "NS"
-  zone_id         = aws_route53_zone.main.zone_id
+  count   = var.environment == "prod" ? 1 : 0
+  name    = "dev.${local.project}.com"
+  ttl     = 60 # TODO increase this to 24 hours: 86400
+  type    = "NS"
+  zone_id = aws_route53_zone.main.zone_id
 
   # NS values from dev zone
   records = [

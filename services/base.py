@@ -72,7 +72,25 @@ services = {
         name="gcp_cloud_sql",
         label="Cloud SQL",
         name_alternatives=["PostgreSQL", "MySQL", "SQL Server", "MSSQL"],
-    )
+    ),
+    "aws_elasticache_redis": Service(
+        platform=aws,
+        name="aws_elasticache_redis",
+        label="ElastiCache Redis",
+        name_alternatives=[
+            "Redis",
+            "AWS Redis",
+        ],
+    ),
+    "aws_elasticache_memcached": Service(
+        platform=aws,
+        name="aws_elasticache_memcached",
+        label="ElastiCache Memcached",
+        name_alternatives=[
+            "Memcached",
+            "AWS Memcached",
+        ],
+    ),
     # ...
 }
 

@@ -30,6 +30,12 @@ provider "aws" {
 }
 
 provider "aws" {
-  alias = "virginia"
+  alias  = "virginia"
   region = "us-east-1"
+}
+
+
+provider "google" {
+  project = local.project
+  region  = local.gcp_region
 }

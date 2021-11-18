@@ -22,6 +22,8 @@ env = environ.Env(
     DB_HOST=(str, "cockroach"),
     DB_PORT=(str, "26257"),
     DB_NAME=(str, "defaultdb"),
+    AWS_ACCESS_KEY_ID=(str, "dummy"),
+    AWS_SECRET_ACCESS_KEY=(str, "dummy"),
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -68,6 +70,9 @@ INSTALLED_APPS = [
     "users",
 ]
 
+AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+
 DEFAULT_FROM_EMAIL = "hello@cloud-outdated.com"
 
 EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"
@@ -75,8 +80,8 @@ EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"
 ANYMAIL = {
     "AMAZON_SES_CLIENT_PARAMS": {
         # example: override normal Boto credentials specifically for Anymail
-        "aws_access_key_id": env("AWS_ACCESS_KEY_ID"),
-        "aws_secret_access_key": env("AWS_SECRET_ACCESS_KEY"),
+        "aws_access_key_id": AWS_ACCESS_KEY_ID,
+        "aws_secret_access_key": AWS_SECRET_ACCESS_KEY,
         "region_name": "eu-central-1",
         # override other default options
         "config": {

@@ -1,4 +1,4 @@
-Django
+Django==3.2.*
 zappa
 black
 whitenoise

@@ -7,42 +7,43 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v1
-      with:
-        python-version: 3.8
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.8
 
-    - name: Install dependencies
-      run: |
-        python -m venv venv
-        source venv/bin/activate
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
 
-    - name: Configure AWS profile
-      run: |
-        aws configure set region eu-central-1 --profile cloud-outdated-deploy-dev
-        aws configure set output json --profile cloud-outdated-deploy-dev
-        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile cloud-outdated-deploy-dev
-        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}  --profile cloud-outdated-deploy-dev
+      - name: Configure AWS profile
+        run: |
+          aws configure set region eu-central-1 --profile cloud-outdated-deploy-dev
+          aws configure set output json --profile cloud-outdated-deploy-dev
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile cloud-outdated-deploy-dev
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}  --profile cloud-outdated-deploy-dev
 
-    - name: Build .env file
-      run: |
-        export CHAMBER_VERSION="v2.10.6"
-        curl -LOs https://github.com/segmentio/chamber/releases/download/${CHAMBER_VERSION}/chamber-${CHAMBER_VERSION}-linux-amd64
-        mv chamber-${CHAMBER_VERSION}-linux-amd64 chamber
-        chmod +x chamber
-        AWS_PROFILE=cloud-outdated-deploy-dev ./chamber export cloud-outdated/dev --format dotenv > .env.dev
+      - name: Build .env file
+        run: |
+          export CHAMBER_VERSION="v2.10.6"
+          curl -LOs https://github.com/segmentio/chamber/releases/download/${CHAMBER_VERSION}/chamber-${CHAMBER_VERSION}-linux-amd64
+          mv chamber-${CHAMBER_VERSION}-linux-amd64 chamber
+          chmod +x chamber
+          AWS_PROFILE=cloud-outdated-deploy-dev ./chamber export cloud-outdated/dev --format dotenv > .env.dev
+          AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/dev --pristine -- printenv GCP_SERVICE_ACCOUNT_KEY > credentials.json
+          echo GOOGLE_APPLICATION_CREDENTIALS=/var/task/credentials.json >> .env.dev
 
-    - name: Zappa deployments
-      run: |
-        export ENV_PATH=.env.dev
-        source venv/bin/activate
-        python manage.py collectstatic --noinput
-        zappa update dev
-        zappa manage dev "migrate --noinput"
+      - name: Zappa deployments
+        run: |
+          export ENV_PATH=.env.dev
+          source venv/bin/activate
+          python manage.py collectstatic --noinput
+          zappa update dev
+          zappa manage dev "migrate --noinput"

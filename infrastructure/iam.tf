@@ -21,6 +21,18 @@ data "aws_iam_policy_document" "backend" {
       "*",
     ]
   }
+  statement {
+    sid    = "ServiceVersionPolling"
+    effect = "Allow"
+
+    actions = [
+      "elasticache:DescribeCacheEngineVersions",
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
 }
 
 resource "aws_iam_policy" "backend" {
@@ -32,3 +44,17 @@ resource "aws_iam_user_policy_attachment" "backend-attach" {
   user       = aws_iam_user.backend.name
   policy_arn = aws_iam_policy.backend.arn
 }
+
+
+module "service_accounts" {
+  source        = "terraform-google-modules/service-accounts/google"
+  version       = "~> 3.0"
+  project_id    = local.project
+  prefix        = local.project
+  names         = ["backend"]
+  generate_keys = true
+  project_roles = [
+    "${local.project}=>roles/serviceusage.apiKeysAdmin",
+  ]
+}
+

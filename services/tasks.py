@@ -1,10 +1,10 @@
-import json
 import logging
 from collections import defaultdict
 from functools import reduce
 from os import environ
 from typing import Callable, List
 
+import boto3
 import backoff
 from django.conf import settings
 from google.auth import load_credentials_from_file
@@ -22,15 +22,9 @@ logger = logging.getLogger(__name__)
 
 
 def gcloud_sql():
-    # TODO: just for testing, make implementation better
-    with open("/tmp/credentials.json", "w") as cred:
-        cred.write(
-            json.dumps(json.loads(environ.get("GOOGLE_APPLICATION_CREDENTIALS")))
-        )
     with build(
         "sqladmin",
         "v1",
-        credentials=load_credentials_from_file("/tmp/credentials.json"),
     ) as sqladmin:
         flags = sqladmin.flags().list().execute()
     return list(
@@ -39,6 +33,44 @@ def gcloud_sql():
             [i["appliesTo"] for i in flags["items"]],
         )
     )
+
+
+def get_aws_session():
+    logger.warning(f"AWS_ACCESS_KEY_ID: {settings.AWS_ACCESS_KEY_ID}")
+    logger.warning(f"AWS_SECRET_ACCESS_KEY end: {settings.AWS_SECRET_ACCESS_KEY[-5:]}")
+
+    return boto3.session.Session(
+        aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+        region_name="eu-central-1",
+        profile_name="default",
+    )
+
+
+def aws_elasticache_redis():
+    """Get AWS ElastiCache Redis versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("elasticache")
+    versions = client.describe_cache_engine_versions(Engine="redis")[
+        "CacheEngineVersions"
+    ]
+    return [version["EngineVersion"] for version in versions]
+
+
+def aws_elasticache_memcached():
+    """Get AWS ElastiCache Memcached versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("elasticache")
+    versions = client.describe_cache_engine_versions(Engine="memcached")[
+        "CacheEngineVersions"
+    ]
+    return [version["EngineVersion"] for version in versions]
 
 
 class PollService:
@@ -77,7 +109,10 @@ class PollService:
             )
 
     def get_current_versions(self):
-        return list(Version.objects.filter(service=self.service.name, deprecated=None))
+        return [
+            v.version
+            for v in Version.objects.filter(service=self.service.name, deprecated=None)
+        ]
 
     def process_deprecated_versions(self, current_versions, supported_versions):
         # Get newly deprecated versions
@@ -114,6 +149,7 @@ def do_polling(executor: PollService):
 
 
 def poll_gcp():
+    """Entrypoint task for all GCP services."""
     gcp_services = [
         PollService(service=services["gcp_cloud_sql"], poll_fn=gcloud_sql),
     ]
@@ -121,6 +157,23 @@ def poll_gcp():
     # with multiprocessing.Pool(settings.POLLING_THREADS) as p:
     #    polled_services = p.map(do_polling, gcp_services)
     polled_services = map(do_polling, gcp_services)
+
+    send_notifications(polled_services)
+
+
+def poll_aws():
+    """Entrypoint task for all AWS services."""
+    aws_services = [
+        PollService(
+            service=services["aws_elasticache_redis"], poll_fn=aws_elasticache_redis
+        ),
+        PollService(
+            service=services["aws_elasticache_memcached"],
+            poll_fn=aws_elasticache_memcached,
+        ),
+    ]
+
+    polled_services = map(do_polling, aws_services)
 
     send_notifications(polled_services)
 
