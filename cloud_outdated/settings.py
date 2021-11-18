@@ -16,7 +16,7 @@ from pathlib import Path
 import environ
 import structlog
 
-env = environ.Env(
+env = environ.FileAwareEnv(
     # set casting, default value
     DEBUG=(bool, False),
     DB_HOST=(str, "cockroach"),
@@ -27,7 +27,7 @@ env = environ.Env(
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-environ.Env.read_env(os.path.join(BASE_DIR, env.str("ENV_PATH", ".env")))
+environ.FileAwareEnv.read_env(os.path.join(BASE_DIR, env.str("ENV_PATH", ".env")))
 
 COMPANY_NAME = "Cloud Outdated"
 
