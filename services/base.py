@@ -36,12 +36,14 @@ class Service:
         name: name of the service
         name_alternatives: list of alternative names; service full name etc.
         lable: value displayed to the end user, name is used if not set
+        public: service is visible to the users in the UI and is used in notifications
     """
 
     platform: Platform
     name: str  # eks - what is stored in db
     name_alternatives: list  # [Elastic Kubernetes Service, AWS Kubernetes]
     label: Optional[str] = None  # what is display to the user
+    public: bool = True
 
     def __post_init__(self):
         if self.label is None:
@@ -54,18 +56,21 @@ services = {
         name="eks",
         label="EKS",
         name_alternatives=["Elastic Kubernetes Service"],
+        public=False,
     ),
     "gke": Service(
         platform=gcp,
         name="gke",
         label="GKE",
         name_alternatives=["Google Kubernetes Engine"],
+        public=False,
     ),
     "aks": Service(
         platform=azure,
         name="aks",
         label="AKS",
         name_alternatives=["Azure Kubernetes Service"],
+        public=False,
     ),
     "gcp_cloud_sql": Service(
         platform=gcp,
