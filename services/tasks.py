@@ -132,6 +132,19 @@ def aws_docdb():
     return [version["EngineVersion"] for version in versions]
 
 
+def aws_memorydb():
+    """Get AWS MemoryDB versions.
+
+    Redis-compatible, durable, in-memory database service for ultra-fast performance.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("memorydb")
+    versions = client.describe_engine_versions()["EngineVersions"]
+    return [version["EngineVersion"] for version in versions]
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -249,6 +262,10 @@ def poll_aws():
         PollService(
             service=services["aws_docdb"],
             poll_fn=aws_docdb,
+        ),
+        PollService(
+            service=services["aws_memorydb"],
+            poll_fn=aws_memorydb,
         ),
     ]
 

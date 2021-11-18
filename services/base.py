@@ -138,7 +138,17 @@ services = {
             "AWS DocumentDB",
             "DocDB",
             "AWS DocDB",
-            "Mongo compatible",
+            "Mongo-compatible",
+        ],
+    ),
+    "aws_memorydb": Service(
+        platform=aws,
+        name="aws_memorydb",
+        label="MemoryDB",
+        name_alternatives=[
+            "MemoryDb",
+            "AWS MemoryDb",
+            "Redis-compatible",
         ],
     ),
     # ...
