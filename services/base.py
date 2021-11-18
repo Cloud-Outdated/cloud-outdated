@@ -151,6 +151,16 @@ services = {
             "Redis-compatible",
         ],
     ),
+    "aws_rabbitmq": Service(
+        platform=aws,
+        name="aws_rabbitmq",
+        label="RabbitMQ",
+        name_alternatives=[
+            "RabbitMQ",
+            "AWS RabbitMQ",
+            "AWS RabbitMQ message broker",
+        ],
+    ),
     # ...
 }
 

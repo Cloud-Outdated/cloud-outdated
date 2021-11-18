@@ -30,6 +30,7 @@ data "aws_iam_policy_document" "backend" {
       "es:ListVersions",
       "kafka:ListKafkaVersions",
       "memorydb:DescribeEngineVersions",
+      "mq:DescribeBrokerEngineTypes",
       "rds:DescribeDBEngineVersions",
     ]
 

@@ -37,6 +37,7 @@
                     "es:ListVersions",
                     "kafka:ListKafkaVersions",
                     "memorydb:DescribeEngineVersions",
+                    "mq:DescribeBrokerEngineTypes",
                     "rds:DescribeDBEngineVersions"
                 ],
                 "Resource": "*"

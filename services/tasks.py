@@ -145,6 +145,23 @@ def aws_memorydb():
     return [version["EngineVersion"] for version in versions]
 
 
+def aws_rabbitmq():
+    """Get AWS RabbitMQ versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("mq")
+    engines = client.describe_broker_engine_types(EngineType="rabbitmq")[
+        "BrokerEngineTypes"
+    ]
+    versions = []
+    for engine in engines:
+        if engine["EngineType"] == "RABBITMQ":
+            versions += [version["Name"] for version in engine["EngineVersions"]]
+    return versions
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -266,6 +283,10 @@ def poll_aws():
         PollService(
             service=services["aws_memorydb"],
             poll_fn=aws_memorydb,
+        ),
+        PollService(
+            service=services["aws_rabbitmq"],
+            poll_fn=aws_rabbitmq,
         ),
     ]
 
