@@ -71,6 +71,21 @@ def aws_elasticache_memcached():
     return [version["EngineVersion"] for version in versions]
 
 
+def aws_kafka():
+    """Get AWS Kafka versions.
+
+    Already filters out deprecated versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("kafka")
+    versions = client.list_kafka_versions()["KafkaVersions"]
+    return [
+        version["Version"] for version in versions if version["Status"] != "DEPRECATED"
+    ]
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -168,6 +183,10 @@ def poll_aws():
         PollService(
             service=services["aws_elasticache_memcached"],
             poll_fn=aws_elasticache_memcached,
+        ),
+        PollService(
+            service=services["aws_kafka"],
+            poll_fn=aws_kafka,
         ),
     ]
 

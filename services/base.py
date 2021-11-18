@@ -91,6 +91,15 @@ services = {
             "AWS Memcached",
         ],
     ),
+    "aws_kafka": Service(
+        platform=aws,
+        name="aws_kafka",
+        label="Kafka",
+        name_alternatives=[
+            "Kafka",
+            "AWS Kafka",
+        ],
+    ),
     # ...
 }
 
