@@ -22,7 +22,7 @@
         "events": [
             {
                 "function": "services.tasks.poll_aws",
-                "expression": "rate(12 hours)"
+                "expression": "rate(5 minutes)"
             },
             {
                 "function": "services.tasks.poll_gcp",
