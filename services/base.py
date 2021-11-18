@@ -161,6 +161,17 @@ services = {
             "AWS RabbitMQ message broker",
         ],
     ),
+    "aws_activemq": Service(
+        platform=aws,
+        name="aws_activemq",
+        label="ActiveMQ",
+        name_alternatives=[
+            "ActiveMQ",
+            "AWS ActiveMQ",
+            "AWS ActiveMQ message broker",
+            "Apache ActiveMQ",
+        ],
+    ),
     # ...
 }
 

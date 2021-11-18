@@ -162,6 +162,23 @@ def aws_rabbitmq():
     return versions
 
 
+def aws_activemq():
+    """Get AWS ActiveMQ versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("mq")
+    engines = client.describe_broker_engine_types(EngineType="activemq")[
+        "BrokerEngineTypes"
+    ]
+    versions = []
+    for engine in engines:
+        if engine["EngineType"] == "ACTIVEMQ":
+            versions += [version["Name"] for version in engine["EngineVersions"]]
+    return versions
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -287,6 +304,10 @@ def poll_aws():
         PollService(
             service=services["aws_rabbitmq"],
             poll_fn=aws_rabbitmq,
+        ),
+        PollService(
+            service=services["aws_activemq"],
+            poll_fn=aws_activemq,
         ),
     ]
 
