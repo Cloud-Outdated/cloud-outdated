@@ -89,7 +89,7 @@ def aws_es():
     """
     client = get_aws_session().client("es")
     versions = client.list_elasticsearch_versions()["ElasticsearchVersions"]
-    [version for version in versions]
+    return [version for version in versions]
 
 
 class PollService:
