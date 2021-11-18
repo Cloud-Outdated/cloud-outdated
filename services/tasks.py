@@ -92,6 +92,20 @@ def aws_es():
     return [version for version in versions]
 
 
+def aws_opensearch():
+    """Get AWS OpenSearch versions.
+
+    OpenSearch is a community-driven, open-source fork from the last
+    ALv2 version of Elasticsearch and Kibana.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("opensearch")
+    versions = client.list_versions()["Versions"]
+    return [version for version in versions]
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -197,6 +211,10 @@ def poll_aws():
         PollService(
             service=services["aws_es"],
             poll_fn=aws_es,
+        ),
+        PollService(
+            service=services["aws_opensearch"],
+            poll_fn=aws_opensearch,
         ),
     ]
 

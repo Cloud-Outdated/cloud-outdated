@@ -108,7 +108,17 @@ services = {
             "AWS ES",
             "AWS ElasticSearch",
         ],
-    )
+    ),
+    "aws_opensearch": Service(
+        platform=aws,
+        name="aws_opensearch",
+        label="OpenSearch",
+        name_alternatives=[
+            "OpenSearch",
+            "AWS OpenSearch",
+            "ElastiSearch fork",
+        ],
+    ),
     # ...
 }
 
