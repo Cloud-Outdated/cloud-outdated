@@ -106,6 +106,19 @@ def aws_opensearch():
     return [version for version in versions]
 
 
+def aws_neptune():
+    """Get AWS Neptune versions.
+
+    Neptune is a fully-managed graph database service.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("neptune")
+    versions = client.describe_db_engine_versions(Engine="neptune")["DBEngineVersions"]
+    return [version["EngineVersion"] for version in versions]
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -215,6 +228,10 @@ def poll_aws():
         PollService(
             service=services["aws_opensearch"],
             poll_fn=aws_opensearch,
+        ),
+        PollService(
+            service=services["aws_neptune"],
+            poll_fn=aws_neptune,
         ),
     ]
 

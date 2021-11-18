@@ -29,6 +29,7 @@ data "aws_iam_policy_document" "backend" {
       "elasticache:DescribeCacheEngineVersions",
       "es:ListVersions",
       "kafka:ListKafkaVersions",
+      "rds:DescribeDBEngineVersions",
     ]
 
     resources = [

@@ -119,6 +119,16 @@ services = {
             "ElastiSearch fork",
         ],
     ),
+    "aws_neptune": Service(
+        platform=aws,
+        name="aws_neptune",
+        label="Neptune",
+        name_alternatives=[
+            "Neptune",
+            "AWS Neptune",
+            "Graph Database",
+        ],
+    ),
     # ...
 }
 

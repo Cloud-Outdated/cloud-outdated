@@ -35,7 +35,8 @@
                 "Action": [
                     "elasticache:DescribeCacheEngineVersions",
                     "es:ListVersions",
-                    "kafka:ListKafkaVersions"
+                    "kafka:ListKafkaVersions",
+                    "rds:DescribeDBEngineVersions"
                 ],
                 "Resource": "*"
             }
