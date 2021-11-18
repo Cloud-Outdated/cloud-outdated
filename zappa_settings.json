@@ -28,6 +28,15 @@
                 "function": "services.tasks.poll_gcp",
                 "expression": "rate(12 hours)"
             }
+        ],
+        "extra_permissions": [
+            {
+                "Effect": "Allow",
+                "Action": [
+                    "elasticache:DescribeCacheEngineVersions"
+                ],
+                "Resource": "*"
+            }
         ]
     },
     "dev": {
