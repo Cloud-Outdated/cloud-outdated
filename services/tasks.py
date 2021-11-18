@@ -81,6 +81,17 @@ def aws_kafka():
     ]
 
 
+def aws_es():
+    """Get AWS ElasticSearch versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("es")
+    versions = client.list_elasticsearch_versions()["ElasticsearchVersions"]
+    [version for version in versions]
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -182,6 +193,10 @@ def poll_aws():
         PollService(
             service=services["aws_kafka"],
             poll_fn=aws_kafka,
+        ),
+        PollService(
+            service=services["aws_es"],
+            poll_fn=aws_es,
         ),
     ]
 

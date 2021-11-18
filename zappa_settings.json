@@ -34,6 +34,7 @@
                 "Effect": "Allow",
                 "Action": [
                     "elasticache:DescribeCacheEngineVersions",
+                    "es:ListVersions",
                     "kafka:ListKafkaVersions"
                 ],
                 "Resource": "*"

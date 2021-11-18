@@ -100,6 +100,15 @@ services = {
             "AWS Kafka",
         ],
     ),
+    "aws_es": Service(
+        platform=aws,
+        name="aws_es",
+        label="ElasticSearch",
+        name_alternatives=[
+            "AWS ES",
+            "AWS ElasticSearch",
+        ],
+    )
     # ...
 }
 
