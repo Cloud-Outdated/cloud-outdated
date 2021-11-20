@@ -134,7 +134,7 @@ resource "aws_ssm_parameter" "backend-azure-account-automation-user" {
   name        = "/${local.project}/${var.environment}/AZURE_USERNAME"
   description = "Backend user's AZURE_USERNAME for internal services"
   type        = "SecureString"
-  value       = azurerm_automation_credential.backend.username
+  value       = azuread_user.backend.user_principal_name
   overwrite   = true
 }
 
@@ -142,6 +142,6 @@ resource "aws_ssm_parameter" "backend-azure-account-automation-password" {
   name        = "/${local.project}/${var.environment}/AZURE_PASSWORD"
   description = "Backend user's AZURE_PASSWORD for internal services"
   type        = "SecureString"
-  value       = azurerm_automation_credential.backend.password
+  value       = azuread_user.backend.password
   overwrite   = true
 }
