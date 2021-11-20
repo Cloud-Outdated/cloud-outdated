@@ -22,7 +22,7 @@
         "events": [
             {
                 "function": "services.tasks.poll_aws",
-                "expression": "rate(5 minutes)"
+                "expression": "rate(12 hours)"
             },
             {
                 "function": "services.tasks.poll_gcp",
@@ -34,7 +34,11 @@
                 "Effect": "Allow",
                 "Action": [
                     "elasticache:DescribeCacheEngineVersions",
-                    "kafka:ListKafkaVersions"
+                    "es:ListVersions",
+                    "kafka:ListKafkaVersions",
+                    "memorydb:DescribeEngineVersions",
+                    "mq:DescribeBrokerEngineTypes",
+                    "rds:DescribeDBEngineVersions"
                 ],
                 "Resource": "*"
             }

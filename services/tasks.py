@@ -81,6 +81,104 @@ def aws_kafka():
     ]
 
 
+def aws_es():
+    """Get AWS ElasticSearch versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("es")
+    versions = client.list_elasticsearch_versions()["ElasticsearchVersions"]
+    return [version for version in versions]
+
+
+def aws_opensearch():
+    """Get AWS OpenSearch versions.
+
+    OpenSearch is a community-driven, open-source fork from the last
+    ALv2 version of Elasticsearch and Kibana.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("opensearch")
+    versions = client.list_versions()["Versions"]
+    return [version for version in versions]
+
+
+def aws_neptune():
+    """Get AWS Neptune versions.
+
+    Neptune is a fully-managed graph database service.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("neptune")
+    versions = client.describe_db_engine_versions(Engine="neptune")["DBEngineVersions"]
+    return [version["EngineVersion"] for version in versions]
+
+
+def aws_docdb():
+    """Get AWS DocDB versions.
+
+    DocumentDB is managed Mongo compatible DB.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("docdb")
+    versions = client.describe_db_engine_versions(Engine="docdb")["DBEngineVersions"]
+    return [version["EngineVersion"] for version in versions]
+
+
+def aws_memorydb():
+    """Get AWS MemoryDB versions.
+
+    Redis-compatible, durable, in-memory database service for ultra-fast performance.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("memorydb")
+    versions = client.describe_engine_versions()["EngineVersions"]
+    return [version["EngineVersion"] for version in versions]
+
+
+def aws_rabbitmq():
+    """Get AWS RabbitMQ versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("mq")
+    engines = client.describe_broker_engine_types(EngineType="rabbitmq")[
+        "BrokerEngineTypes"
+    ]
+    versions = []
+    for engine in engines:
+        if engine["EngineType"] == "RABBITMQ":
+            versions += [version["Name"] for version in engine["EngineVersions"]]
+    return versions
+
+
+def aws_activemq():
+    """Get AWS ActiveMQ versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("mq")
+    engines = client.describe_broker_engine_types(EngineType="activemq")[
+        "BrokerEngineTypes"
+    ]
+    versions = []
+    for engine in engines:
+        if engine["EngineType"] == "ACTIVEMQ":
+            versions += [version["Name"] for version in engine["EngineVersions"]]
+    return versions
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -182,6 +280,34 @@ def poll_aws():
         PollService(
             service=services["aws_kafka"],
             poll_fn=aws_kafka,
+        ),
+        PollService(
+            service=services["aws_es"],
+            poll_fn=aws_es,
+        ),
+        PollService(
+            service=services["aws_opensearch"],
+            poll_fn=aws_opensearch,
+        ),
+        PollService(
+            service=services["aws_neptune"],
+            poll_fn=aws_neptune,
+        ),
+        PollService(
+            service=services["aws_docdb"],
+            poll_fn=aws_docdb,
+        ),
+        PollService(
+            service=services["aws_memorydb"],
+            poll_fn=aws_memorydb,
+        ),
+        PollService(
+            service=services["aws_rabbitmq"],
+            poll_fn=aws_rabbitmq,
+        ),
+        PollService(
+            service=services["aws_activemq"],
+            poll_fn=aws_activemq,
         ),
     ]
 

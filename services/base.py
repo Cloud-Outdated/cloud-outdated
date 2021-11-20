@@ -36,12 +36,14 @@ class Service:
         name: name of the service
         name_alternatives: list of alternative names; service full name etc.
         lable: value displayed to the end user, name is used if not set
+        public: service is visible to the users in the UI and is used in notifications
     """
 
     platform: Platform
     name: str  # eks - what is stored in db
     name_alternatives: list  # [Elastic Kubernetes Service, AWS Kubernetes]
     label: Optional[str] = None  # what is display to the user
+    public: bool = True
 
     def __post_init__(self):
         if self.label is None:
@@ -54,18 +56,21 @@ services = {
         name="eks",
         label="EKS",
         name_alternatives=["Elastic Kubernetes Service"],
+        public=False,
     ),
     "gke": Service(
         platform=gcp,
         name="gke",
         label="GKE",
         name_alternatives=["Google Kubernetes Engine"],
+        public=False,
     ),
     "aks": Service(
         platform=azure,
         name="aks",
         label="AKS",
         name_alternatives=["Azure Kubernetes Service"],
+        public=False,
     ),
     "gcp_cloud_sql": Service(
         platform=gcp,
@@ -98,6 +103,78 @@ services = {
         name_alternatives=[
             "Kafka",
             "AWS Kafka",
+        ],
+    ),
+    "aws_es": Service(
+        platform=aws,
+        name="aws_es",
+        label="ElasticSearch",
+        name_alternatives=[
+            "AWS ES",
+            "AWS ElasticSearch",
+        ],
+    ),
+    "aws_opensearch": Service(
+        platform=aws,
+        name="aws_opensearch",
+        label="OpenSearch",
+        name_alternatives=[
+            "OpenSearch",
+            "AWS OpenSearch",
+            "ElastiSearch fork",
+        ],
+    ),
+    "aws_neptune": Service(
+        platform=aws,
+        name="aws_neptune",
+        label="Neptune",
+        name_alternatives=[
+            "Neptune",
+            "AWS Neptune",
+            "Graph Database",
+        ],
+    ),
+    "aws_docdb": Service(
+        platform=aws,
+        name="aws_docdb",
+        label="DocumentDB",
+        name_alternatives=[
+            "DocumentDB",
+            "AWS DocumentDB",
+            "DocDB",
+            "AWS DocDB",
+            "Mongo-compatible",
+        ],
+    ),
+    "aws_memorydb": Service(
+        platform=aws,
+        name="aws_memorydb",
+        label="MemoryDB",
+        name_alternatives=[
+            "MemoryDb",
+            "AWS MemoryDb",
+            "Redis-compatible",
+        ],
+    ),
+    "aws_rabbitmq": Service(
+        platform=aws,
+        name="aws_rabbitmq",
+        label="RabbitMQ",
+        name_alternatives=[
+            "RabbitMQ",
+            "AWS RabbitMQ",
+            "AWS RabbitMQ message broker",
+        ],
+    ),
+    "aws_activemq": Service(
+        platform=aws,
+        name="aws_activemq",
+        label="ActiveMQ",
+        name_alternatives=[
+            "ActiveMQ",
+            "AWS ActiveMQ",
+            "AWS ActiveMQ message broker",
+            "Apache ActiveMQ",
         ],
     ),
     # ...

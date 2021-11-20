@@ -19,17 +19,17 @@ class UserSubscriptionsView(BaseView):
         context["aws_services"] = [
             (key, service)
             for key, service in services.items()
-            if service.platform == aws
+            if service.platform == aws and service.public is True
         ]
         context["gcp_services"] = [
             (key, service)
             for key, service in services.items()
-            if service.platform == gcp
+            if service.platform == gcp and service.public is True
         ]
         context["azure_services"] = [
             (key, service)
             for key, service in services.items()
-            if service.platform == azure
+            if service.platform == azure and service.public is True
         ]
         return context
 
