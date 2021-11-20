@@ -113,3 +113,35 @@ resource "aws_ssm_parameter" "backend-user-service-account-key" {
   value       = module.service_accounts.key
   overwrite   = true
 }
+
+resource "aws_ssm_parameter" "backend-azure-account-automation-client" {
+  name        = "/${local.project}/${var.environment}/AZURE_CLIENT_ID"
+  description = "Backend user's AZURE_CLIENT_ID for internal services"
+  type        = "SecureString"
+  value       = data.azurerm_client_config.current.client_id
+  overwrite   = true
+}
+
+resource "aws_ssm_parameter" "backend-azure-account-automation-tenant" {
+  name        = "/${local.project}/${var.environment}/AZURE_TENANT_ID"
+  description = "Backend user's AZURE_TENANT_ID for internal services"
+  type        = "SecureString"
+  value       = data.azurerm_client_config.current.tenant_id
+  overwrite   = true
+}
+
+resource "aws_ssm_parameter" "backend-azure-account-automation-user" {
+  name        = "/${local.project}/${var.environment}/AZURE_USERNAME"
+  description = "Backend user's AZURE_USERNAME for internal services"
+  type        = "SecureString"
+  value       = azurerm_automation_credential.backend.username
+  overwrite   = true
+}
+
+resource "aws_ssm_parameter" "backend-azure-account-automation-password" {
+  name        = "/${local.project}/${var.environment}/AZURE_PASSWORD"
+  description = "Backend user's AZURE_PASSWORD for internal services"
+  type        = "SecureString"
+  value       = azurerm_automation_credential.backend.password
+  overwrite   = true
+}

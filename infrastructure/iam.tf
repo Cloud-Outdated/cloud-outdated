@@ -63,3 +63,35 @@ module "service_accounts" {
   ]
 }
 
+resource "azurerm_automation_account" "backend" {
+  name                = "${local.project}-backend-${var.environment}"
+  location            = azurerm_resource_group.cloud_outdated.location
+  resource_group_name = azurerm_resource_group.cloud_outdated.name
+  sku_name            = "Basic"
+}
+
+resource "random_string" "azure_automation_account_password" {
+  length  = 16
+  upper   = true
+  lower   = true
+  number  = true
+  special = true
+
+  keepers = {
+    # Update this to generate new value
+    secret_version = "1"
+  }
+}
+
+resource "azurerm_automation_credential" "backend" {
+  name                    = "${local.project}-backend-${var.environment}"
+  resource_group_name     = azurerm_resource_group.cloud_outdated.name
+  automation_account_name = azurerm_automation_account.backend.name
+  username                = "${local.project}-backend-${var.environment}"
+  password                = random_string.azure_automation_account_password.result
+}
+
+data "azurerm_client_config" "current" {
+}
+
+
