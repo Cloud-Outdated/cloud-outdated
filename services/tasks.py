@@ -471,35 +471,35 @@ def poll_aws():
             poll_fn=aws_postgres,
         ),
         PollService(
-            service=services["oracle_ee"],
+            service=services["aws_oracle_ee"],
             poll_fn=aws_oracle_ee,
         ),
         PollService(
-            service=services["oracle_ee_cdb"],
+            service=services["aws_oracle_ee_cdb"],
             poll_fn=aws_oracle_ee_cdb,
         ),
         PollService(
-            service=services["oracle_se2"],
+            service=services["aws_oracle_se2"],
             poll_fn=aws_oracle_se2,
         ),
         PollService(
-            service=services["oracle_se2_cdb"],
+            service=services["aws_oracle_se2_cdb"],
             poll_fn=aws_oracle_se2_cdb,
         ),
         PollService(
-            service=services["sqlserver_ee"],
+            service=services["aws_sqlserver_ee"],
             poll_fn=aws_sqlserver_ee,
         ),
         PollService(
-            service=services["sqlserver_se"],
+            service=services["aws_sqlserver_se"],
             poll_fn=aws_sqlserver_se,
         ),
         PollService(
-            service=services["sqlserver_ex"],
+            service=services["aws_sqlserver_ex"],
             poll_fn=aws_sqlserver_ex,
         ),
         PollService(
-            service=services["sqlserver_web"],
+            service=services["aws_sqlserver_web"],
             poll_fn=aws_sqlserver_web,
         ),
     ]
