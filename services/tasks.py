@@ -186,7 +186,7 @@ def _aws_rds(engine):
         list[str] of supported versions
     """
     client = get_aws_session().client("rds")
-    versions = client.describe_db_engine_versions(Engine=engine)
+    versions = client.describe_db_engine_versions(Engine=engine)["DBEngineVersions"]
     return [version["EngineVersion"] for version in versions]
 
 
