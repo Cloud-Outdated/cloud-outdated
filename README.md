@@ -11,10 +11,19 @@ Commands:
 - `make rebuild`, to rebuild docker images
 - `make destroy`, to stop server and delete volumes
 
-## Zappa Django + periodic tasks
+### Testing
 
-Please note that this is using my local AWS credentials and deploying in my personal AWS account.
-The code is that matters here.
+Tests are run within the Docker container.
+
+```
+docker compose exec django pytest .
+```
+
+or if you use zsh and oh my zsh with docker compose plugin:
+
+```
+dce django pytest .
+```
 
 ## Deploy process
 
@@ -22,20 +31,6 @@ The code is that matters here.
 - `python manage.py collectstatic`
 - `zappa deploy dev` for new deploy
 - `zappa update dev` for updates
-
-## Testing
-
-- tested
-    - use Zappa to deploy django app - test single view and template
-        - https://b4eu57c6a2.execute-api.eu-central-1.amazonaws.com/dev & https://b4eu57c6a2.execute-api.eu-central-1.amazonaws.com/dev/about/
-    - use Zappa with [whitenoise](http://whitenoise.evans.io/en/stable/)
-        - https://b4eu57c6a2.execute-api.eu-central-1.amazonaws.com/dev/dlxusdprq-uzbdhomvw/
-        - for staticfiles to work:
-            - see `STATIC_X` settings in `settings.py`
-            - run locally `./manage.py collectstatic` and then deploy
-    - call Zappa _event_ (periodi task)
-        - see `zappa_settings.json -> dev.events.0.function`
-        - can be seen that it is running using `zappa tail dev` command
 
 ## Infrastructure
 

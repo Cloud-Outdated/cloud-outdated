@@ -1,6 +1,5 @@
 Django==3.2.*
 zappa
-black
 whitenoise
 troposphere<3
 google-api-python-client

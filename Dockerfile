@@ -4,5 +4,7 @@ WORKDIR /app
 
 COPY . /app
 
-RUN pip install -r requirements.txt
+ARG REQUIREMENTS_PATH_ARG
+ENV REQUIREMENTS_PATH=$REQUIREMENTS_PATH_ARG
 
+RUN pip install -r ${REQUIREMENTS_PATH}

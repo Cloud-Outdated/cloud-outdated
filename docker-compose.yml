@@ -7,8 +7,8 @@ services:
     env_file:
       - .env.local
     ports:
-     - "26257:26257"
-     - "8080:8080"  # visit localhost:8080 for web ui
+      - "26257:26257"
+      - "8080:8080" # visit localhost:8080 for web ui
     command: start-single-node --insecure
     volumes:
       - database-data:/cockroach/cockroach-data
@@ -17,6 +17,8 @@ services:
     build:
       context: .
       dockerfile: ./Dockerfile
+      args:
+        - REQUIREMENTS_PATH_ARG=./requirements_local.txt
     restart: always
     expose:
       - "8020"
@@ -36,4 +38,4 @@ services:
       - ENV_PATH=.env.local
 
 volumes:
-  database-data:
+  database-data: null

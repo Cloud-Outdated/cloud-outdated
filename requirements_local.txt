@@ -1,0 +1,9 @@
+-r requirements.txt
+black
+django-extensions
+moto
+pre-commit
+pre-commit-hooks
+pytest-cov
+pytest-django
+vcrpy
