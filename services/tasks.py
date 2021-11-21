@@ -179,6 +179,44 @@ def aws_activemq():
     return versions
 
 
+def _aws_rds(engine):
+    """Generic function to get RDS versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("rds")
+    versions = client.describe_db_engine_versions(Engine=engine)
+    return [version["EngineVersion"] for version in versions]
+
+
+def aws_aurora():
+    """Get AWS Aurora for MySQL 5.6 compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("aurora")
+
+
+def aws_aurora_mysql():
+    """Get AWS Aurora for MySQL 5.7+ compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("aurora-mysql")
+
+
+def aws_aurora_postgres():
+    """Get AWS Aurora Postgres compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("aurora-postgresql")
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -308,6 +346,18 @@ def poll_aws():
         PollService(
             service=services["aws_activemq"],
             poll_fn=aws_activemq,
+        ),
+        PollService(
+            service=services["aws_aurora"],
+            poll_fn=aws_aurora,
+        ),
+        PollService(
+            service=services["aws_aurora_mysql"],
+            poll_fn=aws_aurora_mysql,
+        ),
+        PollService(
+            service=services["aws_aurora_postgres"],
+            poll_fn=aws_aurora_postgres,
         ),
     ]
 

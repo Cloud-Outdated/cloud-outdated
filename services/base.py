@@ -177,6 +177,36 @@ services = {
             "Apache ActiveMQ",
         ],
     ),
+    "aws_aurora": Service(
+        platform=aws,
+        name="aws_aurora",
+        label="Aurora MySQL (MySQL 5.6 compatible)",
+        name_alternatives=[
+            "Aurora MySQL 5.6-compatible",
+            "AWS Aurora",
+            "AWS Aurora MySQL",
+            "AWS Aurora MySQL 5.6",
+        ],
+    ),
+    "aws_aurora_mysql": Service(
+        platform=aws,
+        name="aws_aurora_mysql",
+        label="Aurora MySQL (MySQL 5.7+ compatible)",
+        name_alternatives=[
+            "Aurora MySQL 5.7+ compatible",
+            "AWS Aurora MySQL 5.7",
+            "AWS Aurora MySQL 8.0",
+        ],
+    ),
+    "aws_aurora_postgres": Service(
+        platform=aws,
+        name="aws_aurora_postgres",
+        label="Aurora Postgres",
+        name_alternatives=[
+            "Aurora Postgres",
+            "AWS Aurora Postgres",
+        ],
+    ),
     # ...
 }
 
