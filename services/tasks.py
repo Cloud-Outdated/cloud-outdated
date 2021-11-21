@@ -1,13 +1,11 @@
 import logging
 from collections import defaultdict
 from functools import reduce
-from os import environ
 from typing import Callable, List
 
 import backoff
 import boto3
 from django.conf import settings
-from google.auth import load_credentials_from_file
 from googleapiclient.discovery import build
 from subscriptions.models import Subscription
 
