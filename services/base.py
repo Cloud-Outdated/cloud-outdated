@@ -278,6 +278,50 @@ services = {
             "AWS Oracle Standard Edition Two Container Database",
         ],
     ),
+    "aws_sqlserver_ee": Service(
+        platform=aws,
+        name="aws_sqlserver_ee",
+        label="SQL Server EE",
+        name_alternatives=[
+            "SQL Server Enterprise Edition",
+            "AWS SQL Server EE",
+            "Microsoft SQL Server EE",
+            "Microsoft SQL Server Enterprise Edition",
+        ],
+    ),
+    "aws_sqlserver_se": Service(
+        platform=aws,
+        name="aws_sqlserver_se",
+        label="SQL Server SE",
+        name_alternatives=[
+            "SQL Server Standard Edition",
+            "AWS SQL Server SE",
+            "Microsoft SQL Server SE",
+            "Microsoft SQL Server Standard Edition",
+        ],
+    ),
+    "aws_sqlserver_ex": Service(
+        platform=aws,
+        name="aws_sqlserver_ex",
+        label="SQL Server EX",
+        name_alternatives=[
+            "SQL Server Express Edition",
+            "AWS SQL Server EX",
+            "Microsoft SQL Server EX",
+            "Microsoft SQL Server Express Edition",
+        ],
+    ),
+    "aws_sqlserver_web": Service(
+        platform=aws,
+        name="aws_sqlserver_web",
+        label="SQL Server Web",
+        name_alternatives=[
+            "SQL Server Web Edition",
+            "AWS SQL Server Web",
+            "Microsoft SQL Server Web",
+            "Microsoft SQL Server Web Edition",
+        ],
+    ),
     # ...
 }
 

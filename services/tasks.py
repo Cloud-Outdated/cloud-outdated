@@ -280,6 +280,42 @@ def aws_oracle_se2_cdb():
     return _aws_rds("oracle-se2-cdb")
 
 
+def aws_sqlserver_ee():
+    """Get AWS SQL Server Enterprise Edition compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("sqlserver-ee")
+
+
+def aws_sqlserver_se():
+    """Get AWS SQL Server Enterprise Edition compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("sqlserver-se")
+
+
+def aws_sqlserver_ex():
+    """Get AWS SQL Server Express Edition compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("sqlserver-ex")
+
+
+def aws_sqlserver_web():
+    """Get AWS SQL Server Web Edition compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("sqlserver-web")
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -449,6 +485,22 @@ def poll_aws():
         PollService(
             service=services["oracle_se2_cdb"],
             poll_fn=aws_oracle_se2_cdb,
+        ),
+        PollService(
+            service=services["sqlserver_ee"],
+            poll_fn=aws_sqlserver_ee,
+        ),
+        PollService(
+            service=services["sqlserver_se"],
+            poll_fn=aws_sqlserver_se,
+        ),
+        PollService(
+            service=services["sqlserver_ex"],
+            poll_fn=aws_sqlserver_ex,
+        ),
+        PollService(
+            service=services["sqlserver_web"],
+            poll_fn=aws_sqlserver_web,
         ),
     ]
 
