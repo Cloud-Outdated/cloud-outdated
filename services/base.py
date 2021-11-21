@@ -204,7 +204,38 @@ services = {
         label="Aurora Postgres",
         name_alternatives=[
             "Aurora Postgres",
+            "Aurora PostgreSQL",
             "AWS Aurora Postgres",
+            "AWS Aurora PostgreSQL",
+        ],
+    ),
+    "aws_mariadb": Service(
+        platform=aws,
+        name="aws_mariadb",
+        label="MariaDB",
+        name_alternatives=[
+            "MariaDB",
+            "AWS MariaDB",
+        ],
+    ),
+    "aws_mysql": Service(
+        platform=aws,
+        name="aws_mysql",
+        label="MySQL",
+        name_alternatives=[
+            "MySQL",
+            "AWS MySQL",
+        ],
+    ),
+    "aws_postgres": Service(
+        platform=aws,
+        name="aws_postgres",
+        label="Postgres",
+        name_alternatives=[
+            "Postgres",
+            "PostgreSQL",
+            "AWS Postgres",
+            "AWS PostgreSQL",
         ],
     ),
     # ...

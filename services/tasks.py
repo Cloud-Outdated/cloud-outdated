@@ -217,6 +217,33 @@ def aws_aurora_postgres():
     return _aws_rds("aurora-postgresql")
 
 
+def aws_mariadb():
+    """Get AWS MariaDB compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("mariadb")
+
+
+def aws_mysql():
+    """Get AWS MySQL compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("mysql")
+
+
+def aws_postgres():
+    """Get AWS Postgres compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("postgres")
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -358,6 +385,18 @@ def poll_aws():
         PollService(
             service=services["aws_aurora_postgres"],
             poll_fn=aws_aurora_postgres,
+        ),
+        PollService(
+            service=services["aws_mariadb"],
+            poll_fn=aws_mariadb,
+        ),
+        PollService(
+            service=services["aws_mysql"],
+            poll_fn=aws_mysql,
+        ),
+        PollService(
+            service=services["aws_postgres"],
+            poll_fn=aws_postgres,
         ),
     ]
 
