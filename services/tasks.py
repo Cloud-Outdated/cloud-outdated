@@ -4,8 +4,8 @@ from functools import reduce
 from os import environ
 from typing import Callable, List
 
-import boto3
 import backoff
+import boto3
 from django.conf import settings
 from google.auth import load_credentials_from_file
 from googleapiclient.discovery import build
@@ -18,21 +18,55 @@ from services.models import Version
 logger = logging.getLogger(__name__)
 
 
-# export GOOGLE_APPLICATION_CREDENTIALS="/path/to/service/account/key.json"
+def _gcp_cloud_sql(engine):
+    """Generic function to get Cloud SQL versions.
 
+    Args:
+        engine (str): Database engine.
 
-def gcloud_sql():
+    Returns:
+        list(str): List of supported versions.
+    """
     with build(
         "sqladmin",
         "v1",
     ) as sqladmin:
         flags = sqladmin.flags().list().execute()
-    return list(
-        reduce(
+    return [
+        v
+        for v in reduce(
             lambda a, b: set(list(a) + list(b)),
             [i["appliesTo"] for i in flags["items"]],
         )
-    )
+        if str(v).lower().startswith(str(engine).lower())
+    ]
+
+
+def gcp_cloudsql_postgres():
+    """Get GCP CloudSQL Postgres versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _gcp_cloud_sql("postgres")
+
+
+def gcp_cloudsql_sqlserver():
+    """Get GCP CloudSQL SQL Server versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _gcp_cloud_sql("sqlserver")
+
+
+def gcp_cloudsql_mysql():
+    """Get GCP MySQL Server versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _gcp_cloud_sql("mysql")
 
 
 def get_aws_session():
@@ -394,7 +428,13 @@ def do_polling(executor: PollService):
 def poll_gcp():
     """Entrypoint task for all GCP services."""
     gcp_services = [
-        PollService(service=services["gcp_cloud_sql"], poll_fn=gcloud_sql),
+        PollService(
+            service=services["gcp_cloudsql_postgres"], poll_fn=gcp_cloudsql_postgres
+        ),
+        PollService(
+            service=services["gcp_cloudsql_sqlserver"], poll_fn=gcp_cloudsql_sqlserver
+        ),
+        PollService(service=services["gcp_cloudsql_mysql"], poll_fn=gcp_cloudsql_mysql),
     ]
 
     # with multiprocessing.Pool(settings.POLLING_THREADS) as p:

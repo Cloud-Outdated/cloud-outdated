@@ -72,11 +72,23 @@ services = {
         name_alternatives=["Azure Kubernetes Service"],
         public=False,
     ),
-    "gcp_cloud_sql": Service(
+    "gcp_cloudsql_postgres": Service(
         platform=gcp,
-        name="gcp_cloud_sql",
-        label="Cloud SQL",
-        name_alternatives=["PostgreSQL", "MySQL", "SQL Server", "MSSQL"],
+        name="gcp_cloudsql_postgres",
+        label="GCP CloudSQL Postgres",
+        name_alternatives=["PostgreSQL", "Postgres"],
+    ),
+    "gcp_cloudsql_sqlserver": Service(
+        platform=gcp,
+        name="gcp_cloudsql_sqlserver",
+        label="GCP CloudSQL SQL Server",
+        name_alternatives=["SQL Server", "MSSQL"],
+    ),
+    "gcp_cloudsql_mysql": Service(
+        platform=gcp,
+        name="gcp_cloudsql_mysql",
+        label="GCP CloudSQL MySQL",
+        name_alternatives=["MySQL"],
     ),
     "aws_elasticache_redis": Service(
         platform=aws,
