@@ -238,6 +238,46 @@ services = {
             "AWS PostgreSQL",
         ],
     ),
+    "aws_oracle_ee": Service(
+        platform=aws,
+        name="aws_oracle_ee",
+        label="Oracle EE",
+        name_alternatives=[
+            "Oracle Enterprise Edition",
+            "AWS Oracle EE",
+            "AWS Oracle Enterprise Edition",
+        ],
+    ),
+    "aws_oracle_ee_cdb": Service(
+        platform=aws,
+        name="aws_oracle_ee_cdb",
+        label="Oracle EE CDB",
+        name_alternatives=[
+            "Oracle Enterprise Edition Container Database",
+            "AWS Oracle EE CDB",
+            "AWS Oracle Enterprise Edition Container Database",
+        ],
+    ),
+    "aws_oracle_se2": Service(
+        platform=aws,
+        name="aws_oracle_se2",
+        label="Oracle SE2",
+        name_alternatives=[
+            "Oracle Standard Edition Two",
+            "AWS Oracle SE2 CDB",
+            "AWS Oracle Standard Edition Two",
+        ],
+    ),
+    "aws_oracle_se2_cdb": Service(
+        platform=aws,
+        name="aws_oracle_se2_cdb",
+        label="Oracle SE2 CDB",
+        name_alternatives=[
+            "Oracle Standard Edition Two Container Database",
+            "AWS Oracle SE2 CDB",
+            "AWS Oracle Standard Edition Two Container Database",
+        ],
+    ),
     # ...
 }
 

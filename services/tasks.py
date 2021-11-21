@@ -244,6 +244,42 @@ def aws_postgres():
     return _aws_rds("postgres")
 
 
+def aws_oracle_ee():
+    """Get AWS Oracle Enterprise Edition compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("oracle-ee")
+
+
+def aws_oracle_ee_cdb():
+    """Get AWS Oracle Enterprise Edition compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("oracle-ee-cdb")
+
+
+def aws_oracle_se2():
+    """Get AWS Oracle Standard Edition Two compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("oracle-se2")
+
+
+def aws_oracle_se2_cdb():
+    """Get AWS Oracle Standard Edition Two Container Database compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("oracle-se2-cdb")
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -397,6 +433,22 @@ def poll_aws():
         PollService(
             service=services["aws_postgres"],
             poll_fn=aws_postgres,
+        ),
+        PollService(
+            service=services["oracle_ee"],
+            poll_fn=aws_oracle_ee,
+        ),
+        PollService(
+            service=services["oracle_ee_cdb"],
+            poll_fn=aws_oracle_ee_cdb,
+        ),
+        PollService(
+            service=services["oracle_se2"],
+            poll_fn=aws_oracle_se2,
+        ),
+        PollService(
+            service=services["oracle_se2_cdb"],
+            poll_fn=aws_oracle_se2_cdb,
         ),
     ]
 
