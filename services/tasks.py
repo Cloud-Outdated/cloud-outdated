@@ -6,6 +6,7 @@ from typing import Callable, List
 import backoff
 import boto3
 from django.conf import settings
+from google.cloud import container_v1
 from googleapiclient.discovery import build
 from subscriptions.models import Subscription
 
@@ -65,6 +66,11 @@ def gcp_cloudsql_mysql():
         list[str] of supported versions
     """
     return _gcp_cloud_sql("mysql")
+
+
+def gcp_gke():
+    client = container_v1.ClusterManagerClient()
+    client.get_server_config(zone="europe-central2")
 
 
 def get_aws_session():

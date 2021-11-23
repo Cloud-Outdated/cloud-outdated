@@ -3,6 +3,7 @@ zappa
 whitenoise
 troposphere<3
 google-api-python-client
+google-cloud-container
 psycopg2-binary
 django-environ
 django-structlog
