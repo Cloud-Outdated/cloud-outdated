@@ -69,8 +69,14 @@ def gcp_cloudsql_mysql():
 
 
 def gcp_gke():
+    """Get GCP GKE master node supported versions.
+
+    Returns:
+        list(str): List of supported versions
+    """
     client = container_v1.ClusterManagerClient()
-    client.get_server_config(zone="europe-central2")
+    result = client.get_server_config(zone="europe-central2")
+    return result.valid_master_versions
 
 
 def get_aws_session():
@@ -432,6 +438,7 @@ def do_polling(executor: PollService):
 def poll_gcp():
     """Entrypoint task for all GCP services."""
     gcp_services = [
+        PollService(service=services["gke"], poll_fn=gcp_gke),
         PollService(
             service=services["gcp_cloudsql_postgres"], poll_fn=gcp_cloudsql_postgres
         ),
