@@ -1,12 +1,12 @@
-from django.shortcuts import render
+from core.views import BaseView
 from django.contrib.auth import get_user_model
+from django.core.exceptions import BadRequest
+from django.shortcuts import render
+from services.base import aws, azure, gcp, services
 from sesame.utils import get_query_string
 
-from core.views import BaseView
-from services.base import services, aws, gcp, azure
-
 from .email import UserLoginEmail, UserRegistrationEmail
-
+from .forms import UserSubscriptionsCaptchaForm
 
 User = get_user_model()
 
@@ -31,6 +31,7 @@ class UserSubscriptionsView(BaseView):
             for key, service in services.items()
             if service.platform == azure and service.public is True
         ]
+        context["captcha"] = UserSubscriptionsCaptchaForm()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -43,6 +44,9 @@ class UserSubscriptionsView(BaseView):
         post_data = request.POST
         email = post_data.get("email")
         protocol = "https" if request.is_secure() else "http"
+
+        if not UserSubscriptionsCaptchaForm(post_data).is_valid():
+            raise BadRequest
 
         user = User.objects.filter(email=email).first()
         if not user:

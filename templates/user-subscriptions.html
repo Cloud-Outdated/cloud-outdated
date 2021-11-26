@@ -20,7 +20,7 @@
                 </label>                
                 <input 
                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="email"
+                  id="id_email"
                   name="email"
                   type="text"
                   placeholder="Email"
@@ -30,6 +30,7 @@
                   {% endif %}
                 >
               </div>
+              {{ captcha.captcha }}
               <hr>
               <div class="flex items-center justify-between">
                 <h3 class="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">
