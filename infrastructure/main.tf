@@ -39,3 +39,7 @@ provider "google" {
   project = local.project
   region  = local.gcp_region
 }
+
+provider "azurerm" {
+  features {}
+}

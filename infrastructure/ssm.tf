@@ -113,3 +113,30 @@ resource "aws_ssm_parameter" "backend-user-service-account-key" {
   value       = module.service_accounts.key
   overwrite   = true
 }
+
+
+variable "RECAPTCHA_PUBLIC_KEY" {
+  type        = string
+  description = "RECAPTCHA_PUBLIC_KEY"
+}
+
+variable "RECAPTCHA_PRIVATE_KEY" {
+  type        = string
+  description = "RECAPTCHA_PRIVATE_KEY"
+}
+
+resource "aws_ssm_parameter" "backend-recaptcha-v3-public-key" {
+  name        = "/${local.project}/${var.environment}/RECAPTCHA_PUBLIC_KEY"
+  description = "Backend RECAPTCHA_PUBLIC_KEY for internal services"
+  type        = "SecureString"
+  value       = var.RECAPTCHA_PUBLIC_KEY
+  overwrite   = true
+}
+
+resource "aws_ssm_parameter" "backend-recaptcha-v3-private-key" {
+  name        = "/${local.project}/${var.environment}/RECAPTCHA_PRIVATE_KEY"
+  description = "Backend RECAPTCHA_PRIVATE_KEY for internal services"
+  type        = "SecureString"
+  value       = var.RECAPTCHA_PRIVATE_KEY
+  overwrite   = true
+}
