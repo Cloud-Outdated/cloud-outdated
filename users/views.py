@@ -4,6 +4,7 @@ from django.core.exceptions import BadRequest
 from django.shortcuts import render
 from services.base import aws, azure, gcp, services
 from sesame.utils import get_query_string
+from subscriptions.models import Subscription
 
 from .email import UserLoginEmail, UserRegistrationEmail
 from .forms import UserSubscriptionsCaptchaForm
@@ -39,6 +40,11 @@ class UserSubscriptionsView(BaseView):
         context_data = self.get_context_data(**kwargs)
 
         if request.user.is_authenticated:
+            user = request.user
+            subscriptions = Subscription.objects.filter(
+                user=user, disabled=None
+            ).values_list("service")
+            context_data["subscriptions"] = subscriptions
             return render(request, self.template_name, context_data)
 
         post_data = request.POST

@@ -39,7 +39,12 @@
                 <div class="w-full text-gray-700">
                   {% for s in aws_services %}
                     <label class="inline-flex items-center">
-                      <input type="checkbox" class="form-checkbox" value="{{ s.0 }}">
+                      <input 
+                        type="checkbox"
+                        class="form-checkbox"
+                        value="{{ s.0 }}"
+                        {% if user.is_authenticated and s.0 in subscriptions %}checked{% endif %}
+                      >
                       <span class="ml-2">{{ s.1.label }}</span>
                     </label>
                   {% endfor %}
@@ -53,7 +58,12 @@
                 <div class="w-full text-gray-700">
                   {% for s in gcp_services %}
                     <label class="inline-flex items-center">
-                      <input type="checkbox" class="form-checkbox" value="{{ s.0 }}">
+                      <input 
+                        type="checkbox"
+                        class="form-checkbox"
+                        value="{{ s.0 }}"
+                        {% if user.is_authenticated and s.0 in subscriptions %}checked{% endif %}
+                      >
                       <span class="ml-2">{{ s.1.label }}</span>
                     </label>
                   {% endfor %}
@@ -67,7 +77,12 @@
                 <div class="w-full text-gray-700">
                   {% for s in azure_services %}
                     <label class="inline-flex items-center">
-                      <input type="checkbox" class="form-checkbox" value="{{ s.0 }}">
+                      <input 
+                        type="checkbox"
+                        class="form-checkbox"
+                        value="{{ s.0 }}"
+                        {% if user.is_authenticated and s.0 in subscriptions %}checked{% endif %}
+                      >
                       <span class="ml-2">{{ s.1.label }}</span>
                     </label>
                   {% endfor %}
