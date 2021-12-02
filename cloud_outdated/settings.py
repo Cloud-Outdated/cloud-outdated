@@ -37,6 +37,10 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
 
+RECAPTCHA_PUBLIC_KEY = env("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = env("RECAPTCHA_PRIVATE_KEY")
+RECAPTCHA_REQUIRED_SCORE = 0.85
+
 ALLOWED_HOSTS = [
     "dev.cloud-outdated.com",
     "b4eu57c6a2.execute-api.eu-central-1.amazonaws.com",
@@ -64,6 +68,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "anymail",
+    "captcha",
     "core",
     "services",
     "subscriptions",

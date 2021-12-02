@@ -1,13 +1,12 @@
 import logging
 from collections import defaultdict
 from functools import reduce
-from os import environ
 from typing import Callable, List
 
-import boto3
 import backoff
+import boto3
 from django.conf import settings
-from google.auth import load_credentials_from_file
+from google.cloud import container_v1
 from googleapiclient.discovery import build
 from subscriptions.models import Subscription
 
@@ -18,21 +17,66 @@ from services.models import Version
 logger = logging.getLogger(__name__)
 
 
-# export GOOGLE_APPLICATION_CREDENTIALS="/path/to/service/account/key.json"
+def _gcp_cloud_sql(engine):
+    """Generic function to get Cloud SQL versions.
 
+    Args:
+        engine (str): Database engine.
 
-def gcloud_sql():
+    Returns:
+        list(str): List of supported versions.
+    """
     with build(
         "sqladmin",
         "v1",
     ) as sqladmin:
         flags = sqladmin.flags().list().execute()
-    return list(
-        reduce(
+    return [
+        v
+        for v in reduce(
             lambda a, b: set(list(a) + list(b)),
             [i["appliesTo"] for i in flags["items"]],
         )
-    )
+        if str(v).lower().startswith(str(engine).lower())
+    ]
+
+
+def gcp_cloudsql_postgres():
+    """Get GCP CloudSQL Postgres versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _gcp_cloud_sql("postgres")
+
+
+def gcp_cloudsql_sqlserver():
+    """Get GCP CloudSQL SQL Server versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _gcp_cloud_sql("sqlserver")
+
+
+def gcp_cloudsql_mysql():
+    """Get GCP MySQL Server versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _gcp_cloud_sql("mysql")
+
+
+def gcp_gke():
+    """Get GCP GKE master node supported versions.
+
+    Returns:
+        list(str): List of supported versions
+    """
+    client = container_v1.ClusterManagerClient()
+    result = client.get_server_config(zone="europe-central2")
+    return result.valid_master_versions
 
 
 def get_aws_session():
@@ -179,6 +223,143 @@ def aws_activemq():
     return versions
 
 
+def _aws_rds(engine):
+    """Generic function to get RDS versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    client = get_aws_session().client("rds")
+    versions = client.describe_db_engine_versions(Engine=engine)["DBEngineVersions"]
+    return [version["EngineVersion"] for version in versions]
+
+
+def aws_aurora():
+    """Get AWS Aurora for MySQL 5.6 compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("aurora")
+
+
+def aws_aurora_mysql():
+    """Get AWS Aurora for MySQL 5.7+ compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("aurora-mysql")
+
+
+def aws_aurora_postgres():
+    """Get AWS Aurora Postgres compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("aurora-postgresql")
+
+
+def aws_mariadb():
+    """Get AWS MariaDB compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("mariadb")
+
+
+def aws_mysql():
+    """Get AWS MySQL compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("mysql")
+
+
+def aws_postgres():
+    """Get AWS Postgres compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("postgres")
+
+
+def aws_oracle_ee():
+    """Get AWS Oracle Enterprise Edition compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("oracle-ee")
+
+
+def aws_oracle_ee_cdb():
+    """Get AWS Oracle Enterprise Edition compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("oracle-ee-cdb")
+
+
+def aws_oracle_se2():
+    """Get AWS Oracle Standard Edition Two compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("oracle-se2")
+
+
+def aws_oracle_se2_cdb():
+    """Get AWS Oracle Standard Edition Two Container Database compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("oracle-se2-cdb")
+
+
+def aws_sqlserver_ee():
+    """Get AWS SQL Server Enterprise Edition compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("sqlserver-ee")
+
+
+def aws_sqlserver_se():
+    """Get AWS SQL Server Enterprise Edition compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("sqlserver-se")
+
+
+def aws_sqlserver_ex():
+    """Get AWS SQL Server Express Edition compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("sqlserver-ex")
+
+
+def aws_sqlserver_web():
+    """Get AWS SQL Server Web Edition compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_rds("sqlserver-web")
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -257,7 +438,14 @@ def do_polling(executor: PollService):
 def poll_gcp():
     """Entrypoint task for all GCP services."""
     gcp_services = [
-        PollService(service=services["gcp_cloud_sql"], poll_fn=gcloud_sql),
+        PollService(service=services["gke"], poll_fn=gcp_gke),
+        PollService(
+            service=services["gcp_cloudsql_postgres"], poll_fn=gcp_cloudsql_postgres
+        ),
+        PollService(
+            service=services["gcp_cloudsql_sqlserver"], poll_fn=gcp_cloudsql_sqlserver
+        ),
+        PollService(service=services["gcp_cloudsql_mysql"], poll_fn=gcp_cloudsql_mysql),
     ]
 
     # with multiprocessing.Pool(settings.POLLING_THREADS) as p:
@@ -308,6 +496,62 @@ def poll_aws():
         PollService(
             service=services["aws_activemq"],
             poll_fn=aws_activemq,
+        ),
+        PollService(
+            service=services["aws_aurora"],
+            poll_fn=aws_aurora,
+        ),
+        PollService(
+            service=services["aws_aurora_mysql"],
+            poll_fn=aws_aurora_mysql,
+        ),
+        PollService(
+            service=services["aws_aurora_postgres"],
+            poll_fn=aws_aurora_postgres,
+        ),
+        PollService(
+            service=services["aws_mariadb"],
+            poll_fn=aws_mariadb,
+        ),
+        PollService(
+            service=services["aws_mysql"],
+            poll_fn=aws_mysql,
+        ),
+        PollService(
+            service=services["aws_postgres"],
+            poll_fn=aws_postgres,
+        ),
+        PollService(
+            service=services["aws_oracle_ee"],
+            poll_fn=aws_oracle_ee,
+        ),
+        PollService(
+            service=services["aws_oracle_ee_cdb"],
+            poll_fn=aws_oracle_ee_cdb,
+        ),
+        PollService(
+            service=services["aws_oracle_se2"],
+            poll_fn=aws_oracle_se2,
+        ),
+        PollService(
+            service=services["aws_oracle_se2_cdb"],
+            poll_fn=aws_oracle_se2_cdb,
+        ),
+        PollService(
+            service=services["aws_sqlserver_ee"],
+            poll_fn=aws_sqlserver_ee,
+        ),
+        PollService(
+            service=services["aws_sqlserver_se"],
+            poll_fn=aws_sqlserver_se,
+        ),
+        PollService(
+            service=services["aws_sqlserver_ex"],
+            poll_fn=aws_sqlserver_ex,
+        ),
+        PollService(
+            service=services["aws_sqlserver_web"],
+            poll_fn=aws_sqlserver_web,
         ),
     ]
 

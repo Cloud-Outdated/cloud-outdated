@@ -1,13 +1,14 @@
 Django==3.2.*
 zappa
-black
 whitenoise
 troposphere<3
 google-api-python-client
+google-cloud-container
 psycopg2-binary
 django-environ
 django-structlog
 django-anymail[amazon_ses]
+django-recaptcha
 django-templated-mail
 django-sesame[ua]
 django-cockroachdb==3.2.1

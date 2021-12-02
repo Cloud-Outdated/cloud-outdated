@@ -114,34 +114,29 @@ resource "aws_ssm_parameter" "backend-user-service-account-key" {
   overwrite   = true
 }
 
-resource "aws_ssm_parameter" "backend-azure-account-automation-client" {
-  name        = "/${local.project}/${var.environment}/AZURE_CLIENT_ID"
-  description = "Backend user's AZURE_CLIENT_ID for internal services"
+
+variable "RECAPTCHA_PUBLIC_KEY" {
+  type        = string
+  description = "RECAPTCHA_PUBLIC_KEY"
+}
+
+variable "RECAPTCHA_PRIVATE_KEY" {
+  type        = string
+  description = "RECAPTCHA_PRIVATE_KEY"
+}
+
+resource "aws_ssm_parameter" "backend-recaptcha-v3-public-key" {
+  name        = "/${local.project}/${var.environment}/RECAPTCHA_PUBLIC_KEY"
+  description = "Backend RECAPTCHA_PUBLIC_KEY for internal services"
   type        = "SecureString"
-  value       = data.azurerm_client_config.current.client_id
+  value       = var.RECAPTCHA_PUBLIC_KEY
   overwrite   = true
 }
 
-resource "aws_ssm_parameter" "backend-azure-account-automation-tenant" {
-  name        = "/${local.project}/${var.environment}/AZURE_TENANT_ID"
-  description = "Backend user's AZURE_TENANT_ID for internal services"
+resource "aws_ssm_parameter" "backend-recaptcha-v3-private-key" {
+  name        = "/${local.project}/${var.environment}/RECAPTCHA_PRIVATE_KEY"
+  description = "Backend RECAPTCHA_PRIVATE_KEY for internal services"
   type        = "SecureString"
-  value       = data.azurerm_client_config.current.tenant_id
-  overwrite   = true
-}
-
-resource "aws_ssm_parameter" "backend-azure-account-automation-user" {
-  name        = "/${local.project}/${var.environment}/AZURE_USERNAME"
-  description = "Backend user's AZURE_USERNAME for internal services"
-  type        = "SecureString"
-  value       = azuread_user.backend.user_principal_name
-  overwrite   = true
-}
-
-resource "aws_ssm_parameter" "backend-azure-account-automation-password" {
-  name        = "/${local.project}/${var.environment}/AZURE_PASSWORD"
-  description = "Backend user's AZURE_PASSWORD for internal services"
-  type        = "SecureString"
-  value       = azuread_user.backend.password
+  value       = var.RECAPTCHA_PRIVATE_KEY
   overwrite   = true
 }

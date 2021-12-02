@@ -72,11 +72,23 @@ services = {
         name_alternatives=["Azure Kubernetes Service"],
         public=False,
     ),
-    "gcp_cloud_sql": Service(
+    "gcp_cloudsql_postgres": Service(
         platform=gcp,
-        name="gcp_cloud_sql",
-        label="Cloud SQL",
-        name_alternatives=["PostgreSQL", "MySQL", "SQL Server", "MSSQL"],
+        name="gcp_cloudsql_postgres",
+        label="GCP CloudSQL Postgres",
+        name_alternatives=["PostgreSQL", "Postgres"],
+    ),
+    "gcp_cloudsql_sqlserver": Service(
+        platform=gcp,
+        name="gcp_cloudsql_sqlserver",
+        label="GCP CloudSQL SQL Server",
+        name_alternatives=["SQL Server", "MSSQL"],
+    ),
+    "gcp_cloudsql_mysql": Service(
+        platform=gcp,
+        name="gcp_cloudsql_mysql",
+        label="GCP CloudSQL MySQL",
+        name_alternatives=["MySQL"],
     ),
     "aws_elasticache_redis": Service(
         platform=aws,
@@ -175,6 +187,151 @@ services = {
             "AWS ActiveMQ",
             "AWS ActiveMQ message broker",
             "Apache ActiveMQ",
+        ],
+    ),
+    "aws_aurora": Service(
+        platform=aws,
+        name="aws_aurora",
+        label="Aurora MySQL (MySQL 5.6 compatible)",
+        name_alternatives=[
+            "Aurora MySQL 5.6-compatible",
+            "AWS Aurora",
+            "AWS Aurora MySQL",
+            "AWS Aurora MySQL 5.6",
+        ],
+    ),
+    "aws_aurora_mysql": Service(
+        platform=aws,
+        name="aws_aurora_mysql",
+        label="Aurora MySQL (MySQL 5.7+ compatible)",
+        name_alternatives=[
+            "Aurora MySQL 5.7+ compatible",
+            "AWS Aurora MySQL 5.7",
+            "AWS Aurora MySQL 8.0",
+        ],
+    ),
+    "aws_aurora_postgres": Service(
+        platform=aws,
+        name="aws_aurora_postgres",
+        label="Aurora Postgres",
+        name_alternatives=[
+            "Aurora Postgres",
+            "Aurora PostgreSQL",
+            "AWS Aurora Postgres",
+            "AWS Aurora PostgreSQL",
+        ],
+    ),
+    "aws_mariadb": Service(
+        platform=aws,
+        name="aws_mariadb",
+        label="MariaDB",
+        name_alternatives=[
+            "MariaDB",
+            "AWS MariaDB",
+        ],
+    ),
+    "aws_mysql": Service(
+        platform=aws,
+        name="aws_mysql",
+        label="MySQL",
+        name_alternatives=[
+            "MySQL",
+            "AWS MySQL",
+        ],
+    ),
+    "aws_postgres": Service(
+        platform=aws,
+        name="aws_postgres",
+        label="Postgres",
+        name_alternatives=[
+            "Postgres",
+            "PostgreSQL",
+            "AWS Postgres",
+            "AWS PostgreSQL",
+        ],
+    ),
+    "aws_oracle_ee": Service(
+        platform=aws,
+        name="aws_oracle_ee",
+        label="Oracle EE",
+        name_alternatives=[
+            "Oracle Enterprise Edition",
+            "AWS Oracle EE",
+            "AWS Oracle Enterprise Edition",
+        ],
+    ),
+    "aws_oracle_ee_cdb": Service(
+        platform=aws,
+        name="aws_oracle_ee_cdb",
+        label="Oracle EE CDB",
+        name_alternatives=[
+            "Oracle Enterprise Edition Container Database",
+            "AWS Oracle EE CDB",
+            "AWS Oracle Enterprise Edition Container Database",
+        ],
+    ),
+    "aws_oracle_se2": Service(
+        platform=aws,
+        name="aws_oracle_se2",
+        label="Oracle SE2",
+        name_alternatives=[
+            "Oracle Standard Edition Two",
+            "AWS Oracle SE2 CDB",
+            "AWS Oracle Standard Edition Two",
+        ],
+    ),
+    "aws_oracle_se2_cdb": Service(
+        platform=aws,
+        name="aws_oracle_se2_cdb",
+        label="Oracle SE2 CDB",
+        name_alternatives=[
+            "Oracle Standard Edition Two Container Database",
+            "AWS Oracle SE2 CDB",
+            "AWS Oracle Standard Edition Two Container Database",
+        ],
+    ),
+    "aws_sqlserver_ee": Service(
+        platform=aws,
+        name="aws_sqlserver_ee",
+        label="SQL Server EE",
+        name_alternatives=[
+            "SQL Server Enterprise Edition",
+            "AWS SQL Server EE",
+            "Microsoft SQL Server EE",
+            "Microsoft SQL Server Enterprise Edition",
+        ],
+    ),
+    "aws_sqlserver_se": Service(
+        platform=aws,
+        name="aws_sqlserver_se",
+        label="SQL Server SE",
+        name_alternatives=[
+            "SQL Server Standard Edition",
+            "AWS SQL Server SE",
+            "Microsoft SQL Server SE",
+            "Microsoft SQL Server Standard Edition",
+        ],
+    ),
+    "aws_sqlserver_ex": Service(
+        platform=aws,
+        name="aws_sqlserver_ex",
+        label="SQL Server EX",
+        name_alternatives=[
+            "SQL Server Express Edition",
+            "AWS SQL Server EX",
+            "Microsoft SQL Server EX",
+            "Microsoft SQL Server Express Edition",
+        ],
+    ),
+    "aws_sqlserver_web": Service(
+        platform=aws,
+        name="aws_sqlserver_web",
+        label="SQL Server Web",
+        name_alternatives=[
+            "SQL Server Web Edition",
+            "AWS SQL Server Web",
+            "Microsoft SQL Server Web",
+            "Microsoft SQL Server Web Edition",
         ],
     ),
     # ...
