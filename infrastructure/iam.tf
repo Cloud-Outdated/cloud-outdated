@@ -62,3 +62,11 @@ module "service_accounts" {
     "${local.project}=>roles/serviceusage.apiKeysAdmin",
   ]
 }
+
+
+resource "azurerm_role_assignment" "cloud_oudated" {
+  scope                = data.azurerm_subscription.current.id
+  role_definition_name = "Reader"
+  principal_id         = azuread_service_principal.backend.object_id
+}
+

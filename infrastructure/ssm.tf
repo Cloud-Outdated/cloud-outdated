@@ -140,3 +140,35 @@ resource "aws_ssm_parameter" "backend-recaptcha-v3-private-key" {
   value       = var.RECAPTCHA_PRIVATE_KEY
   overwrite   = true
 }
+
+resource "aws_ssm_parameter" "backend-azure-account-subscription-id" {
+  name        = "/${local.project}/${var.environment}/AZURE_SUBSCRIPTION_ID"
+  description = "Backend user's AZURE_SUBSCRIPTION_ID for internal services"
+  type        = "SecureString"
+  value       = data.azurerm_subscription.current.subscription_id
+  overwrite   = true
+}
+
+resource "aws_ssm_parameter" "backend-azure-account-client-id" {
+  name        = "/${local.project}/${var.environment}/AZURE_CLIENT_ID"
+  description = "Backend user's AZURE_CLIENT_ID for internal services"
+  type        = "SecureString"
+  value       = azuread_service_principal.backend.application_id
+  overwrite   = true
+}
+
+resource "aws_ssm_parameter" "backend-azure-account-tenant-id" {
+  name        = "/${local.project}/${var.environment}/AZURE_TENANT_ID"
+  description = "Backend user's AZURE_TENANT_ID for internal services"
+  type        = "SecureString"
+  value       = data.azurerm_client_config.current.tenant_id
+  overwrite   = true
+}
+
+resource "aws_ssm_parameter" "backend-azure-account-client-secret" {
+  name        = "/${local.project}/${var.environment}/AZURE_CLIENT_SECRET"
+  description = "Backend user's AZURE_CLIENT_SECRET for internal services"
+  type        = "SecureString"
+  value       = azuread_service_principal_password.backend.value
+  overwrite   = true
+}

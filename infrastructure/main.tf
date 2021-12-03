@@ -61,7 +61,7 @@ provider "azuread" {
 
 # Create a resource group
 resource "azurerm_resource_group" "cloud_outdated" {
-  name     = "cloud-outdated"
+  name     = "${local.project}-${var.environment}"
   location = "Germany West Central"
 }
 
@@ -70,39 +70,26 @@ data "azuread_domains" "current" {
   only_initial = true
 }
 
+data "azurerm_client_config" "current" {
+}
+data "azuread_client_config" "current" {
+}
+data "azurerm_subscription" "current" {
+}
+
 # Create an application
 resource "azuread_application" "cloud_outdated" {
-  display_name                   = "${local.project}-${var.environment}"
-  fallback_public_client_enabled = true
+  display_name = "${local.project}-${var.environment}"
+  owners       = [data.azuread_client_config.current.object_id]
 }
 
 
 resource "azuread_service_principal" "backend" {
-  application_id = azuread_application.cloud_outdated.application_id
+  application_id               = azuread_application.cloud_outdated.application_id
+  app_role_assignment_required = false
+  owners                       = [data.azuread_client_config.current.object_id]
 }
 
-resource "random_string" "azure_automation_account_password" {
-  length  = 16
-  upper   = true
-  lower   = true
-  number  = true
-  special = true
-
-  keepers = {
-    # Update this to generate new value
-    secret_version = "1"
-  }
+resource "azuread_service_principal_password" "backend" {
+  service_principal_id = azuread_service_principal.backend.object_id
 }
-
-resource "azuread_user" "backend" {
-  user_principal_name = "${local.project}-backend-${var.environment}@${data.azuread_domains.current.domains.0.domain_name}"
-  display_name        = "${local.project}-backend-${var.environment}"
-  mail_nickname       = "${local.project}-backend-${var.environment}"
-  password            = random_string.azure_automation_account_password.result
-}
-
-data "azurerm_client_config" "current" {
-}
-
-
-
