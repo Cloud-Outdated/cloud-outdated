@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     "anymail",
     "captcha",
     "core",
+    "notifications",
     "services",
     "subscriptions",
     "users",
