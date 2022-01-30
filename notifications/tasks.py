@@ -35,7 +35,7 @@ def send_user_notification(user):
         user (users.models.UserProfile): user instance
     """
     subscribed_service_ids = Subscription.objects.filter(
-        user=user, disabled=False
+        user=user, disabled=None
     ).values_list("service", flat=True)
 
     subscribed_services_count = len(subscribed_service_ids)
@@ -69,7 +69,7 @@ def get_new_versions_for_user(user, service_ids):
     """
     available_version_ids = Version.objects.filter(
         service__in=service_ids,
-        deprecated=False,
+        deprecated=None,
         released__lte=datetime.today(),
     ).values_list("id", flat=True)
 
