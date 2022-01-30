@@ -1,4 +1,3 @@
-from curses.panel import version
 import factory
 from notifications.models import Notification, NotificationItem
 from users.tests.factories import UserProfileFactory
