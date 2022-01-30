@@ -1,10 +1,10 @@
-import logging
 from collections import defaultdict
 from functools import reduce
 from typing import Callable, List
 
 import backoff
 import boto3
+import structlog
 from django.conf import settings
 from google.cloud import container_v1
 from googleapiclient.discovery import build
@@ -14,7 +14,7 @@ from services.base import Service, services
 from services.email import NotificationEmail
 from services.models import Version
 
-logger = logging.getLogger(__name__)
+logger = structlog.get_logger(__name__)
 
 
 def _gcp_cloud_sql(engine):
