@@ -7,7 +7,9 @@ from notifications.tasks import (
     get_new_versions_for_user,
 )
 from django.test import TestCase
+from notifications.tests.factories import NotificationFactory, NotificationItemFactory
 from subscriptions.tests.factories import SubscriptionFactory
+from services.tests.factories import VersionFactory
 from users.tests.factories import UserProfileFactory
 
 
@@ -57,3 +59,21 @@ class SendUserNotificationTestCase(TestCase):
         send_user_notification(self.user)
 
         mocked_notify_user.assert_called_once()
+
+
+class GetNewVersionsForUserTestCase(TestCase):
+    def test_new_versions(self):
+        user = UserProfileFactory()
+
+        version_1 = VersionFactory(deprecated=None)
+        version_2 = VersionFactory(deprecated=timezone.now() - timedelta(days=1))
+        version_3 = VersionFactory()  # already notified version
+
+        past_notification = NotificationFactory(user=user, sent=True)
+        NotificationItemFactory(notification=past_notification, version=version_3)
+
+        service_keys = [version_1.service, version_2.service, version_3.service]
+
+        result = get_new_versions_for_user(user, service_keys)
+        assert len(result) == 1
+        assert result[0] == str(version_1.id)

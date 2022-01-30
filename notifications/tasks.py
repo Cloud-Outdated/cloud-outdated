@@ -2,10 +2,12 @@ from datetime import datetime
 
 import structlog
 from django.contrib.auth import get_user_model
+from django.db.models import Q
+from django.utils import timezone
 
+from notifications.models import Notification, NotificationItem
 from subscriptions.models import Subscription
 from services.models import Version
-from .models import Notification, NotificationItem
 
 UserProfile = get_user_model()
 logger = structlog.get_logger(__name__)
@@ -34,11 +36,11 @@ def send_user_notification(user):
     Args:
         user (users.models.UserProfile): user instance
     """
-    subscribed_service_ids = Subscription.objects.filter(
+    subscribed_service_keys = Subscription.objects.filter(
         user=user, disabled=None
     ).values_list("service", flat=True)
 
-    subscribed_services_count = len(subscribed_service_ids)
+    subscribed_services_count = len(subscribed_service_keys)
     if subscribed_services_count == 0:
         logger.info(
             "No active subscriptions found, skipping.",
@@ -52,26 +54,29 @@ def send_user_notification(user):
             subscribed_services_count=subscribed_services_count,
         )
 
-        new_version_ids = get_new_versions_for_user(user, subscribed_service_ids)
+        new_version_ids = get_new_versions_for_user(user, subscribed_service_keys)
 
         notify_user(user, new_version_ids)
 
 
-def get_new_versions_for_user(user, service_ids):
+def get_new_versions_for_user(user, service_keys):
     """Get versions about which user was not notified yet.
 
     Args:
         user (users.models.UserProfile): user instance
-        service_ids (list[str]): list of service names
+        service_keys (list[str]): list of service keys as stored in db
 
     Returns:
         list: ids of new versions
     """
-    available_version_ids = Version.objects.filter(
-        service__in=service_ids,
-        deprecated=None,
-        released__lte=datetime.today(),
-    ).values_list("id", flat=True)
+    available_version_ids = (
+        Version.objects.filter(
+            service__in=service_keys,
+        )
+        .filter(Q(deprecated__gte=timezone.now()) | Q(deprecated=None))
+        .filter(Q(released__lte=datetime.today()) | Q(released=None))
+        .values_list("id", flat=True)
+    )
 
     past_notification_version_ids = (
         NotificationItem.objects.filter(
@@ -85,7 +90,7 @@ def get_new_versions_for_user(user, service_ids):
 
     new_version_ids = set(available_version_ids) - set(past_notification_version_ids)
 
-    return new_version_ids
+    return [str(id) for id in list(new_version_ids)]
 
 
 def notify_user(user, version_ids):

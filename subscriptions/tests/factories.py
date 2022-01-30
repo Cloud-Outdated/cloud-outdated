@@ -6,7 +6,7 @@ from services.base import service_choices
 
 class SubscriptionFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserProfileFactory)
-    service = factory.Iterator(service_choices)
+    service = factory.Faker("random_element", elements=[k for k, v in service_choices])
     disabled = None
 
     class Meta:
