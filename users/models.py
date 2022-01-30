@@ -3,7 +3,6 @@ from django.contrib.auth.models import (
     BaseUserManager,
 )
 from django.db import models
-from django.utils import timezone
 
 from core.models import BaseModelMixin
 

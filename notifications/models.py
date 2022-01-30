@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.db import models
-from users.models import UserProfile
 from core.models import BaseModelMixin
 from services.models import Version
 
