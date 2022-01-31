@@ -1,6 +1,7 @@
 -r requirements.txt
 black
 django-extensions
+factory_boy
 moto
 pre-commit
 pre-commit-hooks
