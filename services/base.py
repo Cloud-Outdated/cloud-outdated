@@ -334,6 +334,12 @@ services = {
             "Microsoft SQL Server Web Edition",
         ],
     ),
+    "azure_mariadb_server": Service(
+        platform=azure,
+        name="azure_mariadb_server",
+        label="MariaDB Server",
+        name_alternatives=[],
+    )
     # ...
 }
 

@@ -5,7 +5,9 @@ from typing import Callable, List
 
 import backoff
 import boto3
+import requests
 import structlog
+from bs4 import BeautifulSoup
 from django.conf import settings
 from google.cloud import container_v1
 from googleapiclient.discovery import build
@@ -361,6 +363,29 @@ def aws_sqlserver_web():
     return _aws_rds("sqlserver-web")
 
 
+def azure_mariadb_server():
+    """Get Azure MariaDB server compatible versions.
+
+    Returns:
+        list[str]: supported versions
+    """
+
+    page = requests.get(
+        "https://docs.microsoft.com/en-us/rest/api/mariadb/servers/create"
+    )
+    soup = BeautifulSoup(page.content, "html.parser")
+    server_version_title = soup.find(id="serverversion")
+    server_version_table = (
+        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling
+    )
+    supported_versions = []
+    for c in server_version_table.findChildren("tr"):
+        d = c.findChildren("td")
+        if d:
+            supported_versions.append(str(d[0].text.strip()))
+    return supported_versions
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -557,6 +582,19 @@ def poll_aws():
     ]
 
     polled_services = map(do_polling, aws_services)
+
+    send_notifications(polled_services)
+
+
+def poll_azure():
+    """Entrypoint task for all Azure services."""
+    azure_services = [
+        PollService(
+            service=services["azure_mariadb_server"], poll_fn=azure_mariadb_server
+        ),
+    ]
+
+    polled_services = map(do_polling, azure_services)
 
     send_notifications(polled_services)
 
