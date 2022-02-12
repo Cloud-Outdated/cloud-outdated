@@ -1,7 +1,6 @@
-Django==3.2.*
-zappa
+Django==3.2.12
+zappa>=0.54.1
 whitenoise
-troposphere<3
 google-api-python-client
 google-cloud-container
 psycopg2-binary
