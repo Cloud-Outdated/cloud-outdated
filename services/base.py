@@ -338,7 +338,25 @@ services = {
         platform=azure,
         name="azure_mariadb_server",
         label="MariaDB Server",
-        name_alternatives=[],
+        name_alternatives=["MariaDB", "Azure MariaDB"],
+    ),
+    "azure_postgresql_server": Service(
+        platform=azure,
+        name="azure_postgresql_server",
+        label="PostgreSQL Server",
+        name_alternatives=["Postgres", "Azure PostgreSQL", "Azure Postgres"],
+    ),
+    "azure_redis_server": Service(
+        platform=azure,
+        name="azure_redis_server",
+        label="Redis Server",
+        name_alternatives=["Redis", "Azure Redis"],
+    ),
+    "azure_mysql_server": Service(
+        platform=azure,
+        name="azure_mysql_server",
+        label="MySQL Server",
+        name_alternatives=["MySQL", "Azure MySQL"],
     )
     # ...
 }

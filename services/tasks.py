@@ -1,4 +1,7 @@
 import logging
+import re
+import sys
+import traceback
 from collections import defaultdict
 from functools import reduce
 from typing import Callable, List
@@ -8,6 +11,7 @@ import boto3
 import requests
 import structlog
 from bs4 import BeautifulSoup
+from core.util import notify_operator
 from django.conf import settings
 from google.cloud import container_v1
 from googleapiclient.discovery import build
@@ -363,6 +367,10 @@ def aws_sqlserver_web():
     return _aws_rds("sqlserver-web")
 
 
+class ScrappingError(Exception):
+    pass
+
+
 def azure_mariadb_server():
     """Get Azure MariaDB server compatible versions.
 
@@ -379,10 +387,95 @@ def azure_mariadb_server():
         server_version_title.nextSibling.nextSibling.nextSibling.nextSibling
     )
     supported_versions = []
-    for c in server_version_table.findChildren("tr"):
-        d = c.findChildren("td")
-        if d:
-            supported_versions.append(str(d[0].text.strip()))
+    for child in server_version_table.findChildren("tr"):
+        data = child.findChildren("td")
+        if data:
+            version = str(data[0].text.strip())
+            supported_versions.append(version)
+    if supported_versions == []:
+        raise ScrappingError("Azure MariaDB Server versions not found")
+    return supported_versions
+
+
+def azure_postgresql_server():
+    """Get Azure PostgreSQL server compatible versions.
+
+    Returns:
+        list[str]: supported versions
+    """
+
+    page = requests.get(
+        "https://docs.microsoft.com/en-us/azure/postgresql/concepts-version-policy"
+    )
+    soup = BeautifulSoup(page.content, "html.parser")
+    server_version_title = soup.find(id="supported--postgresql-versions")
+    server_version_table = (
+        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling
+    )
+    supported_versions = []
+    for child in server_version_table.findChildren("tr"):
+        data = child.findChildren("td")
+        if data:
+            version = str(data[0].text.strip())
+            if "retired" not in version.lower():
+                supported_versions.append(version)
+    if supported_versions == []:
+        raise ScrappingError("Azure PostgreSQL Server versions not found")
+    return supported_versions
+
+
+def azure_redis_server():
+    """Get Azure Redis server compatible versions.
+
+    Returns:
+        list[str]: supported versions
+    """
+
+    page = requests.get(
+        "https://docs.microsoft.com/en-us/rest/api/redis/2021-06-01/redis/update"
+    )
+    soup = BeautifulSoup(page.content, "html.parser")
+    server_version_title = soup.find(id="request-body")
+    server_version_table = server_version_title.nextSibling.nextSibling
+    for child in server_version_table.findChildren("tr"):
+        data = child.findChildren("td")
+        if not data:
+            continue
+        prop = str(data[0].text.strip())
+        if prop != "properties.redisVersion":
+            continue
+        value = str(data[2].text.strip())
+        matched = re.search("\([0-9]+(,\s?[0-9]+)*\)", value)
+        return [
+            v.strip() for v in value[matched.start() + 1 : matched.end() - 1].split(",")
+        ]
+    raise ScrappingError("Azure Redis version not found")
+
+
+def azure_mysql_server():
+    """Get Azure MySQL server compatible versions.
+
+    Returns:
+        list[str]: supported versions
+    """
+
+    page = requests.get(
+        "https://docs.microsoft.com/en-us/azure/mysql/concepts-version-policy"
+    )
+    soup = BeautifulSoup(page.content, "html.parser")
+    server_version_title = soup.find(id="supported-mysql-versions")
+    server_version_table = (
+        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling
+    )
+    supported_versions = []
+    for child in server_version_table.findChildren("tr"):
+        data = child.findChildren("td")
+        if data:
+            version = str(data[1].text.strip())
+            if "retired" not in version.lower():
+                supported_versions.append(version)
+    if supported_versions == []:
+        raise ScrappingError("Azure MySQL Server versions not found")
     return supported_versions
 
 
@@ -416,6 +509,11 @@ class PollService:
                 current_versions, supported_versions
             )
         except:
+            _, _, tb = sys.exc_info()
+            notify_operator(
+                f"Error ocurred while polling service {self.service.name}\n"
+                + "\n".join(traceback.extract_tb(tb))
+            )
             logger.error(
                 f"Error ocurred while polling service {self.service.name}",
                 exc_info=True,
@@ -591,6 +689,15 @@ def poll_azure():
     azure_services = [
         PollService(
             service=services["azure_mariadb_server"], poll_fn=azure_mariadb_server
+        ),
+        PollService(
+            service=services["azure_postgresql_server"], poll_fn=azure_postgresql_server
+        ),
+        PollService(
+            service=services["azure_redis_server"], poll_fn=azure_redis_server
+        ),
+        PollService(
+            service=services["azure_mysql_server"], poll_fn=azure_mysql_server
         ),
     ]
 
