@@ -479,6 +479,88 @@ def azure_mysql_server():
     return supported_versions
 
 
+def azure_aks():
+    """Get Azure Kubernetes compatible versions.
+
+    Returns:
+        list[str]: supported versions
+    """
+
+    page = requests.get(
+        "https://docs.microsoft.com/en-us/azure/aks/supported-kubernetes-versions"
+    )
+    soup = BeautifulSoup(page.content, "html.parser")
+    server_version_title = soup.find(id="aks-kubernetes-release-calendar")
+    server_version_table = (
+        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling
+    )
+    supported_versions = []
+    for child in server_version_table.findChildren("tr"):
+        data = child.findChildren("td")
+        if data:
+            version = str(data[0].text.strip())
+            if not version.lower().endswith("*"):
+                supported_versions.append(version)
+    if supported_versions == []:
+        raise ScrappingError("Azure Kubernetes versions not found")
+    return supported_versions
+
+
+def azure_hdinsight():
+    """Get Azure HDInsight compatible versions.
+
+    Returns:
+        list[str]: supported versions
+    """
+
+    page = requests.get(
+        "https://docs.microsoft.com/en-us/azure/hdinsight/hdinsight-component-versioning"
+    )
+    soup = BeautifulSoup(page.content, "html.parser")
+    server_version_title = soup.find(id="supported-hdinsight-versions")
+    server_version_table = (
+        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling
+    )
+    supported_versions = []
+    for child in server_version_table.findChildren("tr"):
+        data = child.findChildren("td")
+        if data:
+            version = str(data[0].text.strip())
+            supported_versions.append(version)
+    if supported_versions == []:
+        raise ScrappingError("Azure HDInsight versions not found")
+    return supported_versions
+
+
+def azure_databricks():
+    """Get Azure Databricks compatible versions.
+
+    Returns:
+        list[str]: supported versions
+    """
+
+    page = requests.get(
+        "https://docs.microsoft.com/en-us/azure/databricks/release-notes/runtime/releases"
+    )
+    soup = BeautifulSoup(page.content, "html.parser")
+    server_version_title = soup.find(
+        id="--supported-databricks-runtime-releases-and-support-schedule"
+    )
+    server_version_table = (
+        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling
+    )
+    supported_versions = []
+    for child in server_version_table.findChildren("tr"):
+        data = child.findChildren("td")
+        if data:
+            version = str(data[0].text.strip())
+            if version:
+                supported_versions.append(version)
+    if supported_versions == []:
+        raise ScrappingError("Azure Databricks versions not found")
+    return supported_versions
+
+
 class PollService:
     def __init__(self, service: Service, poll_fn: Callable):
         self.service = service
@@ -693,12 +775,11 @@ def poll_azure():
         PollService(
             service=services["azure_postgresql_server"], poll_fn=azure_postgresql_server
         ),
-        PollService(
-            service=services["azure_redis_server"], poll_fn=azure_redis_server
-        ),
-        PollService(
-            service=services["azure_mysql_server"], poll_fn=azure_mysql_server
-        ),
+        PollService(service=services["azure_redis_server"], poll_fn=azure_redis_server),
+        PollService(service=services["azure_mysql_server"], poll_fn=azure_mysql_server),
+        PollService(service=services["aks"], poll_fn=azure_aks),
+        PollService(service=services["azure_hdinsight"], poll_fn=azure_hdinsight),
+        PollService(service=services["azure_databricks"], poll_fn=azure_databricks),
     ]
 
     polled_services = map(do_polling, azure_services)

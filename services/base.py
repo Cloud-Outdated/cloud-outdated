@@ -357,6 +357,18 @@ services = {
         name="azure_mysql_server",
         label="MySQL Server",
         name_alternatives=["MySQL", "Azure MySQL"],
+    ),
+    "azure_hdinsight": Service(
+        platform=azure,
+        name="azure_hdinsight",
+        label="Azure HDInsight",
+        name_alternatives=["HDInsight"],
+    ),
+    "azure_databricks": Service(
+        platform=azure,
+        name="azure_databricks",
+        label="Azure Databricks",
+        name_alternatives=["Databricks"],
     )
     # ...
 }
