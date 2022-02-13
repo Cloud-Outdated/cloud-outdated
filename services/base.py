@@ -90,6 +90,24 @@ services = {
         label="GCP CloudSQL MySQL",
         name_alternatives=["MySQL"],
     ),
+    "gcp_dataproc": Service(
+        platform=gcp,
+        name="gcp_dataproc",
+        label="GCP Dataproc",
+        name_alternatives=["Dataproc"],
+    ),
+    "gcp_dataproc_os": Service(
+        platform=gcp,
+        name="gcp_dataproc_os",
+        label="GCP Dataproc OS Images",
+        name_alternatives=["Dataproc OS Images", "Dataproc OS"],
+    ),
+    "gcp_memorystore_redis": Service(
+        platform=gcp,
+        name="gcp_memorystore_redis",
+        label="GCP Memorystore Redis",
+        name_alternatives=["GCP Redis", "Redis"],
+    ),
     "aws_elasticache_redis": Service(
         platform=aws,
         name="aws_elasticache_redis",

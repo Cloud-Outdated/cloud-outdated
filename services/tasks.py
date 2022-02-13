@@ -86,6 +86,90 @@ def gcp_gke():
     return result.valid_master_versions
 
 
+def gcp_dataproc_os():
+    """Get GCP Dataproc OS images compatible versions.
+
+    Returns:
+        list[str]: supported versions
+    """
+
+    page = requests.get(
+        "https://cloud.google.com/dataproc/docs/concepts/versioning/overview"
+    )
+    soup = BeautifulSoup(page.content, "html.parser")
+    server_version_title = soup.find(id="how_versioning_works")
+    server_version_table = (
+        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling
+    )
+    supported_versions = []
+    for child in server_version_table.findChildren("tr"):
+        data = child.findChildren("td")
+        if data:
+            version = str(data[0].text.strip())
+            if version:
+                supported_versions.append(version)
+    if supported_versions == []:
+        raise ScrappingError("Azure Dataproc OS images versions not found")
+    return supported_versions
+
+
+def gcp_dataproc():
+    """Get GCP Dataproc compatible versions.
+
+    Returns:
+        list[str]: supported versions
+    """
+
+    page = requests.get(
+        "https://cloud.google.com/dataproc/docs/concepts/versioning/dataproc-versions"
+    )
+    final_supported_versions = []
+    soup = BeautifulSoup(page.content, "html.parser")
+    images = {"debian": 6, "ubuntu": 4, "centos": 4}
+    for image, offset in images.items():
+        supported_versions = []
+        server_version_table = soup.find(id=f"{image}_images")
+        for _ in range(offset):
+            server_version_table = server_version_table.nextSibling
+        for child in server_version_table.findChildren("tr"):
+            data = child.findChildren("td")
+            if data:
+                version = str(data[0].text.strip())
+                if version:
+                    supported_versions.append(version)
+        if supported_versions == []:
+            raise ScrappingError("GCP Dataproc versions not found")
+        final_supported_versions += supported_versions
+    return final_supported_versions
+
+
+def gcp_memorystore_redis():
+    """Get GCP Memorystore for Redis compatible versions.
+
+    Returns:
+        list[str]: supported versions
+    """
+
+    page = requests.get(
+        "https://cloud.google.com/memorystore/docs/redis/supported-versions"
+    )
+    soup = BeautifulSoup(page.content, "html.parser")
+    server_version_title = soup.find(id="current_versions")
+    server_version_table = (
+        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling
+    )
+    supported_versions = []
+    for child in server_version_table.findChildren("tr"):
+        data = child.findChildren("td")
+        if data:
+            version = str(data[1].text.strip())
+            if version:
+                supported_versions.append(version)
+    if supported_versions == []:
+        raise ScrappingError("Azure Memorystore for Redis versions not found")
+    return supported_versions
+
+
 def get_aws_session():
     # credentials used here are from zappa settings
     return boto3.session.Session()
@@ -652,6 +736,9 @@ def poll_gcp():
             service=services["gcp_cloudsql_sqlserver"], poll_fn=gcp_cloudsql_sqlserver
         ),
         PollService(service=services["gcp_cloudsql_mysql"], poll_fn=gcp_cloudsql_mysql),
+        PollService(service=services["gcp_dataproc"], poll_fn=gcp_dataproc),
+        PollService(service=services["gcp_dataproc_os"], poll_fn=gcp_dataproc_os),
+        PollService(service=services["gcp_memorystore_redis"], poll_fn=gcp_memorystore_redis),
     ]
 
     # with multiprocessing.Pool(settings.POLLING_THREADS) as p:
