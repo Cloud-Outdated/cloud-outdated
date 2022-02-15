@@ -12,3 +12,5 @@ django-templated-mail
 django-sesame[ua]
 django-cockroachdb==3.2.1
 backoff
+beautifulsoup4
+requests

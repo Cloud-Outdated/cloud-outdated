@@ -27,6 +27,10 @@
             {
                 "function": "services.tasks.poll_gcp",
                 "expression": "rate(12 hours)"
+            },
+            {
+                "function": "services.tasks.poll_azure",
+                "expression": "rate(12 hours)"
             }
         ],
         "extra_permissions": [

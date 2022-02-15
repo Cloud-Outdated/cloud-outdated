@@ -334,6 +334,42 @@ services = {
             "Microsoft SQL Server Web Edition",
         ],
     ),
+    "azure_mariadb_server": Service(
+        platform=azure,
+        name="azure_mariadb_server",
+        label="MariaDB Server",
+        name_alternatives=["MariaDB", "Azure MariaDB"],
+    ),
+    "azure_postgresql_server": Service(
+        platform=azure,
+        name="azure_postgresql_server",
+        label="PostgreSQL Server",
+        name_alternatives=["Postgres", "Azure PostgreSQL", "Azure Postgres"],
+    ),
+    "azure_redis_server": Service(
+        platform=azure,
+        name="azure_redis_server",
+        label="Redis Server",
+        name_alternatives=["Redis", "Azure Redis"],
+    ),
+    "azure_mysql_server": Service(
+        platform=azure,
+        name="azure_mysql_server",
+        label="MySQL Server",
+        name_alternatives=["MySQL", "Azure MySQL"],
+    ),
+    "azure_hdinsight": Service(
+        platform=azure,
+        name="azure_hdinsight",
+        label="Azure HDInsight",
+        name_alternatives=["HDInsight"],
+    ),
+    "azure_databricks": Service(
+        platform=azure,
+        name="azure_databricks",
+        label="Azure Databricks",
+        name_alternatives=["Databricks"],
+    )
     # ...
 }
 
