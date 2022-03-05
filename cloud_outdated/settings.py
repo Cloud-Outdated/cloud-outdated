@@ -241,4 +241,4 @@ structlog.configure(
 # Service polling configurations
 POLLING_THREADS = 4
 NOTIFICATIONS_MAX_RETRIES = 10
-NOTIFICATIONS_MAX_TIME = 60 * 5
+NOTIFICATIONS_MAX_TIME = 60 * 3

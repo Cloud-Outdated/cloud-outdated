@@ -1,7 +1,13 @@
+import structlog
+
 from django.conf import settings
 from django.db import models
 from core.models import BaseModelMixin
+from notifications.email import NotificationEmail
 from services.models import Version
+
+
+logger = structlog.get_logger(__name__)
 
 
 class Notification(BaseModelMixin):
@@ -15,11 +21,53 @@ class Notification(BaseModelMixin):
         on_delete=models.CASCADE,
     )
     sent = models.BooleanField(default=False, help_text="switched to True once sent")
+    # TODO
+    # sent_at = models.DateTimeField()
 
     def send(self):
-        """Placeholder method that will use NotificationEmail
-        to send and email with new service versions.
+        """Send an email to the user and notify that new versions of their
+        subscribed services exist.
+
+        This method is ideally used in an async-task.
+
+        Returns:
+            notifications.email.NotificationEmail or None: email object if sent, None if not
         """
+        logger.bind(notification_id=self.id)
+
+        items = self.notification_items.all()
+        new_versions = []
+        deprecated_versions = []
+        for item in items:
+            if item.version.deprecated:
+                deprecated_versions.append(item.version)
+            else:
+                new_versions.append(item.version)
+
+        if not new_versions and not deprecated_versions:
+            logger.info("Notification sending aborted: nothing to report")
+            return None
+
+        ctx = {
+            "new_versions": new_versions,
+            "deprecated_versions": deprecated_versions,
+        }
+
+        email = NotificationEmail(context=ctx)
+        email.send(to=[self.user.email])
+
+        if email.anymail_status and hasattr(email.anymail_status, "message_id"):
+            self.sent = True
+            self.save()
+            logger.info("Notification sending succeeded")
+        else:
+            logger.error(
+                "Notification sending failed", anymail_status=email.anymail_status
+            )
+            return None
+
+        logger.unbind("notification_id")
+        return email
 
 
 class NotificationItem(BaseModelMixin):

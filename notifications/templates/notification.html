@@ -1,0 +1,36 @@
+{% load i18n %}
+{% block subject %}
+    {% blocktrans %}Cloud-Outdated.com - New service versions updates{% endblocktrans %}
+{% endblock subject %}
+{% block text_body %}
+    Hi! Here are version updates to services you are subscribed to at cloud-outdated.com.
+    {% if new_versions %}
+        New versions:
+        {% for version in new_versions %}- {{ version.service_label }}: {{ version.version }}{% endfor %}
+    {% endif %}
+    {% if deprecated_versions %}
+        Deprecated versions
+        {% for version in deprecated_versions %}- {{ version.service_label }}: {{ version.version }}{% endfor %}
+    {% endif %}
+    Brought to you with by cloud-outdated.com team.
+{% endblock text_body %}
+{% block html_body %}
+    <div>
+        Hi! Here are version updates to services you are subscribed to at <a href="https://cloud-outdated.com">cloud-outdated.com</a>.
+    </div>
+    {% if new_versions %}
+        <h3>New versions</h3>
+        <ul>
+            {% for version in new_versions %}<li>{{ version.service_label }}: {{ version.version }}</li>{% endfor %}
+        </ul>
+    {% endif %}
+    {% if deprecated_versions %}
+        <h3>Deprecated versions</h3>
+        <ul>
+            {% for version in deprecated_versions %}<li>{{ version.service_label }}: {{ version.version }}</li>{% endfor %}
+        </ul>
+    {% endif %}
+    <div>
+        Brought to you with by <a href="https://cloud-outdated.com">cloud-outdated.com</a> team.
+    </div>
+{% endblock html_body %}
