@@ -21,52 +21,13 @@
                                    {% if user.is_authenticated %} value="{{ user.email }}" disabled{% endif %}>
                         </div>
                         {{ captcha.captcha }}
-                        <hr>
-                        <div class="flex items-center justify-between">
-                            <h3 class="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">AWS</h3>
-                            <div class="w-full text-gray-700">
-                                {% for s in aws_services %}
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox"
-                                               class="form-checkbox"
-                                               value="{{ s.0 }}"
-                                               {% if user.is_authenticated and s.0 in active_subscription_services %}checked{% endif %}>
-                                        <span class="ml-2">{{ s.1.label }}</span>
-                                    </label>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="flex items-center justify-between">
-                            <h3 class="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">GCP</h3>
-                            <div class="w-full text-gray-700">
-                                {% for s in gcp_services %}
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox"
-                                               class="form-checkbox"
-                                               value="{{ s.0 }}"
-                                               {% if user.is_authenticated and s.0 in active_subscription_services %}checked{% endif %}>
-                                        <span class="ml-2">{{ s.1.label }}</span>
-                                    </label>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="flex items-center justify-between">
-                            <h3 class="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">Azure</h3>
-                            <div class="w-full text-gray-700">
-                                {% for s in azure_services %}
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox"
-                                               class="form-checkbox"
-                                               value="{{ s.0 }}"
-                                               {% if user.is_authenticated and s.0 in active_subscription_services %}checked{% endif %}>
-                                        <span class="ml-2">{{ s.1.label }}</span>
-                                    </label>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <hr>
+                        <hr />
+                        {% include "user-subscriptions-provider-services.html" with provider="AWS" services=aws_services %}
+                        <hr />
+                        {% include "user-subscriptions-provider-services.html" with provider="GCP" services=gcp_services %}
+                        <hr />
+                        {% include "user-subscriptions-provider-services.html" with provider="Azure" services=azure_services %}
+                        <hr />
                         <div class="flex items-center justify-between">
                             <button class="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
                                     type="submit">

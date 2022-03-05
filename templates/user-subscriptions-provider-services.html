@@ -1,0 +1,14 @@
+<div class="flex items-center justify-between">
+    <h3 class="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">{{ provider }}</h3>
+    <div class="w-full text-gray-700">
+        {% for s in services %}
+            <label class="inline-flex items-center">
+                <input type="checkbox"
+                       class="form-checkbox"
+                       value="{{ s.0 }}"
+                       {% if user.is_authenticated and s.0 in active_subscription_services %}checked{% endif %}>
+                <span class="ml-2">{{ s.1.label }}</span>
+            </label>
+        {% endfor %}
+    </div>
+</div>
