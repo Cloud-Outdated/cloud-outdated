@@ -15,8 +15,27 @@ User = get_user_model()
 class UserSubscriptionsView(BaseView):
     template_name = "user-subscriptions.html"
 
+    def get_active_subscription_services(self):
+        """Return list of services the user is currently subscribed to.
+
+        Returns:
+            list: keys of services
+        """
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            return Subscription.objects.filter(user=user, disabled=None).values_list(
+                "service", flat=True
+            )
+        else:
+            return []
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        context[
+            "active_subscription_services"
+        ] = self.get_active_subscription_services()
+
         context["aws_services"] = [
             (key, service)
             for key, service in services.items()
@@ -39,12 +58,10 @@ class UserSubscriptionsView(BaseView):
 
         context_data = self.get_context_data(**kwargs)
 
+        context_data[
+            "active_subscription_services"
+        ] = self.get_active_subscription_services()
         if request.user.is_authenticated:
-            user = request.user
-            subscriptions = Subscription.objects.filter(
-                user=user, disabled=None
-            ).values_list("service")
-            context_data["subscriptions"] = subscriptions
             return render(request, self.template_name, context_data)
 
         post_data = request.POST
