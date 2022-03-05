@@ -1,7 +1,9 @@
 import structlog
 
 from django.conf import settings
+from django.utils import timezone
 from django.db import models
+
 from core.models import BaseModelMixin
 from notifications.email import NotificationEmail
 from services.models import Version
@@ -21,8 +23,7 @@ class Notification(BaseModelMixin):
         on_delete=models.CASCADE,
     )
     sent = models.BooleanField(default=False, help_text="switched to True once sent")
-    # TODO
-    # sent_at = models.DateTimeField()
+    sent_at = models.DateTimeField(null=True, blank=True)
 
     def send(self):
         """Send an email to the user and notify that new versions of their
@@ -58,6 +59,7 @@ class Notification(BaseModelMixin):
 
         if email.anymail_status and hasattr(email.anymail_status, "message_id"):
             self.sent = True
+            self.sent_at = timezone.now()
             self.save()
             logger.info("Notification sending succeeded")
         else:
