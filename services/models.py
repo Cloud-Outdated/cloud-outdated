@@ -1,7 +1,7 @@
 from django.db import models
 
 from core.models import BaseModelMixin
-from .base import service_choices
+from .base import service_choices, services
 
 
 class Version(BaseModelMixin):
@@ -26,3 +26,15 @@ class Version(BaseModelMixin):
                 name="unique_service_version",
             ),
         ]
+
+    @property
+    def service_label(self):
+        """Get human readable service name.
+
+        Returns:
+            str: service name
+        """
+        try:
+            return services[self.service].label
+        except KeyError:
+            return self.service
