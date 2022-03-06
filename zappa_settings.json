@@ -51,6 +51,7 @@
     "dev": {
         "extends": "common",
         "debug": true,
+        "log_level": "INFO",
         "profile_name": "cloud-outdated-deploy-dev",
         "s3_bucket": "cloud-outdated-dev",
         "environment_variables": {
