@@ -22,8 +22,11 @@ class Notification(BaseModelMixin):
         related_name="user_notifications",
         on_delete=models.CASCADE,
     )
-    sent = models.BooleanField(default=False, help_text="switched to True once sent")
-    sent_at = models.DateTimeField(null=True, blank=True)
+    sent = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="If populated timestamp when the notification was sent, if not, notification was not sent yet",
+    )
 
     def send(self):
         """Send an email to the user and notify that new versions of their
@@ -58,8 +61,7 @@ class Notification(BaseModelMixin):
         email.send(to=[self.user.email])
 
         if email.anymail_status and hasattr(email.anymail_status, "message_id"):
-            self.sent = True
-            self.sent_at = timezone.now()
+            self.sent = timezone.now()
             self.save()
             logger.info("Notification sending succeeded")
         else:

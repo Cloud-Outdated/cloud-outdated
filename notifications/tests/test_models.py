@@ -24,14 +24,14 @@ class NotifactionSendTestCase(TestCase):
 
     @mock_ses
     def test_new_versions(self):
-        notification = NotificationFactory(user=self.user, sent=False)
+        notification = NotificationFactory(user=self.user, sent=None)
         version = VersionFactory(deprecated=None)
         NotificationItemFactory(notification=notification, version=version)
 
         email = notification.send()
 
         notification.refresh_from_db()
-        notification.sent is True
+        notification.sent is not None
 
         from django.conf import settings
 
@@ -43,14 +43,14 @@ class NotifactionSendTestCase(TestCase):
         assert version.version in email.html
 
     def test_deprecated_versions(self):
-        notification = NotificationFactory(user=self.user, sent=False)
+        notification = NotificationFactory(user=self.user, sent=None)
         version = VersionFactory(deprecated=timezone.now() - timedelta(days=1))
         NotificationItemFactory(notification=notification, version=version)
 
         email = notification.send()
 
         notification.refresh_from_db()
-        notification.sent is True
+        notification.sent is not None
         assert email.subject == NotificationEmail.subject
         assert email.to == [self.user.email]
         assert "New versions" not in email.html

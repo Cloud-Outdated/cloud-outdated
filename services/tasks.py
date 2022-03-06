@@ -734,7 +734,9 @@ def poll_gcp():
         PollService(service=services["gcp_cloudsql_mysql"], poll_fn=gcp_cloudsql_mysql),
         PollService(service=services["gcp_dataproc"], poll_fn=gcp_dataproc),
         PollService(service=services["gcp_dataproc_os"], poll_fn=gcp_dataproc_os),
-        PollService(service=services["gcp_memorystore_redis"], poll_fn=gcp_memorystore_redis),
+        PollService(
+            service=services["gcp_memorystore_redis"], poll_fn=gcp_memorystore_redis
+        ),
     ]
 
     # with multiprocessing.Pool(settings.POLLING_THREADS) as p:
