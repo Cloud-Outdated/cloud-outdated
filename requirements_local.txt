@@ -8,3 +8,4 @@ pre-commit-hooks
 pytest-cov
 pytest-django
 vcrpy
+newrelic-lambda-cli

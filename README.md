@@ -63,3 +63,13 @@ CockroachDB database needs to be created manually since there is no terraform pr
 
 - go to [cockroachlabs.cloud](https://cockroachlabs.cloud/clusters) and create a cluster for the environment
 - get connection info and store it to SSM
+
+### New Relic
+
+Single installation per account, not per deploy env.
+
+- install [New Relic' Lambda CLI tool](https://github.com/newrelic/newrelic-lambda-cli#installation) in your venv
+    - `pip install newrelic-lambda-cli`
+- install New Relic integration for all Lambdas in account
+    - `aws-vault exec cloud-outdated-mislav --no-session -- newrelic-lambda integrations install --nr-account-id 3438061 --nr-api-key {REDACTED - SEE aws_ssm_parameter.new-relic-api-key} --nr-region eu`
+    - `aws-vault exec cloud-outdated-mislav --no-session -- newrelic-lambda layers install -f all --nr-account-id 3438061 --nr-api-key {REDACTED - SEE aws_ssm_parameter.new-relic-api-key} --nr-region eu --enable-extension-function-logs --aws-region eu-central-1`
