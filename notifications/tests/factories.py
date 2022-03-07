@@ -6,7 +6,7 @@ from services.tests.factories import VersionFactory
 
 class NotificationFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserProfileFactory)
-    sent = True
+    sent = factory.Faker("past_datetime")
 
     class Meta:
         model = Notification

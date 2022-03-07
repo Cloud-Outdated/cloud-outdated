@@ -1,24 +1,18 @@
-import logging
 import re
 import sys
 import traceback
-from collections import defaultdict
 from functools import reduce
 from typing import Callable, List
 
-import backoff
 import boto3
 import requests
 import structlog
 from bs4 import BeautifulSoup
 from core.util import notify_operator
-from django.conf import settings
 from google.cloud import container_v1
 from googleapiclient.discovery import build
-from subscriptions.models import Subscription
 
 from services.base import Service, services
-from services.email import NotificationEmail
 from services.models import Version
 
 logger = structlog.get_logger(__name__)
@@ -727,6 +721,8 @@ def do_polling(executor: PollService):
 
 def poll_gcp():
     """Entrypoint task for all GCP services."""
+    logger.info("Starting polling GCP")
+
     gcp_services = [
         PollService(service=services["gke"], poll_fn=gcp_gke),
         PollService(
@@ -738,18 +734,22 @@ def poll_gcp():
         PollService(service=services["gcp_cloudsql_mysql"], poll_fn=gcp_cloudsql_mysql),
         PollService(service=services["gcp_dataproc"], poll_fn=gcp_dataproc),
         PollService(service=services["gcp_dataproc_os"], poll_fn=gcp_dataproc_os),
-        PollService(service=services["gcp_memorystore_redis"], poll_fn=gcp_memorystore_redis),
+        PollService(
+            service=services["gcp_memorystore_redis"], poll_fn=gcp_memorystore_redis
+        ),
     ]
 
     # with multiprocessing.Pool(settings.POLLING_THREADS) as p:
     #    polled_services = p.map(do_polling, gcp_services)
     polled_services = map(do_polling, gcp_services)
 
-    send_notifications(polled_services)
+    logger.info("Finished polling GCP", polled_services_count=len(polled_services))
 
 
 def poll_aws():
     """Entrypoint task for all AWS services."""
+    logger.info("Starting polling AWS")
+
     aws_services = [
         PollService(
             service=services["aws_elasticache_redis"], poll_fn=aws_elasticache_redis
@@ -850,11 +850,13 @@ def poll_aws():
 
     polled_services = map(do_polling, aws_services)
 
-    send_notifications(polled_services)
+    logger.info("Finished polling AWS", polled_services_count=len(polled_services))
 
 
 def poll_azure():
     """Entrypoint task for all Azure services."""
+    logger.info("Starting polling Azure")
+
     azure_services = [
         PollService(
             service=services["azure_mariadb_server"], poll_fn=azure_mariadb_server
@@ -871,39 +873,4 @@ def poll_azure():
 
     polled_services = map(do_polling, azure_services)
 
-    send_notifications(polled_services)
-
-
-@backoff.on_exception(
-    backoff.expo,
-    Exception,
-    max_tries=settings.NOTIFICATIONS_MAX_RETRIES,
-    max_time=settings.NOTIFICATIONS_MAX_TIME,
-    backoff_log_level=logging.WARN,
-)
-def send_notifications(polled_services: List[PollService]):
-    notifications = defaultdict(list)
-
-    for ps in polled_services:
-        if ps.added_versions or ps.deprecated_versions:
-            notifications[ps.service.name].append(
-                (ps.added_versions, ps.deprecated_versions)
-            )
-
-    subscriptions = Subscription.objects.filter(
-        service__in=notifications.keys(), disabled=None
-    ).prefetch_related("user")
-
-    users_subscriptions = defaultdict(list)
-    for sub in subscriptions:
-        users_subscriptions[sub.user].append(
-            {
-                "service": sub.service,
-                "added": notifications[sub.service][0],
-                "deprecated": notifications[sub.service][1],
-            }
-        )
-
-    for user, subs in users_subscriptions.items():
-        ctx = {"subscriptions": subs}
-        NotificationEmail(context=ctx).send(to=[user.email])
+    logger.info("Finished polling Azure", polled_services_count=len(polled_services))

@@ -1,9 +1,12 @@
+import logging
 from datetime import datetime
 
+import backoff
 import structlog
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.utils import timezone
+from django.conf import settings
 
 from notifications.models import Notification, NotificationItem
 from subscriptions.models import Subscription
@@ -81,9 +84,9 @@ def get_new_versions_for_user(user, service_keys):
     past_notification_version_ids = (
         NotificationItem.objects.filter(
             notification__user=user,
-            notification__sent=True,
             version__in=available_version_ids,
         )
+        .exclude(notification__sent=None)
         .select_related("notification")
         .values_list("version", flat=True)
     )
@@ -93,6 +96,13 @@ def get_new_versions_for_user(user, service_keys):
     return [str(id) for id in list(new_version_ids)]
 
 
+@backoff.on_exception(
+    backoff.expo,
+    Exception,
+    max_tries=settings.NOTIFICATIONS_MAX_RETRIES,
+    max_time=settings.NOTIFICATIONS_MAX_TIME,
+    backoff_log_level=logging.WARN,
+)
 def notify_user(user, version_ids):
     """Takes care of creating the Notification object and sending the email.
 
@@ -100,7 +110,9 @@ def notify_user(user, version_ids):
         user (users.models.UserProfile): user instance
         version_ids (list[uuid.UUID]): list of service versions the user will be notified of
     """
-    notification = Notification.objects.create(user=user, sent=False)
+    notification = Notification.objects.create(user=user, sent=None)
     for version_id in version_ids:
         NotificationItem.objects.create(notification=notification, version=version_id)
-    notification.send()  # call method that grabs all items, sends email and flips sent to True
+
+    # call method that grabs all notification items, sends email and sets sent timestamp
+    notification.send()

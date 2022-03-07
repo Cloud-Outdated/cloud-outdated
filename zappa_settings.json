@@ -31,6 +31,10 @@
             {
                 "function": "services.tasks.poll_azure",
                 "expression": "rate(12 hours)"
+            },
+            {
+                "function": "notifications.tasks.send_notifications",
+                "expression": "rate(30 days)"
             }
         ],
         "extra_permissions": [

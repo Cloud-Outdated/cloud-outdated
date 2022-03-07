@@ -69,7 +69,9 @@ class GetNewVersionsForUserTestCase(TestCase):
         version_2 = VersionFactory(deprecated=timezone.now() - timedelta(days=1))
         version_3 = VersionFactory()  # already notified version
 
-        past_notification = NotificationFactory(user=user, sent=True)
+        past_notification = NotificationFactory(
+            user=user, sent=timezone.now() - timedelta(hours=12)
+        )
         NotificationItemFactory(notification=past_notification, version=version_3)
 
         service_keys = [version_1.service, version_2.service, version_3.service]
