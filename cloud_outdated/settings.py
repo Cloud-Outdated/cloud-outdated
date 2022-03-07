@@ -120,6 +120,9 @@ MIDDLEWARE = [
     "django_structlog.middlewares.RequestMiddleware",
 ]
 
+SESAME_MAX_AGE = 60 * 24 * 2  # in seconds
+SESAME_TOKEN_NAME = "magic"
+
 # dev in this path is name of deployment env,
 # will probably be just `/static/` when deploying to {env}.domain.com
 STATIC_URL = "/static/"
