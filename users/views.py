@@ -1,4 +1,4 @@
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from core.views import BaseView
 from django.contrib.auth import get_user_model
 from django.views.generic import FormView
@@ -47,6 +47,8 @@ class UserSubscriptionsView(FormView, BaseView):
                 if field_value is True:
                     Subscription.subscribe_user_to_service(user, field_name)
         # TODO unsubscribe user (if logged in and deselects a service)
+        # I have a list in active_subscription_services of currently subscribed
+        # services, need to get the diff
 
     def form_valid(self, form):
         email = form.cleaned_data["email"]
@@ -63,7 +65,7 @@ class UserSubscriptionsView(FormView, BaseView):
             email_ctx = {
                 "link": f"{protocol}://"
                 + self.request.get_host()
-                + self.request.path
+                + reverse("user_subscriptions")
                 + get_query_string(user),
             }
 
@@ -72,7 +74,7 @@ class UserSubscriptionsView(FormView, BaseView):
             email_ctx = {
                 "link": f"{protocol}://"
                 + self.request.get_host()
-                + self.request.path
+                + reverse("user_subscriptions")
                 + get_query_string(user),
             }
             UserLoginEmail(context=email_ctx).send(to=[user.email])
