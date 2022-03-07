@@ -63,14 +63,14 @@ services = {
         name="gke",
         label="GKE",
         name_alternatives=["Google Kubernetes Engine"],
-        public=False,
+        public=True,
     ),
     "aks": Service(
         platform=azure,
         name="aks",
         label="AKS",
         name_alternatives=["Azure Kubernetes Service"],
-        public=False,
+        public=True,
     ),
     "gcp_cloudsql_postgres": Service(
         platform=gcp,
