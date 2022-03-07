@@ -19,6 +19,7 @@ import structlog
 env = environ.FileAwareEnv(
     # set casting, default value
     DEBUG=(bool, False),
+    ENVIRONMENT=(str, "dummy"),  # see section if env("ENVIRONMENT") == "local"
     DB_HOST=(str, "cockroach"),
     DB_PORT=(str, "26257"),
     DB_NAME=(str, "defaultdb"),
@@ -245,3 +246,7 @@ structlog.configure(
 POLLING_THREADS = 4
 NOTIFICATIONS_MAX_RETRIES = 10
 NOTIFICATIONS_MAX_TIME = 60 * 5
+
+# local overrides
+if env("ENVIRONMENT") == "local":
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
