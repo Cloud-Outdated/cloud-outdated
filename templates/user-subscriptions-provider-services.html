@@ -2,16 +2,23 @@
     <h3 class="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">{{ provider }}</h3>
     <div class="w-full text-gray-700">
         <ul>
-            {% for s in services %}
-                <li>
-                    <label class="inline-flex items-center">
-                        <input type="checkbox"
-                               class="form-checkbox"
-                               value="{{ s.0 }}"
-                               {% if user.is_authenticated and s.0 in active_subscription_services %}checked{% endif %}>
-                        <span class="ml-2">{{ s.1.label }}</span>
-                    </label>
-                </li>
+            {% for service_field in form.visible_fields %}
+                {% if service_field.field.is_service %}
+                    {% if service_field.field.platform.name|lower == provider|lower %}
+                        <li>
+                            <label class="inline-flex items-center"
+                                   for="{{ service_field.id_for_label }}">
+                                <input type="checkbox"
+                                       class="form-checkbox"
+                                       id="{{ service_field.id_for_label }}"
+                                       name="{{ service_field.name }}"
+                                       value="{{ service_field.name }}"
+                                       {% if user.is_authenticated and service_field.name in active_subscription_services %}checked{% endif %}>
+                                <span class="ml-2">{{ service_field.label }}</span>
+                            </label>
+                        </li>
+                    {% endif %}
+                {% endif %}
             {% endfor %}
         </ul>
     </div>

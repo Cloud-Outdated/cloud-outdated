@@ -1,8 +1,8 @@
+from django.urls import reverse_lazy
 from core.views import BaseView
 from django.contrib.auth import get_user_model
-from django.core.exceptions import BadRequest
-from django.shortcuts import render
-from services.base import aws, azure, gcp, services
+from django.views.generic import FormView
+from services.base import services
 from sesame.utils import get_query_string
 from subscriptions.models import Subscription
 
@@ -12,8 +12,11 @@ from .forms import UserSubscriptionsCaptchaForm
 User = get_user_model()
 
 
-class UserSubscriptionsView(BaseView):
+class UserSubscriptionsView(FormView, BaseView):
     template_name = "user-subscriptions.html"
+    form_class = UserSubscriptionsCaptchaForm
+    # TODO redirect to some "Thank you for subscribing! Check you email!" page
+    success_url = reverse_lazy("user_subscriptions")
 
     def get_active_subscription_services(self):
         """Return list of services the user is currently subscribed to.
@@ -36,61 +39,44 @@ class UserSubscriptionsView(BaseView):
             "active_subscription_services"
         ] = self.get_active_subscription_services()
 
-        context["aws_services"] = [
-            (key, service)
-            for key, service in services.items()
-            if service.platform == aws and service.public is True
-        ]
-        context["gcp_services"] = [
-            (key, service)
-            for key, service in services.items()
-            if service.platform == gcp and service.public is True
-        ]
-        context["azure_services"] = [
-            (key, service)
-            for key, service in services.items()
-            if service.platform == azure and service.public is True
-        ]
-        context["captcha"] = UserSubscriptionsCaptchaForm()
         return context
 
-    def post(self, request, *args, **kwargs):
+    def subscribe_user(self, user, form):
+        for field_name, field_value in form.cleaned_data.items():
+            if field_name in services:
+                if field_value is True:
+                    Subscription.subscribe_user_to_service(user, field_name)
+        # TODO unsubscribe user (if logged in and deselects a service)
 
-        context_data = self.get_context_data(**kwargs)
+    def form_valid(self, form):
+        email = form.cleaned_data["email"]
 
-        context_data[
-            "active_subscription_services"
-        ] = self.get_active_subscription_services()
-        if request.user.is_authenticated:
-            return render(request, self.template_name, context_data)
-
-        post_data = request.POST
-        email = post_data.get("email")
-        protocol = "https" if request.is_secure() else "http"
-
-        if not UserSubscriptionsCaptchaForm(post_data).is_valid():
-            raise BadRequest
+        # TODO add validation if user is logged in but email is different
 
         user = User.objects.filter(email=email).first()
+        protocol = "https" if self.request.is_secure() else "http"
+
         if not user:
             user = User.objects.create(email=email)
             user.set_unusable_password()
 
-            ctx = {
+            email_ctx = {
                 "link": f"{protocol}://"
-                + request.get_host()
-                + request.path
+                + self.request.get_host()
+                + self.request.path
                 + get_query_string(user),
             }
 
-            UserRegistrationEmail(context=ctx).send(to=[user.email])
+            UserRegistrationEmail(context=email_ctx).send(to=[user.email])
         else:
-            ctx = {
+            email_ctx = {
                 "link": f"{protocol}://"
-                + request.get_host()
-                + request.path
+                + self.request.get_host()
+                + self.request.path
                 + get_query_string(user),
             }
-            UserLoginEmail(context=ctx).send(to=[user.email])
+            UserLoginEmail(context=email_ctx).send(to=[user.email])
 
-        return render(request, self.template_name, context_data)
+        self.subscribe_user(user, form)
+
+        return super().form_valid(form)

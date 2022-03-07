@@ -12,21 +12,29 @@
                     <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" method="post">
                         {% csrf_token %}
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email</label>
+                            {{ form.email.label }}
+                            <label class="block text-gray-700 text-sm font-bold mb-2"
+                                   for="{{ form.email.html_name }}">
+                                {{ form.email.label }}
+                            </label>
                             <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                   id="id_email"
-                                   name="email"
+                                   id="{{ form.email.id_for_label }}"
+                                   name="{{ form.email.html_name }}"
                                    type="text"
-                                   placeholder="Email"
-                                   {% if user.is_authenticated %} value="{{ user.email }}" disabled{% endif %}>
+                                   placeholder="{{ form.email.label }}"
+                                   {% if user.is_authenticated %} value="{{ user.email }}" readonly="readonly"{% endif %}>
+                            {% if form.email.errors %}<div class="w-full text-gray-700">{{ form.email.errors }}</div>{% endif %}
                         </div>
-                        {{ captcha.captcha }}
+                        {% if form.captcha.errors %}
+                            <div class="w-full text-gray-700">There was a problem with reCAPTCHA: {{ form.captcha.errors }}</div>
+                        {% endif %}
+                        {{ form.captcha }}
                         <hr />
-                        {% include "user-subscriptions-provider-services.html" with provider="AWS" services=aws_services %}
+                        {% include "user-subscriptions-provider-services.html" with provider="AWS" %}
                         <hr />
-                        {% include "user-subscriptions-provider-services.html" with provider="GCP" services=gcp_services %}
+                        {% include "user-subscriptions-provider-services.html" with provider="GCP" %}
                         <hr />
-                        {% include "user-subscriptions-provider-services.html" with provider="Azure" services=azure_services %}
+                        {% include "user-subscriptions-provider-services.html" with provider="Azure" %}
                         <hr />
                         <div class="flex items-center justify-between">
                             <button class="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"

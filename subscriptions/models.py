@@ -11,3 +11,12 @@ class Subscription(BaseModelMixin):
     disabled = models.DateTimeField(
         null=True, blank=True, help_text="If populated date of unsubscribing"
     )
+
+    @classmethod
+    def subscribe_user_to_service(cls, user, service):
+        subscription, _ = cls.objects.get_or_create(
+            user=user,
+            service=service,
+            disabled=None,
+        )
+        return subscription
