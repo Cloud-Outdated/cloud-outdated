@@ -1,7 +1,9 @@
 {% load static %}
+{% load analytical %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        {% analytical_head_top %}
         <!-- Required meta tags -->
         <meta charset="utf-8" />
         <meta name="viewport"
@@ -27,8 +29,10 @@
         background: linear-gradient(90deg, #d5336f 0%, #da5151 100%);
       }
         </style>
+        {% analytical_head_bottom %}
     </head>
     <body class="leading-normal tracking-normal text-white gradient">
+        {% analytical_body_top %}
         <!-- Our application root element -->
         <div id="app">
             <!-- Responsive navbar-->
@@ -153,5 +157,6 @@
                 </div>
             </footer>
         </div>
+        {% analytical_body_bottom %}
     </body>
 </html>

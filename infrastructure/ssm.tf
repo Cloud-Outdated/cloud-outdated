@@ -177,3 +177,11 @@ resource "aws_ssm_parameter" "new-relic-region" {
   value       = "eu"
   overwrite   = true
 }
+
+resource "aws_ssm_parameter" "google-analytics-gtag-property-id" {
+  name        = "/${local.project}/${var.environment}/GOOGLE_ANALYTICS_GTAG_PROPERTY_ID"
+  description = "Google Analytics gtag.js measurement id"
+  type        = "SecureString"
+  value       = var.environment != "prod" ? "G-F5WFR2V5HX" : "G-M6HH2SF9KK"
+  overwrite   = true
+}
