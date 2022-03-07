@@ -38,3 +38,15 @@ class Version(BaseModelMixin):
             return services[self.service].label
         except KeyError:
             return self.service
+
+    @property
+    def service_is_public(self):
+        """Check if instance's service is public.
+
+        Returns:
+            bool: True if instance's service is public, False if not
+        """
+        try:
+            return services[self.service].public
+        except KeyError:
+            return False

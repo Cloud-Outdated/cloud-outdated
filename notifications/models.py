@@ -39,14 +39,15 @@ class Notification(BaseModelMixin):
         """
         logger.bind(notification_id=self.id)
 
-        items = self.notification_items.all()
+        notification_items = self.notification_items.all()
         new_versions = []
         deprecated_versions = []
-        for item in items:
-            if item.version.deprecated:
-                deprecated_versions.append(item.version)
-            else:
-                new_versions.append(item.version)
+        for item in notification_items:
+            if item.version.service_is_public is True:
+                if item.version.deprecated:
+                    deprecated_versions.append(item.version)
+                else:
+                    new_versions.append(item.version)
 
         if not new_versions and not deprecated_versions:
             logger.info("Notification sending aborted: nothing to report")
