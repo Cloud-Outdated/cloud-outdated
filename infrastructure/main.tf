@@ -34,12 +34,7 @@ provider "aws" {
   region = "us-east-1"
 }
 
-
 provider "google" {
   project = local.project
   region  = local.gcp_region
-}
-
-provider "azurerm" {
-  features {}
 }

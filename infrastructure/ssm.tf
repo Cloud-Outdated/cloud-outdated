@@ -148,3 +148,32 @@ resource "aws_ssm_parameter" "backend-recaptcha-v3-private-key" {
   value       = var.RECAPTCHA_PRIVATE_KEY
   overwrite   = true
 }
+
+resource "aws_ssm_parameter" "new-relic-account-id" {
+  name        = "/${local.project}/${var.environment}/NEW_RELIC_ACCOUNT_ID"
+  description = "New Relic account id"
+  type        = "SecureString"
+  value       = "3438061"
+  overwrite   = true
+}
+
+resource "aws_ssm_parameter" "new-relic-api-key" {
+  name        = "/${local.project}/${var.environment}/NEW_RELIC_API_KEY"
+  description = "New Relic API key"
+  type        = "SecureString"
+  value       = ""
+  overwrite   = true
+
+  # This ^ is manually populated, therefore the lifecycle rule below:
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+resource "aws_ssm_parameter" "new-relic-region" {
+  name        = "/${local.project}/${var.environment}/NEW_RELIC_REGION"
+  description = "New Relic integration region"
+  type        = "SecureString"
+  value       = "eu"
+  overwrite   = true
+}
