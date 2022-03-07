@@ -6,7 +6,7 @@ from services.base import services
 
 class UserSubscriptionsCaptchaForm(forms.Form):
     email = forms.EmailField(required=True, help_text="Email for notifications")
-    captcha = ReCaptchaField(widget=ReCaptchaV3, disabled=True)
+    captcha = ReCaptchaField(widget=ReCaptchaV3)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
