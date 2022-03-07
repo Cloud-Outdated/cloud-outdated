@@ -22,6 +22,14 @@ resource "random_string" "app-secret-key" {
   }
 }
 
+resource "aws_ssm_parameter" "deploy-environment" {
+  name        = "/${local.project}/${var.environment}/ENVIRONMENT"
+  description = "Deploy environment"
+  type        = "SecureString"
+  value       = var.environment
+  overwrite   = true
+}
+
 resource "aws_ssm_parameter" "app-secret-key" {
   name        = "/${local.project}/${var.environment}/DJANGO_SECRET_KEY"
   description = "SECRET_KEY used by Django setting."

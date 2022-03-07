@@ -20,9 +20,13 @@ from core.views import AboutView, IndexView
 from users.views import UserSubscriptionsView
 
 urlpatterns = [
-    path("", IndexView.as_view()),
-    path("about/", AboutView.as_view()),
-    path("user-subscriptions/", UserSubscriptionsView.as_view()),
+    path("", IndexView.as_view(), name="home"),
+    path("about/", AboutView.as_view(), name="about"),
+    path(
+        "user-subscriptions/",
+        UserSubscriptionsView.as_view(),
+        name="user_subscriptions",
+    ),
     path("dlxusdprq-uzbdhomvw/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
 ]

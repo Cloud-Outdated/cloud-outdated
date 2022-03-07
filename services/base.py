@@ -12,7 +12,7 @@ class Platform:
     Attributes:
         name: name of the platform
         name_alternatives: list of alternative names; platform full name etc.
-        lable: value displayed to the end user
+        label: value displayed to the end user
     """
 
     name: str
