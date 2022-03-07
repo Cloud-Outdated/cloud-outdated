@@ -15,9 +15,9 @@ User = get_user_model()
 class UserSubscriptionsView(FormView, BaseView):
     template_name = "user-subscriptions.html"
     form_class = UserSubscriptionsCaptchaForm
+    http_method_names = ["get", "post"]
     # TODO redirect to some "Thank you for subscribing! Check you email!" page
     success_url = reverse_lazy("user_subscriptions")
-    http_method_names = ["get", "post"]
 
     def get_active_subscription_services(self):
         """Return list of services the user is currently subscribed to.
