@@ -1,8 +1,8 @@
+from django.urls import reverse_lazy, reverse
 from core.views import BaseView
 from django.contrib.auth import get_user_model
-from django.core.exceptions import BadRequest
-from django.shortcuts import render
-from services.base import aws, azure, gcp, services
+from django.views.generic import FormView
+from services.base import services
 from sesame.utils import get_query_string
 from subscriptions.models import Subscription
 
@@ -12,68 +12,74 @@ from .forms import UserSubscriptionsCaptchaForm
 User = get_user_model()
 
 
-class UserSubscriptionsView(BaseView):
+class UserSubscriptionsView(FormView, BaseView):
     template_name = "user-subscriptions.html"
+    form_class = UserSubscriptionsCaptchaForm
+    http_method_names = ["get", "post"]
+    # TODO redirect to some "Thank you for subscribing! Check you email!" page
+    success_url = reverse_lazy("user_subscriptions")
+
+    def get_active_subscription_services(self):
+        """Return list of services the user is currently subscribed to.
+
+        Returns:
+            list: keys of services
+        """
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            return Subscription.objects.filter(user=user, disabled=None).values_list(
+                "service", flat=True
+            )
+        else:
+            return []
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["aws_services"] = [
-            (key, service)
-            for key, service in services.items()
-            if service.platform == aws and service.public is True
-        ]
-        context["gcp_services"] = [
-            (key, service)
-            for key, service in services.items()
-            if service.platform == gcp and service.public is True
-        ]
-        context["azure_services"] = [
-            (key, service)
-            for key, service in services.items()
-            if service.platform == azure and service.public is True
-        ]
-        context["captcha"] = UserSubscriptionsCaptchaForm()
+
+        context[
+            "active_subscription_services"
+        ] = self.get_active_subscription_services()
+
         return context
 
-    def post(self, request, *args, **kwargs):
+    def subscribe_user(self, user, form):
+        for field_name, field_value in form.cleaned_data.items():
+            if field_name in services:
+                if field_value is True:
+                    Subscription.subscribe_user_to_service(user, field_name)
+        # TODO unsubscribe user (if logged in and deselects a service)
+        # I have a list in active_subscription_services of currently subscribed
+        # services, need to get the diff
 
-        context_data = self.get_context_data(**kwargs)
+    def form_valid(self, form):
+        email = form.cleaned_data["email"]
 
-        if request.user.is_authenticated:
-            user = request.user
-            subscriptions = Subscription.objects.filter(
-                user=user, disabled=None
-            ).values_list("service")
-            context_data["subscriptions"] = subscriptions
-            return render(request, self.template_name, context_data)
-
-        post_data = request.POST
-        email = post_data.get("email")
-        protocol = "https" if request.is_secure() else "http"
-
-        if not UserSubscriptionsCaptchaForm(post_data).is_valid():
-            raise BadRequest
+        # TODO add validation if user is logged in but email is different
 
         user = User.objects.filter(email=email).first()
+        protocol = "https" if self.request.is_secure() else "http"
+
         if not user:
             user = User.objects.create(email=email)
             user.set_unusable_password()
 
-            ctx = {
+            email_ctx = {
                 "link": f"{protocol}://"
-                + request.get_host()
-                + request.path
+                + self.request.get_host()
+                + reverse("user_subscriptions")
                 + get_query_string(user),
             }
 
-            UserRegistrationEmail(context=ctx).send(to=[user.email])
+            UserRegistrationEmail(context=email_ctx).send(to=[user.email])
         else:
-            ctx = {
+            email_ctx = {
                 "link": f"{protocol}://"
-                + request.get_host()
-                + request.path
+                + self.request.get_host()
+                + reverse("user_subscriptions")
                 + get_query_string(user),
             }
-            UserLoginEmail(context=ctx).send(to=[user.email])
+            UserLoginEmail(context=email_ctx).send(to=[user.email])
 
-        return render(request, self.template_name, context_data)
+        self.subscribe_user(user, form)
+
+        return super().form_valid(form)

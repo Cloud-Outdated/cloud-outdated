@@ -19,6 +19,7 @@ import structlog
 env = environ.FileAwareEnv(
     # set casting, default value
     DEBUG=(bool, False),
+    ENVIRONMENT=(str, "dummy"),  # see section if env("ENVIRONMENT") == "local"
     DB_HOST=(str, "cockroach"),
     DB_PORT=(str, "26257"),
     DB_NAME=(str, "defaultdb"),
@@ -119,6 +120,9 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django_structlog.middlewares.RequestMiddleware",
 ]
+
+SESAME_MAX_AGE = 60 * 24 * 2  # in seconds
+SESAME_TOKEN_NAME = "magic"
 
 # dev in this path is name of deployment env,
 # will probably be just `/static/` when deploying to {env}.domain.com
@@ -241,4 +245,8 @@ structlog.configure(
 # Service polling configurations
 POLLING_THREADS = 4
 NOTIFICATIONS_MAX_RETRIES = 10
-NOTIFICATIONS_MAX_TIME = 60 * 3
+NOTIFICATIONS_MAX_TIME = 60 * 5
+
+# local overrides
+if env("ENVIRONMENT") == "local":
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
