@@ -25,6 +25,7 @@ env = environ.FileAwareEnv(
     DB_NAME=(str, "defaultdb"),
     AWS_ACCESS_KEY_ID=(str, "dummy"),
     AWS_SECRET_ACCESS_KEY=(str, "dummy"),
+    GOOGLE_ANALYTICS_GTAG_PROPERTY_ID=(str, "dummy"),
 )
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -70,6 +71,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "analytical",
     "anymail",
     "captcha",
     "core",
@@ -246,6 +248,8 @@ structlog.configure(
 POLLING_THREADS = 4
 NOTIFICATIONS_MAX_RETRIES = 10
 NOTIFICATIONS_MAX_TIME = 60 * 5
+
+GOOGLE_ANALYTICS_GTAG_PROPERTY_ID = env("GOOGLE_ANALYTICS_GTAG_PROPERTY_ID")
 
 # local overrides
 if env("ENVIRONMENT") == "local":
