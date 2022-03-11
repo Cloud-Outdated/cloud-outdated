@@ -78,6 +78,29 @@ class Notification(BaseModelMixin):
         logger.unbind("notification_id")
         return email
 
+    @classmethod
+    def save_initial_service_subscription(cls, user, service):
+        """Mark all existing service versions as sent for given user.
+
+        The idea there being that if the user subscribes to let's say RDS MySQL
+        on AWS there is no point in them getting an email within the next
+        few hours saying that there are new versions and in that mail we send
+        versions that are available for years.
+
+        Args:
+            user (users.models.UserProfile): user instance
+            service (str): one of keys from services.base.services
+
+        Returns:
+            notifications.models.Notification: newly created Notification instance
+        """
+        notification = Notification.objects.create(
+            user=user, sent=timezone.now(), is_initial=True
+        )
+        for version in Version.objects.filter(service=service):
+            NotificationItem.objects.create(notification=notification, version=version)
+        return notification
+
 
 class NotificationItem(BaseModelMixin):
     """Single service/version about the user will receive notification."""

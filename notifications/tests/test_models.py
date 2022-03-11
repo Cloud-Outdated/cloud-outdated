@@ -2,6 +2,7 @@ from unittest.mock import patch
 from django.utils import timezone
 from datetime import timedelta
 from django.test import TestCase
+from notifications.models import Notification
 from notifications.tests.factories import NotificationFactory, NotificationItemFactory
 from notifications.email import NotificationEmail
 from services.tests.factories import VersionFactory
@@ -77,3 +78,27 @@ class NotifactionSendTestCase(TestCase):
 
             notification.refresh_from_db()
             assert notification.send() is None
+
+
+class NotificationSaveInitialServiceSubscriptionTestCase(TestCase):
+    def setUp(self) -> None:
+        self.user = UserProfileFactory()
+        return super().setUp()
+
+    def test_multiple_versions(self):
+        VersionFactory(service=services["aws_aurora"].name, version="1.0")
+        VersionFactory(service=services["aws_aurora"].name, version="2.0")
+        VersionFactory(service=services["aws_aurora"].name, version="3.0")
+
+        notification = Notification.save_initial_service_subscription(
+            self.user, services["aws_aurora"].name
+        )
+
+        assert notification.is_initial is True
+        all_versions = notification.notification_items.all().values_list(
+            "version__version", flat=True
+        )
+        assert len(all_versions) == 3
+        assert "1.0" in all_versions
+        assert "2.0" in all_versions
+        assert "3.0" in all_versions

@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 
 from core.models import BaseModelMixin
+from notifications.models import Notification
 from services.base import services, service_choices
 
 
@@ -26,9 +27,13 @@ class Subscription(BaseModelMixin):
         """
         assert service in services
 
-        subscription, _ = cls.objects.get_or_create(
+        subscription, created = cls.objects.get_or_create(
             user=user,
             service=service,
             disabled=None,
         )
+
+        if created:
+            Notification.save_initial_service_subscription(user, service)
+
         return subscription
