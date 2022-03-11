@@ -27,6 +27,10 @@ class Notification(BaseModelMixin):
         blank=True,
         help_text="If populated timestamp when the notification was sent, if not, notification was not sent yet",
     )
+    is_initial = models.BooleanField(
+        default=False,
+        help_text="True if this is only bookkeeping for the initial notification that is not really sent",
+    )
 
     def send(self):
         """Send an email to the user and notify that new versions of their
