@@ -2,7 +2,22 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.utils.translation import gettext_lazy as _
 
+from subscriptions.models import Subscription
+
 from .models import UserProfile
+
+
+class UserSubscriptionsInline(admin.TabularInline):
+    model = Subscription
+    readonly_fields = [
+        "created",
+        "service",
+        "disabled",
+    ]
+    show_change_link = True
+    can_delete = False
+    extra = 0
+    ordering = ["-created"]
 
 
 @admin.register(UserProfile)
@@ -43,3 +58,4 @@ class UserProfileAdmin(DjangoUserAdmin):
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
+    inlines = [UserSubscriptionsInline]
