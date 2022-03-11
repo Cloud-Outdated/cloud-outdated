@@ -784,9 +784,7 @@ def poll_aws():
     logger.info("Starting polling AWS")
 
     aws_services = [
-        PollService(
-            service=services["aws_eks"], poll_fn=aws_eks
-        ),
+        PollService(service=services["aws_eks"], poll_fn=aws_eks),
         PollService(
             service=services["aws_elasticache_redis"], poll_fn=aws_elasticache_redis
         ),
