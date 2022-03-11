@@ -1,3 +1,4 @@
+import datetime
 import re
 import sys
 import traceback
@@ -5,6 +6,7 @@ from functools import reduce
 from typing import Callable, List
 
 import boto3
+import dateutil.parser
 import requests
 import structlog
 from bs4 import BeautifulSoup
@@ -119,10 +121,10 @@ def gcp_dataproc():
     )
     final_supported_versions = []
     soup = BeautifulSoup(page.content, "html.parser")
-    images = {"debian": 6, "ubuntu": 4, "centos": 4}
+    images = {"debian": 6, "ubuntu": 4, "rocky linux": 4}
     for image, offset in images.items():
         supported_versions = []
-        server_version_table = soup.find(id=f"{image}_images")
+        server_version_table = soup.find(id=f"{image.replace(' ', '_')}_images")
         for _ in range(offset):
             server_version_table = server_version_table.nextSibling
         for child in server_version_table.findChildren("tr"):
@@ -445,6 +447,39 @@ def aws_sqlserver_web():
     return _aws_rds("sqlserver-web")
 
 
+def aws_eks():
+    """Get AWS EKS compatible versions.
+
+    Returns:
+        list[str]: supported versions
+    """
+
+    page = requests.get(
+        "https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html"
+    )
+    soup = BeautifulSoup(page.content, "html.parser")
+    server_version_title = soup.find(id="kubernetes-release-calendar")
+    server_version_table = (
+        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling
+    )
+    supported_versions = []
+    for child in server_version_table.findChildren("tr"):
+        data = child.findChildren("td")
+        if data:
+            version = str(data[0].text.strip())
+            eos_date = str(data[3].text.strip())
+            if (
+                version
+                and eos_date
+                and dateutil.parser.parse(eos_date).timestamp()
+                > datetime.datetime.now().timestamp()
+            ):
+                supported_versions.append(version)
+    if supported_versions == []:
+        raise ScrappingError("AWS EKS versions not found")
+    return supported_versions
+
+
 class ScrappingError(Exception):
     pass
 
@@ -509,9 +544,7 @@ def azure_redis_server():
         list[str]: supported versions
     """
 
-    page = requests.get(
-        "https://docs.microsoft.com/en-us/rest/api/redis/2021-06-01/redis/update"
-    )
+    page = requests.get("https://docs.microsoft.com/en-us/rest/api/redis/redis/update")
     soup = BeautifulSoup(page.content, "html.parser")
     server_version_title = soup.find(id="request-body")
     server_version_table = server_version_title.nextSibling.nextSibling
@@ -751,6 +784,9 @@ def poll_aws():
     logger.info("Starting polling AWS")
 
     aws_services = [
+        PollService(
+            service=services["aws_eks"], poll_fn=aws_eks
+        ),
         PollService(
             service=services["aws_elasticache_redis"], poll_fn=aws_elasticache_redis
         ),
