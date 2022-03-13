@@ -16,8 +16,7 @@ class UserSubscriptionsView(FormView, BaseView):
     template_name = "user-subscriptions.html"
     form_class = UserSubscriptionsCaptchaForm
     http_method_names = ["get", "post"]
-    # TODO redirect to some "Thank you for subscribing! Check you email!" page
-    success_url = reverse_lazy("user_subscriptions")
+    success_url = reverse_lazy("user_subscriptions_thank_you")
 
     def get_active_subscription_services(self):
         """Return list of services the user is currently subscribed to.
@@ -42,14 +41,13 @@ class UserSubscriptionsView(FormView, BaseView):
 
         return context
 
-    def subscribe_user(self, user, form):
+    def subscribe_and_unsubscribe_user(self, user, form, active_subscription_services):
         for field_name, field_value in form.cleaned_data.items():
             if field_name in services:
                 if field_value is True:
                     Subscription.subscribe_user_to_service(user, field_name)
-        # TODO unsubscribe user (if logged in and deselects a service)
-        # I have a list in active_subscription_services of currently subscribed
-        # services, need to get the diff
+                if field_value is False and field_name in active_subscription_services:
+                    Subscription.unsubscribe_user_from_service(user, field_name)
 
     def form_valid(self, form):
         email = form.cleaned_data["email"]
@@ -80,6 +78,12 @@ class UserSubscriptionsView(FormView, BaseView):
             }
             UserLoginEmail(context=email_ctx).send(to=[user.email])
 
-        self.subscribe_user(user, form)
+        self.subscribe_and_unsubscribe_user(
+            user, form, self.get_context_data()["active_subscription_services"]
+        )
 
         return super().form_valid(form)
+
+
+class UserSubscriptionsThankYouAboutView(BaseView):
+    template_name = "user-subscriptions-thank-you.html"

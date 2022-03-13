@@ -17,11 +17,16 @@ from django.contrib import admin
 from django.urls import path, include
 
 from core.views import AboutView, IndexView
-from users.views import UserSubscriptionsView
+from users.views import UserSubscriptionsView, UserSubscriptionsThankYouAboutView
 
 urlpatterns = [
     path("", IndexView.as_view(), name="home"),
     path("about/", AboutView.as_view(), name="about"),
+    path(
+        "user-subscriptions-thank-you/",
+        UserSubscriptionsThankYouAboutView.as_view(),
+        name="user_subscriptions_thank_you",
+    ),
     path(
         "user-subscriptions/",
         UserSubscriptionsView.as_view(),

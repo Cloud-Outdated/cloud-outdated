@@ -1,4 +1,6 @@
 import pytest
+from datetime import timedelta
+from django.utils import timezone
 from django.test import TestCase
 from notifications.models import Notification, NotificationItem
 from subscriptions.models import Subscription
@@ -37,3 +39,36 @@ class SubscriptionSubscribeUserToServiceTestCase(TestCase):
         assert new_subscription.disabled is None
 
         assert Notification.objects.filter(user=self.user).count() == 0
+
+
+class SubscriptionUnsubscribeUserFromServiceTestCase(TestCase):
+    def setUp(self):
+        self.user = UserProfileFactory()
+
+    def test_service_not_found(self):
+        with pytest.raises(AssertionError):
+            Subscription.unsubscribe_user_from_service(self.user, "dummy_dummy")
+
+    def test_no_active_service_subscription(self):
+        SubscriptionFactory(
+            user=self.user,
+            service=services["aws_aurora"].name,
+            disabled=timezone.now() - timedelta(days=1),
+        )
+
+        subscription = Subscription.unsubscribe_user_from_service(
+            self.user, services["aws_aurora"].name
+        )
+
+        assert subscription is None
+
+    def test_active_service_subscription(self):
+        SubscriptionFactory(
+            user=self.user, service=services["aws_aurora"].name, disabled=None
+        )
+
+        subscription = Subscription.unsubscribe_user_from_service(
+            self.user, services["aws_aurora"].name
+        )
+
+        assert subscription.disabled is not None
