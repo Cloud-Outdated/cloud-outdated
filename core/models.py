@@ -19,3 +19,6 @@ class BaseModelMixin(models.Model):
     class Meta:
         abstract = True
         ordering = ("-created",)
+
+    def __str__(self) -> str:
+        return str(self.id)

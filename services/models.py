@@ -27,6 +27,9 @@ class Version(BaseModelMixin):
             ),
         ]
 
+    def __str__(self) -> str:
+        return f"{str(self.id)} | {self.service} {self.version}"
+
     @property
     def service_label(self):
         """Get human readable service name.

@@ -2,6 +2,7 @@ import pytest
 from datetime import timedelta
 from django.utils import timezone
 from django.test import TestCase
+from notifications.models import Notification, NotificationItem
 from subscriptions.models import Subscription
 from subscriptions.tests.factories import SubscriptionFactory
 from users.tests.factories import UserProfileFactory
@@ -25,6 +26,8 @@ class SubscriptionSubscribeUserToServiceTestCase(TestCase):
         assert new_subscription.service == services["aws_aurora"].name
         assert new_subscription.disabled is None
 
+        assert Notification.objects.filter(user=self.user).count() == 1
+
     def test_existing_subscription(self):
         existing_subscription = SubscriptionFactory(user=self.user)
 
@@ -34,6 +37,8 @@ class SubscriptionSubscribeUserToServiceTestCase(TestCase):
 
         assert new_subscription == existing_subscription
         assert new_subscription.disabled is None
+
+        assert Notification.objects.filter(user=self.user).count() == 0
 
 
 class SubscriptionUnsubscribeUserFromServiceTestCase(TestCase):
