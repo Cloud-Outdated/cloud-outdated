@@ -13,6 +13,8 @@
         {% for version in deprecated_versions %}- {{ version.service_label }}: {{ version.version }}{% endfor %}
     {% endif %}
     Brought to you by cloud-outdated.com team.
+
+    Unsubscribe here: {{ unsubscribe_link }}
 {% endblock text_body %}
 {% block html_body %}
     <div>
@@ -33,4 +35,6 @@
     <div>
         Brought to you by <a href="https://cloud-outdated.com">cloud-outdated.com</a> team.
     </div>
+    <hr>
+    <a href="{{ unsubscribe_link }}" style="font-size: 10px">Unsubscribe</a>
 {% endblock html_body %}

@@ -1,13 +1,13 @@
 import structlog
-
-from django.conf import settings
-from django.utils import timezone
-from django.db import models
-
 from core.models import BaseModelMixin
-from notifications.email import NotificationEmail
+from django.conf import settings
+from django.db import models
+from django.urls import reverse
+from django.utils import timezone
 from services.models import Version
+from sesame.utils import get_query_string
 
+from notifications.email import NotificationEmail
 
 logger = structlog.get_logger(__name__)
 
@@ -60,6 +60,9 @@ class Notification(BaseModelMixin):
         ctx = {
             "new_versions": new_versions,
             "deprecated_versions": deprecated_versions,
+            "unsubscribe_link": settings.BASE_URL
+            + reverse("user_subscriptions")
+            + get_query_string(self.user),
         }
 
         email = NotificationEmail(context=ctx)
