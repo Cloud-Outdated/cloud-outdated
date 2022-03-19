@@ -56,7 +56,7 @@ module "service_accounts" {
   version       = "~> 3.0"
   project_id    = local.project
   prefix        = local.project
-  names         = ["backend"]
+  names         = ["${var.environment}-backend"]
   generate_keys = true
   project_roles = [
     "${local.project}=>roles/serviceusage.apiKeysAdmin",
