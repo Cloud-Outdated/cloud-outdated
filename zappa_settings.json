@@ -5,6 +5,7 @@
         "django_settings": "cloud_outdated.settings",
         "project_name": "cloud-outdated",
         "runtime": "python3.8",
+        "timeout_seconds": 600,
         "exclude": [
             "*.pyc",
             ".dockerignore",
@@ -62,7 +63,18 @@
             "ENV_PATH": ".env.dev"
         },
         "domain": "dev.cloud-outdated.com",
-        "certificate_arn": "arn:aws:acm:us-east-1:291218224580:certificate/50424608-de86-444c-9812-09c84388b83e",
-        "timeout_seconds": 600
+        "certificate_arn": "arn:aws:acm:us-east-1:291218224580:certificate/50424608-de86-444c-9812-09c84388b83e"
+    },
+    "prod": {
+        "extends": "common",
+        "debug": false,
+        "log_level": "INFO",
+        "profile_name": "cloud-outdated-deploy-dev",
+        "s3_bucket": "cloud-outdated",
+        "environment_variables": {
+            "ENV_PATH": ".env.prod"
+        },
+        "domain": "cloud-outdated.com",
+        "certificate_arn": "arn:aws:acm:us-east-1:291218224580:certificate/0fa31a86-75e0-4e31-ad3c-8c17ddc8f0e0"
     }
 }
