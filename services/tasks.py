@@ -776,7 +776,9 @@ def poll_gcp():
     #    polled_services = p.map(do_polling, gcp_services)
     polled_services = map(do_polling, gcp_services)
 
-    logger.info("Finished polling GCP", polled_services_count=len(polled_services))
+    logger.info(
+        "Finished polling GCP", polled_services_count=len(list(polled_services))
+    )
 
 
 def poll_aws():
@@ -884,7 +886,9 @@ def poll_aws():
 
     polled_services = map(do_polling, aws_services)
 
-    logger.info("Finished polling AWS", polled_services_count=len(polled_services))
+    logger.info(
+        "Finished polling AWS", polled_services_count=len(list(polled_services))
+    )
 
 
 def poll_azure():
@@ -907,4 +911,6 @@ def poll_azure():
 
     polled_services = map(do_polling, azure_services)
 
-    logger.info("Finished polling Azure", polled_services_count=len(polled_services))
+    logger.info(
+        "Finished polling Azure", polled_services_count=len(list(polled_services))
+    )
