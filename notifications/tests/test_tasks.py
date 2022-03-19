@@ -91,6 +91,8 @@ class NotifyUserTestCase(TestCase):
         notify_user(user, [])
         mocked_notification_send.assert_not_called()
 
+        assert Notification.objects.filter(user=user).count() == 0
+
     @patch("notifications.models.Notification.send")
     def test_new_versions(self, mocked_notification_send):
         user = UserProfileFactory()
