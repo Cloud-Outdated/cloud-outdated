@@ -757,7 +757,7 @@ def poll_gcp():
     logger.info("Starting polling GCP")
 
     gcp_services = [
-        PollService(service=services["gke"], poll_fn=gcp_gke),
+        PollService(service=services["gcp_gke"], poll_fn=gcp_gke),
         PollService(
             service=services["gcp_cloudsql_postgres"], poll_fn=gcp_cloudsql_postgres
         ),
@@ -904,7 +904,7 @@ def poll_azure():
         ),
         PollService(service=services["azure_redis_server"], poll_fn=azure_redis_server),
         PollService(service=services["azure_mysql_server"], poll_fn=azure_mysql_server),
-        PollService(service=services["aks"], poll_fn=azure_aks),
+        PollService(service=services["azure_aks"], poll_fn=azure_aks),
         PollService(service=services["azure_hdinsight"], poll_fn=azure_hdinsight),
         PollService(service=services["azure_databricks"], poll_fn=azure_databricks),
     ]
