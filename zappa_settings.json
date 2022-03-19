@@ -34,7 +34,7 @@
             },
             {
                 "function": "notifications.tasks.send_notifications",
-                "expression": "rate(30 days)"
+                "expression": "rate(6 hours)"
             }
         ],
         "extra_permissions": [
