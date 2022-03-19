@@ -57,8 +57,11 @@ jobs:
           export NEW_RELIC_ACCOUNT_ID=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/dev --pristine -- printenv NEW_RELIC_ACCOUNT_ID)
           export NEW_RELIC_API_KEY=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/dev --pristine -- printenv NEW_RELIC_API_KEY)
           export NEW_RELIC_REGION=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/dev --pristine -- printenv NEW_RELIC_REGION)
+          echo "NR account id:"
+          echo $NEW_RELIC_ACCOUNT_ID
           newrelic-lambda layers install \
             --function all \
             --enable-extension-function-logs \
+            --aws-profile cloud-outdated-deploy-dev \
             --aws-region eu-central-1 \
             --upgrade
