@@ -16,7 +16,7 @@ Commands:
 Tests are run within the Docker container.
 
 ```
-docker compose exec django pytest .
+docker-compose exec django pytest .
 ```
 
 or if you use zsh and oh my zsh with docker compose plugin:
