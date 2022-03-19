@@ -110,9 +110,12 @@ def notify_user(user, version_ids):
         user (users.models.UserProfile): user instance
         version_ids (list[uuid.UUID]): list of service versions the user will be notified of
     """
-    notification = Notification.objects.create(user=user, sent=None)
-    for version_id in version_ids:
-        NotificationItem.objects.create(notification=notification, version=version_id)
+    versions = Version.objects.filter(id__in=version_ids)
 
-    # call method that grabs all notification items, sends email and sets sent timestamp
-    notification.send()
+    if len(versions) > 0:
+        notification = Notification.objects.create(user=user, sent=None)
+        for version in versions:
+            NotificationItem.objects.create(notification=notification, version=version)
+
+        # call method that grabs all notification items, sends email and sets sent timestamp
+        notification.send()

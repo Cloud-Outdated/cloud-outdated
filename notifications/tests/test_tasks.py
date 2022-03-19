@@ -2,11 +2,13 @@ from unittest.mock import call, patch
 from django.utils import timezone
 from datetime import timedelta
 from notifications.tasks import (
+    notify_user,
     send_notifications,
     send_user_notification,
     get_new_versions_for_user,
 )
 from django.test import TestCase
+from notifications.models import Notification, NotificationItem
 from notifications.tests.factories import NotificationFactory, NotificationItemFactory
 from subscriptions.tests.factories import SubscriptionFactory
 from services.tests.factories import VersionFactory
@@ -79,3 +81,32 @@ class GetNewVersionsForUserTestCase(TestCase):
         result = get_new_versions_for_user(user, service_keys)
         assert len(result) == 1
         assert result[0] == str(version_1.id)
+
+
+class NotifyUserTestCase(TestCase):
+    @patch("notifications.models.Notification.send")
+    def test_no_new_versions(self, mocked_notification_send):
+        user = UserProfileFactory()
+
+        notify_user(user, [])
+        mocked_notification_send.assert_not_called()
+
+    @patch("notifications.models.Notification.send")
+    def test_new_versions(self, mocked_notification_send):
+        user = UserProfileFactory()
+        version_1 = VersionFactory(deprecated=None)
+        version_2 = VersionFactory(deprecated=None)
+
+        assert Notification.objects.filter(user=user).count() == 0
+
+        notify_user(user, [str(version_1.id), str(version_2.id)])
+        mocked_notification_send.assert_called_once()
+
+        user_notifications = Notification.objects.filter(user=user)
+        assert len(user_notifications) == 1
+        assert (
+            NotificationItem.objects.filter(
+                notification=user_notifications.first()
+            ).count()
+            == 2
+        )
