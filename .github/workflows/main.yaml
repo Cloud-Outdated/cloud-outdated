@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - feature/reinstall-new-relic-on-deploy
 
 jobs:
   build:
