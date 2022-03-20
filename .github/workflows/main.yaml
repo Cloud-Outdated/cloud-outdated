@@ -8,6 +8,6 @@ on:
 
 jobs:
   build_deploy:
-    uses: ./.github/workflows/build_deploy.yml
+    uses: ./.github/workflows/build_deploy.yml@main
     with:
       environment: dev
