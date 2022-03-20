@@ -70,7 +70,7 @@
         "debug": false,
         "log_level": "INFO",
         "profile_name": "cloud-outdated-deploy-dev",
-        "s3_bucket": "cloud-outdated",
+        "s3_bucket": "cloud-outdated-prod",
         "environment_variables": {
             "ENV_PATH": ".env.prod"
         },
