@@ -34,6 +34,7 @@ jobs:
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}  --profile cloud-outdated-deploy-dev
 
       - name: Install Chamber
+        run: |
           export CHAMBER_VERSION="v2.10.6"
           curl -LOs https://github.com/segmentio/chamber/releases/download/${CHAMBER_VERSION}/chamber-${CHAMBER_VERSION}-linux-amd64
           mv chamber-${CHAMBER_VERSION}-linux-amd64 chamber
