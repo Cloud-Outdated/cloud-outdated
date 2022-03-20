@@ -29,6 +29,8 @@ dce django pytest .
 
 Regular deployment is done through Github Actions. In special circumstances, such as initial deployment, it can also be done from local machine. aws-vault and an admin user is required for it.
 
+Before running any `zappa` commands locally through `aws-vault` comment out `profile_name` key from `zappa_settings.json` for the deploy environment on which you are currently working on.
+
 - `pip install -r requirements.txt`
 - `python manage.py collectstatic`
 - `aws-vault exec cloud-outdated-x -- zappa deploy dev` for new deploy
