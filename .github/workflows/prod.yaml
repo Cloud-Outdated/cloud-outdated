@@ -1,15 +1,16 @@
-name: Dev Workflow
+name: Prod Workflow
 
 on:
   push:
     branches:
-      - master
+      - prod
+      - feature/prod-release
 
 jobs:
   build_deploy:
     uses: ./.github/workflows/build_deploy.yaml
     with:
-      ENVIRONMENT: dev
+      ENVIRONMENT: prod
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
