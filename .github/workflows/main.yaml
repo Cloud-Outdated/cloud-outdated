@@ -33,12 +33,14 @@ jobs:
           aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile cloud-outdated-deploy-dev
           aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}  --profile cloud-outdated-deploy-dev
 
-      - name: Build .env file
-        run: |
+      - name: Install Chamber
           export CHAMBER_VERSION="v2.10.6"
           curl -LOs https://github.com/segmentio/chamber/releases/download/${CHAMBER_VERSION}/chamber-${CHAMBER_VERSION}-linux-amd64
           mv chamber-${CHAMBER_VERSION}-linux-amd64 chamber
           chmod +x chamber
+
+      - name: Build .env file
+        run: |
           AWS_PROFILE=cloud-outdated-deploy-dev ./chamber export cloud-outdated/$ENVIRONMENT --format dotenv > .env.$ENVIRONMENT
           AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/$ENVIRONMENT --pristine -- printenv GCP_SERVICE_ACCOUNT_KEY > credentials.json
           echo GOOGLE_APPLICATION_CREDENTIALS=/var/task/credentials.json >> .env.$ENVIRONMENT
