@@ -54,6 +54,7 @@ jobs:
           source venv/bin/activate
           python manage.py collectstatic --noinput
           zappa update ${{ inputs.ENVIRONMENT }}
+          zappa certify ${{ inputs.ENVIRONMENT }}
           zappa manage ${{ inputs.ENVIRONMENT }} "migrate --noinput"
 
       # official recommendation is to re-run New Relic lambda layer after every deploy
