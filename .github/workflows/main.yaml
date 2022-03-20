@@ -8,6 +8,6 @@ on:
 
 jobs:
   build_deploy:
-    uses: ./.github/workflows/build_deploy.yml@$GITHUB_REF
+    uses: ./.github/workflows/build_deploy.yml@${{ github.ref }}
     with:
       environment: dev
