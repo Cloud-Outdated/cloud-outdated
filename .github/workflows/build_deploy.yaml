@@ -53,7 +53,7 @@ jobs:
           export ENV_PATH=.env.${{ inputs.ENVIRONMENT }}
           source venv/bin/activate
           python manage.py collectstatic --noinput
-          zappa update ${{ inputs.ENVIRONMENT }}
+          zappa deploy ${{ inputs.ENVIRONMENT }}
           zappa manage ${{ inputs.ENVIRONMENT }} "migrate --noinput"
 
       # official recommendation is to re-run New Relic lambda layer after every deploy
