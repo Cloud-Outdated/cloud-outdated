@@ -1,9 +1,14 @@
 on:
   workflow_call:
     inputs:
-      environment:
+      ENVIRONMENT:
         required: true
         type: string
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
 
 jobs:
   build:
@@ -39,25 +44,25 @@ jobs:
 
       - name: Build .env file
         run: |
-          AWS_PROFILE=cloud-outdated-deploy-dev ./chamber export cloud-outdated/${{ inputs.environment }} --format dotenv > .env.${{ inputs.environment }}
-          AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/${{ inputs.environment }} --pristine -- printenv GCP_SERVICE_ACCOUNT_KEY > credentials.json
-          echo GOOGLE_APPLICATION_CREDENTIALS=/var/task/credentials.json >> .env.${{ inputs.environment }}
+          AWS_PROFILE=cloud-outdated-deploy-dev ./chamber export cloud-outdated/${{ inputs.ENVIRONMENT }} --format dotenv > .env.${{ inputs.ENVIRONMENT }}
+          AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/${{ inputs.ENVIRONMENT }} --pristine -- printenv GCP_SERVICE_ACCOUNT_KEY > credentials.json
+          echo GOOGLE_APPLICATION_CREDENTIALS=/var/task/credentials.json >> .env.${{ inputs.ENVIRONMENT }}
 
       - name: Zappa deployments
         run: |
-          export ENV_PATH=.env.${{ inputs.environment }}
+          export ENV_PATH=.env.${{ inputs.ENVIRONMENT }}
           source venv/bin/activate
           python manage.py collectstatic --noinput
-          zappa update ${{ inputs.environment }}
-          zappa manage ${{ inputs.environment }} "migrate --noinput"
+          zappa update ${{ inputs.ENVIRONMENT }}
+          zappa manage ${{ inputs.ENVIRONMENT }} "migrate --noinput"
 
       # official recommendation is to re-run New Relic lambda layer after every deploy
       - name: New Relic lambda layer
         run: |
           pip install --upgrade newrelic-lambda-cli
-          export NEW_RELIC_ACCOUNT_ID=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/${{ inputs.environment }} --pristine -- printenv NEW_RELIC_ACCOUNT_ID)
-          export NEW_RELIC_API_KEY=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/${{ inputs.environment }} --pristine -- printenv NEW_RELIC_API_KEY)
-          export NEW_RELIC_REGION=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/${{ inputs.environment }} --pristine -- printenv NEW_RELIC_REGION)
+          export NEW_RELIC_ACCOUNT_ID=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/${{ inputs.ENVIRONMENT }} --pristine -- printenv NEW_RELIC_ACCOUNT_ID)
+          export NEW_RELIC_API_KEY=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/${{ inputs.ENVIRONMENT }} --pristine -- printenv NEW_RELIC_API_KEY)
+          export NEW_RELIC_REGION=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/${{ inputs.ENVIRONMENT }} --pristine -- printenv NEW_RELIC_REGION)
           newrelic-lambda layers install \
             --function all \
             --enable-extension-function-logs \
