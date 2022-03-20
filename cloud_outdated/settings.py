@@ -47,7 +47,10 @@ RECAPTCHA_REQUIRED_SCORE = 0.85
 
 ALLOWED_HOSTS = [
     "dev.cloud-outdated.com",
-    "b4eu57c6a2.execute-api.eu-central-1.amazonaws.com",
+    "www.cloud-outdated.com",
+    "cloud-outdated.com",
+    "b4eu57c6a2.execute-api.eu-central-1.amazonaws.com",  # dev
+    "4r4hbnvvu8.execute-api.eu-central-1.amazonaws.com",  # prod
     "127.0.0.1",
     "localhost",
 ]
