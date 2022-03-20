@@ -1,4 +1,4 @@
-name: Main Workflow
+name: Dev Workflow
 
 on:
   push:
@@ -7,63 +7,7 @@ on:
       - feature/prod-release
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    env:
-      ENVIRONMENT: dev
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.8
-
-      - name: Install dependencies
-        run: |
-          python -m venv venv
-          source venv/bin/activate
-          pip install -r requirements.txt
-
-      - name: Configure AWS profile
-        run: |
-          aws configure set region eu-central-1 --profile cloud-outdated-deploy-dev
-          aws configure set output json --profile cloud-outdated-deploy-dev
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }} --profile cloud-outdated-deploy-dev
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}  --profile cloud-outdated-deploy-dev
-
-      - name: Install Chamber
-        run: |
-          export CHAMBER_VERSION="v2.10.6"
-          curl -LOs https://github.com/segmentio/chamber/releases/download/${CHAMBER_VERSION}/chamber-${CHAMBER_VERSION}-linux-amd64
-          mv chamber-${CHAMBER_VERSION}-linux-amd64 chamber
-          chmod +x chamber
-
-      - name: Build .env file
-        run: |
-          AWS_PROFILE=cloud-outdated-deploy-dev ./chamber export cloud-outdated/$ENVIRONMENT --format dotenv > .env.$ENVIRONMENT
-          AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/$ENVIRONMENT --pristine -- printenv GCP_SERVICE_ACCOUNT_KEY > credentials.json
-          echo GOOGLE_APPLICATION_CREDENTIALS=/var/task/credentials.json >> .env.$ENVIRONMENT
-
-      - name: Zappa deployments
-        run: |
-          export ENV_PATH=.env.$ENVIRONMENT
-          source venv/bin/activate
-          python manage.py collectstatic --noinput
-          zappa update $ENVIRONMENT
-          zappa manage $ENVIRONMENT "migrate --noinput"
-
-      # official recommendation is to re-run New Relic lambda layer after every deploy
-      - name: New Relic lambda layer
-        run: |
-          pip install --upgrade newrelic-lambda-cli
-          export NEW_RELIC_ACCOUNT_ID=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/$ENVIRONMENT --pristine -- printenv NEW_RELIC_ACCOUNT_ID)
-          export NEW_RELIC_API_KEY=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/$ENVIRONMENT --pristine -- printenv NEW_RELIC_API_KEY)
-          export NEW_RELIC_REGION=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/$ENVIRONMENT --pristine -- printenv NEW_RELIC_REGION)
-          newrelic-lambda layers install \
-            --function all \
-            --enable-extension-function-logs \
-            --aws-profile cloud-outdated-deploy-dev \
-            --aws-region eu-central-1 \
-            --upgrade
+  build_deploy:
+    uses: ./.github/workflows/build_deploy.yml
+    with:
+      environment: dev
