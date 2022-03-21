@@ -23,11 +23,7 @@
             "Makefile",
             "README.md",
             "requirements.txt",
-            "requirements_local.txt",
-            "notifications/tests/*",
-            "services/tests/*",
-            "subscriptions/tests/*",
-            "users/tests/*"
+            "requirements_local.txt"
         ],
         "events": [
             {
