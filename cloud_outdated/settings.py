@@ -223,7 +223,7 @@ LOGGING = {
     "loggers": {
         "": {
             "handlers": ["console_json"],
-            "level": "DEBUG",
+            "level": "INFO",
             "propagate": True,
         },
     },
