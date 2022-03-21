@@ -62,7 +62,7 @@ class NotifactionSendTestCase(TestCase):
         assert "Deprecated versions" in email.html
         assert version.service_label in email.html
         assert version.version in email.html
-        assert "Unsubscribe" in email.html
+        assert "Unsubscribe or update your subscriptions" in email.html
         assert settings.BASE_URL + reverse("user_subscriptions") in email.html
 
     def test_new_versions_service_not_public(self):
