@@ -1,15 +1,19 @@
-from unittest.mock import patch
-from django.utils import timezone
 from datetime import timedelta
+from unittest.mock import patch
+
+from django.conf import settings
 from django.test import TestCase
+from django.test.utils import override_settings
+from django.urls import reverse
+from django.utils import timezone
+from moto import mock_ses
+from notifications.email import NotificationEmail
 from notifications.models import Notification
 from notifications.tests.factories import NotificationFactory, NotificationItemFactory
-from notifications.email import NotificationEmail
+from services.base import Service, aws, services
 from services.tests.factories import VersionFactory
-from moto import mock_ses
-from django.test.utils import override_settings
+from sesame.utils import get_query_string
 from users.tests.factories import UserProfileFactory
-from services.base import Service, services, aws
 
 
 @override_settings(EMAIL_BACKEND="anymail.backends.test.EmailBackend")
@@ -36,8 +40,6 @@ class NotifactionSendTestCase(TestCase):
         notification.refresh_from_db()
         notification.sent is not None
 
-        from django.conf import settings
-
         assert email.subject == NotificationEmail.subject
         assert email.to == [self.user.email]
         assert "New versions" in email.html
@@ -60,6 +62,8 @@ class NotifactionSendTestCase(TestCase):
         assert "Deprecated versions" in email.html
         assert version.service_label in email.html
         assert version.version in email.html
+        assert "Unsubscribe or update your subscriptions" in email.html
+        assert settings.BASE_URL + reverse("user_subscriptions") in email.html
 
     def test_new_versions_service_not_public(self):
         non_public_aws_aurora = Service(
