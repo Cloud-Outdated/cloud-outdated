@@ -16,7 +16,7 @@ Commands:
 Tests are run within the Docker container.
 
 ```
-docker compose exec django pytest .
+docker-compose exec django pytest .
 ```
 
 or if you use zsh and oh my zsh with docker compose plugin:
@@ -27,10 +27,12 @@ dce django pytest .
 
 ## Deploy process
 
+Regular deployment is done through Github Actions. In special circumstances, such as initial deployment, it can also be done from local machine. aws-vault and an admin user is required for it.
+
 - `pip install -r requirements.txt`
 - `python manage.py collectstatic`
-- `zappa deploy dev` for new deploy
-- `zappa update dev` for updates
+- `aws-vault exec cloud-outdated-x -- zappa deploy dev` for new deploy
+- `aws-vault exec cloud-outdated-x -- zappa update dev` for updates
 
 ## Infrastructure
 
@@ -52,7 +54,7 @@ After terraform changes have been applied `zappa_settings.json` file can be popu
 After `zappa_settings.json` is populated run locally:
 
 ```
-zappa certify <env>
+aws-vault exec cloud-outdated-x -- zappa certify <env>
 ```
 
 to configure API Gateway to honor the domain name specified. Changes can take up to 40 minutes to get applied.
@@ -71,5 +73,5 @@ Single installation per account, not per deploy env.
 - install [New Relic' Lambda CLI tool](https://github.com/newrelic/newrelic-lambda-cli#installation) in your venv
     - `pip install newrelic-lambda-cli`
 - install New Relic integration for all Lambdas in account
-    - `aws-vault exec cloud-outdated-mislav --no-session -- newrelic-lambda integrations install --nr-account-id 3438061 --nr-api-key {REDACTED - SEE aws_ssm_parameter.new-relic-api-key} --nr-region eu`
-    - `aws-vault exec cloud-outdated-mislav --no-session -- newrelic-lambda layers install -f all --nr-account-id 3438061 --nr-api-key {REDACTED - SEE aws_ssm_parameter.new-relic-api-key} --nr-region eu --enable-extension-function-logs --aws-region eu-central-1`
+    - `aws-vault exec cloud-outdated-x --no-session -- newrelic-lambda integrations install --nr-account-id 3438061 --nr-api-key {REDACTED - SEE aws_ssm_parameter.new-relic-api-key} --nr-region eu`
+    - `aws-vault exec cloud-outdated-x --no-session -- newrelic-lambda layers install -f all --nr-account-id 3438061 --nr-api-key {REDACTED - SEE aws_ssm_parameter.new-relic-api-key} --nr-region eu --enable-extension-function-logs --aws-region eu-central-1`

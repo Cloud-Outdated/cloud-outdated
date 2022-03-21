@@ -757,7 +757,7 @@ def poll_gcp():
     logger.info("Starting polling GCP")
 
     gcp_services = [
-        PollService(service=services["gke"], poll_fn=gcp_gke),
+        PollService(service=services["gcp_gke"], poll_fn=gcp_gke),
         PollService(
             service=services["gcp_cloudsql_postgres"], poll_fn=gcp_cloudsql_postgres
         ),
@@ -776,7 +776,7 @@ def poll_gcp():
     #    polled_services = p.map(do_polling, gcp_services)
     polled_services = map(do_polling, gcp_services)
 
-    logger.info("Finished polling GCP", polled_services_count=len(polled_services))
+    logger.info("Finished polling GCP")
 
 
 def poll_aws():
@@ -884,7 +884,7 @@ def poll_aws():
 
     polled_services = map(do_polling, aws_services)
 
-    logger.info("Finished polling AWS", polled_services_count=len(polled_services))
+    logger.info("Finished polling AWS")
 
 
 def poll_azure():
@@ -900,11 +900,11 @@ def poll_azure():
         ),
         PollService(service=services["azure_redis_server"], poll_fn=azure_redis_server),
         PollService(service=services["azure_mysql_server"], poll_fn=azure_mysql_server),
-        PollService(service=services["aks"], poll_fn=azure_aks),
+        PollService(service=services["azure_aks"], poll_fn=azure_aks),
         PollService(service=services["azure_hdinsight"], poll_fn=azure_hdinsight),
         PollService(service=services["azure_databricks"], poll_fn=azure_databricks),
     ]
 
     polled_services = map(do_polling, azure_services)
 
-    logger.info("Finished polling Azure", polled_services_count=len(polled_services))
+    logger.info("Finished polling Azure")
