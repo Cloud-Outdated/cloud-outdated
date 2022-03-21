@@ -24,7 +24,10 @@
             "README.md",
             "requirements.txt",
             "requirements_local.txt",
-            "*/tests/*",
+            "notifications/tests/*",
+            "services/tests/*",
+            "subscriptions/tests/*",
+            "users/tests/*"
         ],
         "events": [
             {
