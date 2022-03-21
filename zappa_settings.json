@@ -8,6 +8,7 @@
         "timeout_seconds": 600,
         "exclude": [
             "*.pyc",
+            ".DS_Store",
             ".dockerignore",
             ".env.local",
             ".github",
@@ -16,9 +17,14 @@
             "__pycache__",
             "*black*",
             "chamber",
+            "credentials.json",
             "Dockerfile",
+            "docker-compose.yml",
             "Makefile",
-            "README.md"
+            "README.md",
+            "requirements.txt",
+            "requirements_local.txt",
+            "*/tests/*",
         ],
         "events": [
             {
