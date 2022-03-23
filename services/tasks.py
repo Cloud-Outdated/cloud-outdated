@@ -772,11 +772,9 @@ def poll_gcp():
         ),
     ]
 
-    # with multiprocessing.Pool(settings.POLLING_THREADS) as p:
-    #    polled_services = p.map(do_polling, gcp_services)
-    polled_services = map(do_polling, gcp_services)
-    # map() is lazy, calling list() on it forces it to get evalauted
-    list(polled_services)
+    for service in gcp_services:
+        do_polling(service)
+
     logger.info("Finished polling GCP")
 
 
@@ -883,9 +881,9 @@ def poll_aws():
         ),
     ]
 
-    polled_services = map(do_polling, aws_services)
-    # map() is lazy, calling list() on it forces it to get evalauted
-    list(polled_services)
+    for service in aws_services:
+        do_polling(service)
+
     logger.info("Finished polling AWS")
 
 
@@ -907,7 +905,7 @@ def poll_azure():
         PollService(service=services["azure_databricks"], poll_fn=azure_databricks),
     ]
 
-    polled_services = map(do_polling, azure_services)
-    # map() is lazy, calling list() on it forces it to get evalauted
-    list(polled_services)
+    for service in azure_services:
+        do_polling(service)
+
     logger.info("Finished polling Azure")
