@@ -35,7 +35,7 @@ COMPANY_NAME = "Cloud Outdated"
 BASE_URL_ENVS = {
     "local": "http://localhost",
     "dev": "https://dev.cloud-outdated.com",
-    "prod": "https://www.cloud-outdated.com",
+    "prod": "https://cloud-outdated.com",
 }
 BASE_URL = BASE_URL_ENVS[env("ENVIRONMENT")]
 
