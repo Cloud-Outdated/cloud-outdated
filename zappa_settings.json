@@ -52,7 +52,10 @@
                     "kafka:ListKafkaVersions",
                     "memorydb:DescribeEngineVersions",
                     "mq:DescribeBrokerEngineTypes",
-                    "rds:DescribeDBEngineVersions"
+                    "rds:DescribeDBEngineVersions",
+                    "ses:SendEmail",
+                    "ses:SendRawEmail",
+                    "ses:SendBulkTemplatedEmail"
                 ],
                 "Resource": "*"
             }

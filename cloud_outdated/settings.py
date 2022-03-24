@@ -101,8 +101,9 @@ EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"
 
 ANYMAIL = {
     "AMAZON_SES_CLIENT_PARAMS": {
-        "aws_access_key_id": AWS_ACCESS_KEY_ID,
-        "aws_secret_access_key": AWS_SECRET_ACCESS_KEY,
+        # also use credentials from zappa_settings.json ¯\_(ツ)_/¯
+        # "aws_access_key_id": AWS_ACCESS_KEY_ID,
+        # "aws_secret_access_key": AWS_SECRET_ACCESS_KEY,
         "region_name": "eu-central-1",
     }
 }
