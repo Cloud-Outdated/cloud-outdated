@@ -95,7 +95,7 @@ INSTALLED_APPS = [
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
 
-DEFAULT_FROM_EMAIL = "hello@cloud-outdated.com"
+DEFAULT_FROM_EMAIL = "cloudoutdated@gmail.com"
 
 EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"
 
