@@ -23,8 +23,8 @@ env = environ.FileAwareEnv(
     DB_HOST=(str, "cockroach"),
     DB_PORT=(str, "26257"),
     DB_NAME=(str, "defaultdb"),
-    AWS_ACCESS_KEY_ID=(str, "dummy"),
-    AWS_SECRET_ACCESS_KEY=(str, "dummy"),
+    AWS_ACCESS_KEY_ID_BACKEND=(str, "dummy"),
+    AWS_SECRET_ACCESS_KEY_BACKEND=(str, "dummy"),
     GOOGLE_ANALYTICS_GTAG_PROPERTY_ID=(str, "dummy"),
 )
 
@@ -92,8 +92,9 @@ INSTALLED_APPS = [
 
 # used by SES
 # poll_aws uses zappa managed role
-AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+# default names are overriden and set by Lambda and Zappa
+AWS_ACCESS_KEY_ID_BACKEND = env("AWS_ACCESS_KEY_ID_BACKEND")
+AWS_SECRET_ACCESS_KEY_BACKEND = env("AWS_SECRET_ACCESS_KEY_BACKEND")
 
 DEFAULT_FROM_EMAIL = "cloudoutdated@gmail.com"
 
@@ -101,9 +102,8 @@ EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"
 
 ANYMAIL = {
     "AMAZON_SES_CLIENT_PARAMS": {
-        # also use credentials from zappa_settings.json ¯\_(ツ)_/¯
-        # "aws_access_key_id": AWS_ACCESS_KEY_ID,
-        # "aws_secret_access_key": AWS_SECRET_ACCESS_KEY,
+        "aws_access_key_id": AWS_ACCESS_KEY_ID_BACKEND,
+        "aws_secret_access_key": AWS_SECRET_ACCESS_KEY_BACKEND,
         "region_name": "eu-central-1",
     }
 }
