@@ -104,11 +104,6 @@ ANYMAIL = {
         "aws_access_key_id": AWS_ACCESS_KEY_ID,
         "aws_secret_access_key": AWS_SECRET_ACCESS_KEY,
         "region_name": "eu-central-1",
-        # override other default options
-        "config": {
-            "connect_timeout": 30,
-            "read_timeout": 30,
-        },
     },
 }
 
