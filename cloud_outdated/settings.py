@@ -32,6 +32,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.FileAwareEnv.read_env(os.path.join(BASE_DIR, env.str("ENV_PATH", ".env")))
 
 COMPANY_NAME = "Cloud Outdated"
+BASE_URL_ENVS = {
+    "local": "http://localhost",
+    "dev": "https://dev.cloud-outdated.com",
+    "prod": "https://www.cloud-outdated.com",
+}
+BASE_URL = BASE_URL_ENVS[env("ENVIRONMENT")]
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env("DJANGO_SECRET_KEY")

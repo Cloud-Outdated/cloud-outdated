@@ -1,6 +1,7 @@
-from django.urls import reverse_lazy, reverse
 from core.views import BaseView
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView
 from services.base import services
 from sesame.utils import get_query_string
@@ -55,15 +56,13 @@ class UserSubscriptionsView(FormView, BaseView):
         # TODO add validation if user is logged in but email is different
 
         user = User.objects.filter(email=email).first()
-        protocol = "https" if self.request.is_secure() else "http"
 
         if not user:
             user = User.objects.create(email=email)
             user.set_unusable_password()
 
             email_ctx = {
-                "link": f"{protocol}://"
-                + self.request.get_host()
+                "link": settings.BASE_URL
                 + reverse("user_subscriptions")
                 + get_query_string(user),
             }
@@ -71,8 +70,7 @@ class UserSubscriptionsView(FormView, BaseView):
             UserRegistrationEmail(context=email_ctx).send(to=[user.email])
         else:
             email_ctx = {
-                "link": f"{protocol}://"
-                + self.request.get_host()
+                "link": settings.BASE_URL
                 + reverse("user_subscriptions")
                 + get_query_string(user),
             }

@@ -23,7 +23,3 @@ class BaseView(PageTitleMixin, TemplateView):
 
 class IndexView(BaseView):
     template_name = "index.html"
-
-
-class AboutView(BaseView):
-    template_name = "about.html"
