@@ -65,6 +65,7 @@ jobs:
           export NEW_RELIC_REGION=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/${{ inputs.ENVIRONMENT }} --pristine -- printenv NEW_RELIC_REGION)
           newrelic-lambda layers install \
             --function cloud-outdated-${{ inputs.ENVIRONMENT }} \
+            --layer-arn arn:aws:lambda:eu-central-1:451483290750:layer:NewRelicPython38:68 \
             --enable-extension-function-logs \
             --aws-profile cloud-outdated-deploy-dev \
             --aws-region eu-central-1 \
