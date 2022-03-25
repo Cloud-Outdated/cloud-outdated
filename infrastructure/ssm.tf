@@ -39,7 +39,7 @@ resource "aws_ssm_parameter" "app-secret-key" {
 }
 
 resource "aws_ssm_parameter" "backend-user-access-key-id" {
-  name        = "/${local.project}/${var.environment}/AWS_ACCESS_KEY_ID"
+  name        = "/${local.project}/${var.environment}/AWS_ACCESS_KEY_ID_BACKEND"
   description = "Backend user's AWS_ACCESS_KEY_ID for internal services"
   type        = "SecureString"
   value       = aws_iam_access_key.backend.id
@@ -47,7 +47,7 @@ resource "aws_ssm_parameter" "backend-user-access-key-id" {
 }
 
 resource "aws_ssm_parameter" "backend-user-aws-secret-access-key" {
-  name        = "/${local.project}/${var.environment}/AWS_SECRET_ACCESS_KEY"
+  name        = "/${local.project}/${var.environment}/AWS_SECRET_ACCESS_KEY_BACKEND"
   description = "Backend user's AWS_SECRET_ACCESS_KEY for internal services"
   type        = "SecureString"
   value       = aws_iam_access_key.backend.secret

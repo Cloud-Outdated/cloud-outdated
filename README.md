@@ -27,7 +27,17 @@ dce django pytest .
 
 ## Deploy process
 
-Regular deployment is done through Github Actions. In special circumstances, such as initial deployment, it can also be done from local machine. aws-vault and an admin user is required for it.
+Regular deployment is done through Github Actions. 
+
+Everything that lands in `master` is deployed to `dev` environment available at [dev.cloud-outdated.com](https://dev.cloud-outdated.com).
+
+To deploy to `prod` available at [cloud-outdated.com](https://cloud-outdated.com) open a pull request from `master` to `prod`.
+
+## Zappa
+
+In special circumstances, such as initial deployment, it can also be done from local machine. aws-vault and an admin user is required for it.
+
+Before running any `zappa` commands locally through `aws-vault` comment out `profile_name` key from `zappa_settings.json` for the deploy environment on which you are currently working on.
 
 - `pip install -r requirements.txt`
 - `python manage.py collectstatic`

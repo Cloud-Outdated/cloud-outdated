@@ -75,37 +75,37 @@ services = {
     "gcp_cloudsql_postgres": Service(
         platform=gcp,
         name="gcp_cloudsql_postgres",
-        label="GCP CloudSQL Postgres",
+        label="CloudSQL Postgres",
         name_alternatives=["PostgreSQL", "Postgres"],
     ),
     "gcp_cloudsql_sqlserver": Service(
         platform=gcp,
         name="gcp_cloudsql_sqlserver",
-        label="GCP CloudSQL SQL Server",
+        label="CloudSQL SQL Server",
         name_alternatives=["SQL Server", "MSSQL"],
     ),
     "gcp_cloudsql_mysql": Service(
         platform=gcp,
         name="gcp_cloudsql_mysql",
-        label="GCP CloudSQL MySQL",
+        label="CloudSQL MySQL",
         name_alternatives=["MySQL"],
     ),
     "gcp_dataproc": Service(
         platform=gcp,
         name="gcp_dataproc",
-        label="GCP Dataproc",
+        label="Dataproc",
         name_alternatives=["Dataproc"],
     ),
     "gcp_dataproc_os": Service(
         platform=gcp,
         name="gcp_dataproc_os",
-        label="GCP Dataproc OS Images",
+        label="Dataproc OS Images",
         name_alternatives=["Dataproc OS Images", "Dataproc OS"],
     ),
     "gcp_memorystore_redis": Service(
         platform=gcp,
         name="gcp_memorystore_redis",
-        label="GCP Memorystore Redis",
+        label="Memorystore Redis",
         name_alternatives=["GCP Redis", "Redis"],
     ),
     "aws_elasticache_redis": Service(
@@ -379,16 +379,15 @@ services = {
     "azure_hdinsight": Service(
         platform=azure,
         name="azure_hdinsight",
-        label="Azure HDInsight",
+        label="HDInsight",
         name_alternatives=["HDInsight"],
     ),
     "azure_databricks": Service(
         platform=azure,
         name="azure_databricks",
-        label="Azure Databricks",
+        label="Databricks",
         name_alternatives=["Databricks"],
-    )
-    # ...
+    ),
 }
 
 # shorthand to be used in models for choice fields

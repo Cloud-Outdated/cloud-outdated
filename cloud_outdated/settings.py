@@ -23,8 +23,8 @@ env = environ.FileAwareEnv(
     DB_HOST=(str, "cockroach"),
     DB_PORT=(str, "26257"),
     DB_NAME=(str, "defaultdb"),
-    AWS_ACCESS_KEY_ID=(str, "dummy"),
-    AWS_SECRET_ACCESS_KEY=(str, "dummy"),
+    AWS_ACCESS_KEY_ID_BACKEND=(str, "dummy"),
+    AWS_SECRET_ACCESS_KEY_BACKEND=(str, "dummy"),
     GOOGLE_ANALYTICS_GTAG_PROPERTY_ID=(str, "dummy"),
 )
 
@@ -35,7 +35,7 @@ COMPANY_NAME = "Cloud Outdated"
 BASE_URL_ENVS = {
     "local": "http://localhost",
     "dev": "https://dev.cloud-outdated.com",
-    "prod": "https://www.cloud-outdated.com",
+    "prod": "https://cloud-outdated.com",
 }
 BASE_URL = BASE_URL_ENVS[env("ENVIRONMENT")]
 
@@ -53,7 +53,10 @@ RECAPTCHA_REQUIRED_SCORE = 0.85
 
 ALLOWED_HOSTS = [
     "dev.cloud-outdated.com",
-    "b4eu57c6a2.execute-api.eu-central-1.amazonaws.com",
+    "www.cloud-outdated.com",
+    "cloud-outdated.com",
+    "b4eu57c6a2.execute-api.eu-central-1.amazonaws.com",  # dev
+    "4r4hbnvvu8.execute-api.eu-central-1.amazonaws.com",  # prod
     "127.0.0.1",
     "localhost",
 ]
@@ -89,24 +92,20 @@ INSTALLED_APPS = [
 
 # used by SES
 # poll_aws uses zappa managed role
-AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+# default names are overriden and set by Lambda and Zappa
+AWS_ACCESS_KEY_ID_BACKEND = env("AWS_ACCESS_KEY_ID_BACKEND")
+AWS_SECRET_ACCESS_KEY_BACKEND = env("AWS_SECRET_ACCESS_KEY_BACKEND")
 
-DEFAULT_FROM_EMAIL = "hello@cloud-outdated.com"
+DEFAULT_FROM_EMAIL = "cloudoutdated@gmail.com"
 
 EMAIL_BACKEND = "anymail.backends.amazon_ses.EmailBackend"
 
 ANYMAIL = {
     "AMAZON_SES_CLIENT_PARAMS": {
-        "aws_access_key_id": AWS_ACCESS_KEY_ID,
-        "aws_secret_access_key": AWS_SECRET_ACCESS_KEY,
+        "aws_access_key_id": AWS_ACCESS_KEY_ID_BACKEND,
+        "aws_secret_access_key": AWS_SECRET_ACCESS_KEY_BACKEND,
         "region_name": "eu-central-1",
-        # override other default options
-        "config": {
-            "connect_timeout": 30,
-            "read_timeout": 30,
-        },
-    },
+    }
 }
 
 LOGOUT_REDIRECT_URL = "/"
@@ -226,7 +225,7 @@ LOGGING = {
     "loggers": {
         "": {
             "handlers": ["console_json"],
-            "level": "DEBUG",
+            "level": "INFO",
             "propagate": True,
         },
     },
