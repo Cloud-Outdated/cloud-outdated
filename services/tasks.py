@@ -704,7 +704,7 @@ class PollService:
             )
         except Exception as e:
             notify_operator(
-                f"Error ocurred while polling service {self.service.name}\n {traceback.print_exc()}"
+                f"Error ocurred while polling service {self.service.name} {traceback.print_exc()}"
             )
             logger.error(
                 f"Error ocurred while polling service {self.service.name}",
