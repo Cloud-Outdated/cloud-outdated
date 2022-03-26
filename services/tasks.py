@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 from core.util import notify_operator
 from google.cloud import container_v1
 from googleapiclient.discovery import build
+from django.utils import timezone
 
 from services.base import Service, services
 from services.models import Version
@@ -724,7 +725,7 @@ class PollService:
         if to_deprecate:
             Version.objects.filter(
                 service=self.service.name, version__in=to_deprecate
-            ).update(deprecated=True)
+            ).update(deprecated=timezone.now())
             logger.info(
                 f"Service: {self.service.name} - These versions have been deprecated: {to_deprecate}",
             )
