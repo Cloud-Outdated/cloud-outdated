@@ -701,11 +701,10 @@ class PollService:
             self.added_versions = self.process_added_versions(
                 current_versions, supported_versions
             )
-        except:
-            _, _, tb = sys.exc_info()
+        except Exception as e:
             notify_operator(
-                f"Error ocurred while polling service {self.service.name}\n"
-                + "\n".join(traceback.extract_tb(tb))
+                f"Error ocurred while polling service {self.service.name}\n\n"
+                f"{traceback.print_exc()}"
             )
             logger.error(
                 f"Error ocurred while polling service {self.service.name}",

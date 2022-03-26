@@ -1,15 +1,10 @@
 {% load i18n %}
-
 {% block subject %}
-{% blocktrans %}Cloud Outdated | Notifty operator{% endblocktrans %}
+    {% blocktrans %}Cloud Outdated | Notifty operator{% endblocktrans %}
 {% endblock subject %}
-
 {% block text_body %}
-{{message}}
+    {{ message }}
 {% endblock text_body %}
-
 {% block html_body %}
-<div>
-    {{message}}
-</div>
+    <div>{{ message }}</div>
 {% endblock html_body %}
