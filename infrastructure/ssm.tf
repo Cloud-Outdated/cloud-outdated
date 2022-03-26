@@ -115,8 +115,8 @@ resource "aws_ssm_parameter" "db-password" {
 }
 
 resource "aws_ssm_parameter" "backend-user-service-account-key" {
-  name        = "/${local.project}/${var.environment}/GCP_SERVICE_ACCOUNT_KEY"
-  description = "Backend user's GCP_SERVICE_ACCOUNT_KEY for internal services"
+  name        = "/${local.project}/${var.environment}/GOOGLE_APPLICATION_CREDENTIALS"
+  description = "Backend user's GOOGLE_APPLICATION_CREDENTIALS for internal services"
   type        = "SecureString"
   value       = module.service_accounts.key
   overwrite   = true

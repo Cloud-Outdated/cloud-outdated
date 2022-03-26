@@ -25,6 +25,7 @@ env = environ.FileAwareEnv(
     DB_NAME=(str, "defaultdb"),
     AWS_ACCESS_KEY_ID_BACKEND=(str, "dummy"),
     AWS_SECRET_ACCESS_KEY_BACKEND=(str, "dummy"),
+    GOOGLE_APPLICATION_CREDENTIALS=(str, "{}"),
     GOOGLE_ANALYTICS_GTAG_PROPERTY_ID=(str, "dummy"),
 )
 
@@ -110,6 +111,9 @@ ANYMAIL = {
         "region_name": "eu-central-1",
     }
 }
+
+# used for polling GCP services
+GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
 
 LOGOUT_REDIRECT_URL = "/"
 
