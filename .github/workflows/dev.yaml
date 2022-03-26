@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - hotfix/fix-error-to-email
 
 jobs:
   build_deploy:
