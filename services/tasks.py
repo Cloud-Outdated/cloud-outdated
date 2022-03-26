@@ -705,7 +705,7 @@ class PollService:
         except Exception as e:
             error_message = f"Error occurred while polling service {self.service.name}"
             notify_operator(
-                f"{error_message}\n {type(e).__name__} at line {e.__traceback__.tb_lineno} of {e.filename}: {e.__str__()}"
+                f"{error_message}\n {type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: {e.__str__()}"
             )
             logger.error(error_message, exc_info=True)
 
