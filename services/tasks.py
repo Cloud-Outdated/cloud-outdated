@@ -703,11 +703,12 @@ class PollService:
                 current_versions, supported_versions
             )
         except Exception as e:
+            error_message = f"Error ocurred while polling service {self.service.name}"
             notify_operator(
-                f"Error ocurred while polling service {self.service.name} {traceback.print_exc()}"
+                f"{error_message}\n {type(e).__name__} at line {e.__traceback__.tb_lineno} of {e.filename}: {e.__str__()}"
             )
             logger.error(
-                f"Error ocurred while polling service {self.service.name}",
+                error_message,
                 exc_info=True,
             )
 
