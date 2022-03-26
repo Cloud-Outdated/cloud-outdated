@@ -703,14 +703,11 @@ class PollService:
                 current_versions, supported_versions
             )
         except Exception as e:
-            error_message = f"Error ocurred while polling service {self.service.name}"
+            error_message = f"Error occurred while polling service {self.service.name}"
             notify_operator(
                 f"{error_message}\n {type(e).__name__} at line {e.__traceback__.tb_lineno} of {e.filename}: {e.__str__()}"
             )
-            logger.error(
-                error_message,
-                exc_info=True,
-            )
+            logger.error(error_message, exc_info=True)
 
     def get_current_versions(self):
         return [
