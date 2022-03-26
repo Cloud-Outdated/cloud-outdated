@@ -53,21 +53,21 @@ class Service:
 services = {
     "aws_eks": Service(
         platform=aws,
-        name="eks",
+        name="aws_eks",
         label="EKS",
         name_alternatives=["Elastic Kubernetes Service"],
         public=True,
     ),
     "gcp_gke": Service(
         platform=gcp,
-        name="gke",
+        name="gcp_gke",
         label="GKE",
         name_alternatives=["Google Kubernetes Engine"],
         public=True,
     ),
     "azure_aks": Service(
         platform=azure,
-        name="aks",
+        name="azure_aks",
         label="AKS",
         name_alternatives=["Azure Kubernetes Service"],
         public=True,
