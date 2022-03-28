@@ -25,6 +25,7 @@ logger = structlog.get_logger(__name__)
 
 
 def get_gcp_credentials():
+    """Read GCP credentials from settings in order to use it with GCP clients."""
     gcp_credentials = json.loads(settings.GOOGLE_APPLICATION_CREDENTIALS)
     credentials = service_account.Credentials.from_service_account_info(gcp_credentials)
     return credentials
@@ -42,7 +43,7 @@ def _gcp_cloud_sql(engine):
     with build(
         "sqladmin",
         "v1",
-        credentials=settings.GOOGLE_APPLICATION_CREDENTIALS,
+        credentials=get_gcp_credentials(),
     ) as sqladmin:
         flags = sqladmin.flags().list().execute()
     return [
@@ -88,7 +89,7 @@ def gcp_gke():
     Returns:
         list(str): List of supported versions
     """
-    client = container_v1.ClusterManagerClient()
+    client = container_v1.ClusterManagerClient(credentials=get_gcp_credentials())
     result = client.get_server_config(zone="europe-central2")
     return result.valid_master_versions
 
