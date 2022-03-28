@@ -1,4 +1,5 @@
 import datetime
+import json
 import re
 import sys
 import traceback
@@ -9,9 +10,11 @@ import boto3
 import dateutil.parser
 import requests
 import structlog
+from django.conf import settings
 from bs4 import BeautifulSoup
 from core.util import notify_operator
 from google.cloud import container_v1
+from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from django.utils import timezone
 
@@ -19,6 +22,12 @@ from services.base import Service, services
 from services.models import Version
 
 logger = structlog.get_logger(__name__)
+
+
+def get_gcp_credentials():
+    gcp_credentials = json.loads(settings.GOOGLE_APPLICATION_CREDENTIALS)
+    credentials = service_account.Credentials.from_service_account_info(gcp_credentials)
+    return credentials
 
 
 def _gcp_cloud_sql(engine):
@@ -33,6 +42,7 @@ def _gcp_cloud_sql(engine):
     with build(
         "sqladmin",
         "v1",
+        credentials=settings.GOOGLE_APPLICATION_CREDENTIALS,
     ) as sqladmin:
         flags = sqladmin.flags().list().execute()
     return [
