@@ -46,7 +46,7 @@ jobs:
         run: |
           AWS_PROFILE=cloud-outdated-deploy-dev ./chamber export cloud-outdated/${{ inputs.ENVIRONMENT }} --format dotenv > .env.${{ inputs.ENVIRONMENT }}
           AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/${{ inputs.ENVIRONMENT }} --pristine -- printenv GOOGLE_APPLICATION_CREDENTIALS > credentials.json
-          echo GOOGLE_APPLICATION_CREDENTIALS=/var/task/credentials.json >> .env.${{ inputs.ENVIRONMENT }}
+          # echo GOOGLE_APPLICATION_CREDENTIALS=/var/task/credentials.json >> .env.${{ inputs.ENVIRONMENT }}
 
       - name: Zappa deployments
         run: |
