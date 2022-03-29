@@ -26,8 +26,12 @@ logger = structlog.get_logger(__name__)
 
 def get_gcp_credentials():
     """Read GCP credentials from settings in order to use it with GCP clients."""
+
+    # cleaning gcp credentials from weird new line chars
     gcp_credentials = json.loads(
-        settings.GOOGLE_APPLICATION_CREDENTIALS.replace(r"\n", " ").replace(r"\r", "")
+        settings.GOOGLE_APPLICATION_CREDENTIALS.replace('\\n  "', '"')
+        .replace('"\\n', '"')
+        .replace("}\\n", "}")
     )
     credentials = service_account.Credentials.from_service_account_info(gcp_credentials)
     return credentials
