@@ -27,7 +27,9 @@ logger = structlog.get_logger(__name__)
 def get_gcp_credentials():
     """Read GCP credentials from settings in order to use it with GCP clients."""
 
-    # cleaning gcp credentials from weird new line chars
+    # Cleaning gcp credentials from weird new line chars.
+    # Problem is that we want new line chars in private key, but not in the rest
+    # of the json
     gcp_credentials = json.loads(
         settings.GOOGLE_APPLICATION_CREDENTIALS.replace('\\n  "', '"')
         .replace('"\\n', '"')
