@@ -78,6 +78,7 @@ DATABASES = {
 
 # Application definition
 INSTALLED_APPS = [
+    "django_admin_env_notice",  # must come before django.admin
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -160,6 +161,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "django_admin_env_notice.context_processors.from_settings",
             ],
         },
     },
@@ -262,6 +264,17 @@ NOTIFICATIONS_MAX_RETRIES = 10
 NOTIFICATIONS_MAX_TIME = 60 * 5
 
 GOOGLE_ANALYTICS_GTAG_PROPERTY_ID = env("GOOGLE_ANALYTICS_GTAG_PROPERTY_ID")
+
+# django-admin-env-notice
+ENVIRONMENT_NAME = env("ENVIRONMENT")
+if env("ENVIRONMENT") == "local":
+    ENVIRONMENT_COLOR = "#5F9EA0"
+elif env("ENVIRONMENT") == "dev":
+    ENVIRONMENT_COLOR = "#228B22"
+elif env("ENVIRONMENT") == "prod":
+    ENVIRONMENT_COLOR = "#C04000"
+else:
+    ENVIRONMENT_COLOR = "#000000"
 
 # local overrides
 if env("ENVIRONMENT") == "local":
