@@ -1,4 +1,5 @@
 import datetime
+import json
 import re
 import sys
 import traceback
@@ -9,15 +10,33 @@ import boto3
 import dateutil.parser
 import requests
 import structlog
+from django.conf import settings
 from bs4 import BeautifulSoup
 from core.util import notify_operator
 from google.cloud import container_v1
+from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from django.utils import timezone
 
 from services.base import Service, services
 from services.models import Version
 
 logger = structlog.get_logger(__name__)
+
+
+def get_gcp_credentials():
+    """Read GCP credentials from settings in order to use it with GCP clients."""
+
+    # Cleaning gcp credentials from weird new line chars.
+    # Problem is that we want new line chars in private key, but not in the rest
+    # of the json
+    gcp_credentials = json.loads(
+        settings.GOOGLE_APPLICATION_CREDENTIALS.replace('\\n  "', '"')
+        .replace('"\\n', '"')
+        .replace("}\\n", "}")
+    )
+    credentials = service_account.Credentials.from_service_account_info(gcp_credentials)
+    return credentials
 
 
 def _gcp_cloud_sql(engine):
@@ -32,6 +51,7 @@ def _gcp_cloud_sql(engine):
     with build(
         "sqladmin",
         "v1",
+        credentials=get_gcp_credentials(),
     ) as sqladmin:
         flags = sqladmin.flags().list().execute()
     return [
@@ -77,7 +97,7 @@ def gcp_gke():
     Returns:
         list(str): List of supported versions
     """
-    client = container_v1.ClusterManagerClient()
+    client = container_v1.ClusterManagerClient(credentials=get_gcp_credentials())
     result = client.get_server_config(zone="europe-central2")
     return result.valid_master_versions
 
@@ -701,16 +721,12 @@ class PollService:
             self.added_versions = self.process_added_versions(
                 current_versions, supported_versions
             )
-        except:
-            _, _, tb = sys.exc_info()
+        except Exception as e:
+            error_message = f"Error occurred while polling service {self.service.name}"
             notify_operator(
-                f"Error ocurred while polling service {self.service.name}\n"
-                + "\n".join(traceback.extract_tb(tb))
+                f"{error_message}:\n {type(e).__name__} at line {e.__traceback__.tb_lineno} of {__file__}: {e.__str__()}"
             )
-            logger.error(
-                f"Error ocurred while polling service {self.service.name}",
-                exc_info=True,
-            )
+            logger.error(error_message, exc_info=True)
 
     def get_current_versions(self):
         return [
@@ -725,7 +741,7 @@ class PollService:
         if to_deprecate:
             Version.objects.filter(
                 service=self.service.name, version__in=to_deprecate
-            ).update(deprecated=True)
+            ).update(deprecated=timezone.now())
             logger.info(
                 f"Service: {self.service.name} - These versions have been deprecated: {to_deprecate}",
             )

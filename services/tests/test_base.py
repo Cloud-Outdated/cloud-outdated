@@ -28,3 +28,11 @@ class ServicesHaveUniqueNameTestCase(SimpleTestCase):
         assert len(services) == len(
             set([service.name for service in services.values()])
         )
+
+
+class AllServicesHavePlatformNameAsSuffixTestCase(SimpleTestCase):
+    def test_platform_suffix_set(self):
+        for service_name, service_obj in services.items():
+            platform = service_obj.platform.name.lower()
+            assert service_name.startswith(platform)
+            assert service_obj.name.startswith(platform)
