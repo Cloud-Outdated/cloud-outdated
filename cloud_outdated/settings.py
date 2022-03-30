@@ -47,7 +47,7 @@ SECRET_KEY = env("DJANGO_SECRET_KEY")
 DEBUG = env("DEBUG")
 
 OPERATORS_EMAIL = [
-    # "liezun.js@gmail.com",
+    "liezun.js@gmail.com",
     "mislav.cimpersak@gmail.com",
 ]
 
