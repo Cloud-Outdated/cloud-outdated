@@ -1,15 +1,12 @@
 {% load i18n %}
-
 {% block subject %}
-{% blocktrans %}Confirm subscription to Cloud Outdated{% endblocktrans %}
+    {% blocktrans %}{{ subject_prefix }} - {{ subject_suffix }}{% endblocktrans %}
 {% endblock subject %}
-
 {% block text_body %}
-{% blocktrans %}To confirm subscription to Cloud Outdated follow this link:{% endblocktrans %}
-{{ link }}
+    {% blocktrans %}To confirm subscription to Cloud Outdated follow this link:{% endblocktrans %}
+    {{ link }}
 {% endblock text_body %}
-
 {% block html_body %}
-{% blocktrans %}To confirm subscription to Cloud Outdated follow this link:{% endblocktrans %}
-<a href="{{ link }}">{{ link }}</a>
+    {% blocktrans %}To confirm subscription to Cloud Outdated follow this link:{% endblocktrans %}
+    <a href="{{ link }}">{{ link }}</a>
 {% endblock html_body %}

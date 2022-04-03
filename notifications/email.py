@@ -1,7 +1,6 @@
-from anymail.message import AnymailMessageMixin
-from templated_mail.mail import BaseEmailMessage
+from core.emails import BaseEmail
 
 
-class NotificationEmail(BaseEmailMessage, AnymailMessageMixin):
-    subject = "Cloud-Outdated.com - New service versions updates"
+class NotificationEmail(BaseEmail):
     template_name = "notification.html"
+    subject_suffix = "New service versions updates"
