@@ -1,12 +1,14 @@
 {% load i18n %}
 {% block subject %}
-    {% blocktrans %}{{ subject_prefix }} - Login to Cloud Outdated{% endblocktrans %}
+    {% blocktrans %}{{ subject_prefix }} - Log in{% endblocktrans %}
 {% endblock subject %}
 {% block text_body %}
-    {% blocktrans %}Click the following link to login to Cloud Outdated:{% endblocktrans %}
+    {% blocktrans %}We have received a login attempt for your email. To complete the login process, please follow the provided link:{% endblocktrans %}
     {{ link }}
 {% endblock text_body %}
 {% block html_body %}
-    {% blocktrans %}Click the following link to login to Cloud Outdated:{% endblocktrans %}
-    <a href="{{ link }}">{{ link }}</a>
+    <div>
+        {% blocktrans %}We have received a login attempt for your email. To complete the login process, please follow the provided link:{% endblocktrans %}
+        <a href="{{ link }}">{{ link }}</a>
+    </div>
 {% endblock html_body %}

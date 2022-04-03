@@ -7,3 +7,7 @@ class UserRegistrationEmail(BaseEmail):
 
 class UserLoginEmail(BaseEmail):
     template_name = "user_login_email.html"
+
+
+class UserUpdateSubscriptionsEmail(BaseEmail):
+    template_name = "user_update_subscriptions_email.html"
