@@ -15,6 +15,8 @@ class UserSubscriptionsCaptchaForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        self.user = kwargs["initial"].get("user")
+
         #  dynamicaly set all public services as form fields
         for service_key, service_details in services.items():
             if service_details.public is True:
@@ -24,6 +26,14 @@ class UserSubscriptionsCaptchaForm(forms.Form):
                 )
                 self.fields[service_key].is_service = True
                 self.fields[service_key].platform = service_details.platform
+
+    def clean_email(self):
+        data = self.cleaned_data["email"]
+
+        if self.user and self.user.email != data:
+            raise forms.ValidationError("You cannot update your email.")
+
+        return data
 
 
 class UserLoginForm(forms.Form):

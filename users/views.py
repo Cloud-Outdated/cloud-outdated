@@ -82,6 +82,16 @@ class UserSubscriptionsView(FormView, BaseView):
 
         return super().form_valid(form)
 
+    def get_initial(self):
+        data = super().get_initial()
+
+        if self.request.user.is_authenticated:
+            data["user"] = self.request.user
+        else:
+            data["user"] = None
+
+        return data
+
 
 class UserSubscriptionsThankYouAboutView(BaseView):
     template_name = "user-subscriptions-thank-you.html"
