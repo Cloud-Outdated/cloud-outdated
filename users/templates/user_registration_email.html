@@ -1,14 +1,22 @@
 {% load i18n %}
 {% block subject %}
-    {% blocktrans %}{{ subject_prefix }} - Confirm subscription to Cloud Outdated{% endblocktrans %}
+    {% blocktrans %}{{ subject_prefix }} - Successfuly subscribed{% endblocktrans %}
 {% endblock subject %}
 {% block text_body %}
-    {% blocktrans %}To confirm your account and to update your subscriptions on Cloud Outdated follow this link:{% endblocktrans %}
+    {% blocktrans %}You have successfully subscribed to get notified about service updates on Cloud Outdated.{% endblocktrans %}
+    {% blocktrans %}When a new version of the service you have subscribed to is made publicly available we will send you an email as soon as possible.{% endblocktrans %}
+    {% blocktrans %}To update your subscriptions on Cloud Outdated or cancel it all together follow this link:{% endblocktrans %}
     {{ link }}
 {% endblock text_body %}
 {% block html_body %}
     <div>
-        {% blocktrans %}To confirm your account and to update your subscriptions on Cloud Outdated follow this link:{% endblocktrans %}
+        {% blocktrans %}You have successfully subscribed to get notified about service updates on Cloud Outdated.{% endblocktrans %}
+    </div>
+    <div>
+        {% blocktrans %}When a new version of the service you have subscribed to is made publicly available we will send you an email as soon as possible.{% endblocktrans %}
+    </div>
+    <div>
+        {% blocktrans %}To update your subscriptions on Cloud Outdated or cancel it all together follow this link:{% endblocktrans %}
         <a href="{{ link }}">{{ link }}</a>
     </div>
 {% endblock html_body %}
