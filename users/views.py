@@ -53,8 +53,6 @@ class UserSubscriptionsView(FormView, BaseView):
     def form_valid(self, form):
         email = form.cleaned_data["email"]
 
-        # TODO add validation if user is logged in but email is different
-
         user = User.objects.filter(email=email).first()
 
         if not user:
