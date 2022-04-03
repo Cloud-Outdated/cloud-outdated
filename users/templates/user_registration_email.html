@@ -7,6 +7,8 @@
     {{ link }}
 {% endblock text_body %}
 {% block html_body %}
-    {% blocktrans %}To confirm your account and to update your subscriptions on Cloud Outdated follow this link:{% endblocktrans %}
-    <a href="{{ link }}">{{ link }}</a>
+    <div>
+        {% blocktrans %}To confirm your account and to update your subscriptions on Cloud Outdated follow this link:{% endblocktrans %}
+        <a href="{{ link }}">{{ link }}</a>
+    </div>
 {% endblock html_body %}
