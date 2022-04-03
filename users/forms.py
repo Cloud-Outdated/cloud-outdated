@@ -28,6 +28,7 @@ class UserSubscriptionsCaptchaForm(forms.Form):
 
 class UserLoginForm(forms.Form):
     email = forms.EmailField(required=True, help_text="Email for notifications")
+    captcha = ReCaptchaField(widget=ReCaptchaV3)
 
     def clean_email(self):
         data = self.cleaned_data["email"]
