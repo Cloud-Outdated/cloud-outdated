@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="pt-24">
+        <!-- Features section-->
+        <section class="bg-white border-b py-8">
+            <div class="container mx-auto flex flex-wrap pt-4 pb-12">
+                <h1 class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800">Log in</h1>
+                <div class="w-full mb-4">
+                    <div class="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
+                </div>
+                <div class="w-full max-w-4xl mx-auto">
+                    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" method="post">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            {{ form.email.label }}
+                            <label class="block text-gray-700 text-sm font-bold mb-2"
+                                   for="{{ form.email.html_name }}">
+                                {{ form.email.label }}
+                            </label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                   id="{{ form.email.id_for_label }}"
+                                   name="{{ form.email.html_name }}"
+                                   type="text"
+                                   placeholder="{{ form.email.label }}">
+                            {% if form.email.errors %}<div class="w-full text-gray-700">{{ form.email.errors }}</div>{% endif %}
+                        </div>
+                        {% if form.captcha.errors %}
+                            <div class="w-full text-gray-700">There was a problem with reCAPTCHA: {{ form.captcha.errors }}</div>
+                        {% endif %}
+                        {{ form.captcha }}
+                        <hr />
+                        <div class="flex items-center justify-between">
+                            <button class="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out"
+                                    type="submit">
+                                Send email
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock content %}

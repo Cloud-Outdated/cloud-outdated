@@ -1,10 +1,13 @@
-from anymail.message import AnymailMessageMixin
-from templated_mail.mail import BaseEmailMessage
+from core.emails import BaseEmail
 
 
-class UserRegistrationEmail(BaseEmailMessage, AnymailMessageMixin):
+class UserRegistrationEmail(BaseEmail):
     template_name = "user_registration_email.html"
 
 
-class UserLoginEmail(BaseEmailMessage, AnymailMessageMixin):
+class UserLoginEmail(BaseEmail):
     template_name = "user_login_email.html"
+
+
+class UserUpdateSubscriptionsEmail(BaseEmail):
+    template_name = "user_update_subscriptions_email.html"

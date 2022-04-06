@@ -1,7 +1,11 @@
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV3
+from django.contrib.auth import get_user_model
 from django import forms
+
 from services.base import services
+
+User = get_user_model()
 
 
 class UserSubscriptionsCaptchaForm(forms.Form):
@@ -10,6 +14,8 @@ class UserSubscriptionsCaptchaForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.user = kwargs["initial"].get("user")
 
         #  dynamicaly set all public services as form fields
         for service_key, service_details in services.items():
@@ -20,3 +26,26 @@ class UserSubscriptionsCaptchaForm(forms.Form):
                 )
                 self.fields[service_key].is_service = True
                 self.fields[service_key].platform = service_details.platform
+
+    def clean_email(self):
+        data = self.cleaned_data["email"]
+
+        if self.user and self.user.email != data:
+            raise forms.ValidationError("You cannot update your email.")
+
+        return data
+
+
+class UserLoginForm(forms.Form):
+    email = forms.EmailField(required=True, help_text="Email for notifications")
+    captcha = ReCaptchaField(widget=ReCaptchaV3)
+
+    def clean_email(self):
+        data = self.cleaned_data["email"]
+
+        if User.objects.filter(email=data).exists() is False:
+            raise forms.ValidationError(
+                "There is no account associated with this email address"
+            )
+
+        return data
