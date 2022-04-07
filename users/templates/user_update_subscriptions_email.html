@@ -3,14 +3,14 @@
     {% blocktrans %}{{ subject_prefix }} - Manage subscriptions{% endblocktrans %}
 {% endblock subject %}
 {% block text_body %}
-    {% blocktrans %}You have sucessfuly updated your subscriptions on Cloud Outdated.{% endblocktrans %}
-    {% blocktrans %}If you wish to update your subscription again click the following link:{% endblocktrans %}
+    {% blocktrans %}You have successfully updated your subscriptions on Cloud Outdated.{% endblocktrans %}
+    {% blocktrans %}If you wish to update your subscription again, click the following link:{% endblocktrans %}
     {{ link }}
 {% endblock text_body %}
 {% block html_body %}
-    <div>{% blocktrans %}You have sucessfuly updated your subscriptions on Cloud Outdated.{% endblocktrans %}</div>
+    <div>{% blocktrans %}You have successfully updated your subscriptions on Cloud Outdated.{% endblocktrans %}</div>
     <div>
-        {% blocktrans %}If you wish to update your subscription again click the following link:{% endblocktrans %}
+        {% blocktrans %}If you wish to update your subscription again, click the following link:{% endblocktrans %}
         <a href="{{ link }}">{{ link }}</a>
     </div>
 {% endblock html_body %}
