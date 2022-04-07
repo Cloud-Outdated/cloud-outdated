@@ -31,15 +31,27 @@ class Version(BaseModelMixin):
         return f"{str(self.id)} | {self.service} {self.version}"
 
     @property
+    def service_obj(self):
+        """Get service object for given version.service choice.
+
+        Returns:
+            services.base.Service or None
+        """
+        try:
+            return services[self.service]
+        except KeyError:
+            return None
+
+    @property
     def service_label(self):
         """Get human readable service name.
 
         Returns:
             str: service name
         """
-        try:
-            return services[self.service].label
-        except KeyError:
+        if self.service_obj:
+            return self.service_obj.label
+        else:
             return self.service
 
     @property
@@ -49,7 +61,7 @@ class Version(BaseModelMixin):
         Returns:
             bool: True if instance's service is public, False if not
         """
-        try:
-            return services[self.service].public
-        except KeyError:
+        if self.service_obj:
+            return self.service_obj.public
+        else:
             return False

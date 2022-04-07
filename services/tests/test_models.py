@@ -5,6 +5,18 @@ from django.test import TestCase
 from services.base import Service, services, aws
 
 
+class VersionServiceObjTestCase(TestCase):
+    def test_known_service(self):
+        version = VersionFactory(deprecated=None)
+
+        assert version.service_obj == services[version.service]
+
+    def test_unknown_service(self):
+        version = VersionFactory(deprecated=None, service="foo_bar")
+
+        assert version.service_obj is None
+
+
 class VersionServiceLabelTestCase(TestCase):
     def test_known_service(self):
         version = VersionFactory(deprecated=None)

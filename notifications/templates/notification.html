@@ -1,19 +1,20 @@
 {% load i18n %}
 {% block subject %}
-    {% blocktrans %}Cloud-Outdated.com - New service versions updates{% endblocktrans %}
+    {% blocktrans %}{{ subject_prefix }} - New service versions updates{% endblocktrans %}
 {% endblock subject %}
 {% block text_body %}
     Hi! Here are version updates to services you are subscribed to at cloud-outdated.com.
     {% if new_versions %}
         New versions:
-        {% for version in new_versions %}- {{ version.service_label }}: {{ version.version }}{% endfor %}
+        {% for version in new_versions %}
+            - {{ version.service_obj.platform.label }} {{ version.service_label }}: {{ version.version }}
+        {% endfor %}
     {% endif %}
     {% if deprecated_versions %}
         Deprecated versions
         {% for version in deprecated_versions %}- {{ version.service_label }}: {{ version.version }}{% endfor %}
     {% endif %}
     Brought to you by cloud-outdated.com team.
-
     Unsubscribe or update your subscriptions here: {{ unsubscribe_link }}
 {% endblock text_body %}
 {% block html_body %}
@@ -23,7 +24,9 @@
     {% if new_versions %}
         <h3>New versions</h3>
         <ul>
-            {% for version in new_versions %}<li>{{ version.service_label }}: {{ version.version }}</li>{% endfor %}
+            {% for version in new_versions %}
+                <li>{{ version.service_obj.platform.label }} {{ version.service_label }}: {{ version.version }}</li>
+            {% endfor %}
         </ul>
     {% endif %}
     {% if deprecated_versions %}
