@@ -1,8 +1,7 @@
 from captcha.fields import ReCaptchaField
 from captcha.widgets import ReCaptchaV3
-from django.contrib.auth import get_user_model
 from django import forms
-
+from django.contrib.auth import get_user_model
 from services.base import services
 
 User = get_user_model()
@@ -10,7 +9,7 @@ User = get_user_model()
 
 class UserSubscriptionsCaptchaForm(forms.Form):
     email = forms.EmailField(required=True, help_text="Email for notifications")
-    captcha = ReCaptchaField(widget=ReCaptchaV3)
+    # captcha = ReCaptchaField(widget=ReCaptchaV3)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -26,6 +25,19 @@ class UserSubscriptionsCaptchaForm(forms.Form):
                 )
                 self.fields[service_key].is_service = True
                 self.fields[service_key].platform = service_details.platform
+
+    def clean(self):
+        super().clean()
+        selected_services = []
+        for field_name, field_value in self.cleaned_data.items():
+            if field_name in services:
+                if field_value is True:
+                    selected_services.append(field_name)
+        if not selected_services:
+            # Adding the error to the email field just for the purpose of looking good in the UI
+            self.add_error(
+                "email", "You need to select at least 1 service in order to signup."
+            )
 
     def clean_email(self):
         data = self.cleaned_data["email"]
