@@ -9,7 +9,7 @@ User = get_user_model()
 
 class UserSubscriptionsCaptchaForm(forms.Form):
     email = forms.EmailField(required=True, help_text="Email for notifications")
-    # captcha = ReCaptchaField(widget=ReCaptchaV3)
+    captcha = ReCaptchaField(widget=ReCaptchaV3)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
