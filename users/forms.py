@@ -33,10 +33,7 @@ class UserSubscriptionsCaptchaForm(forms.Form):
             if field_name in services:
                 if field_value is True:
                     selected_services.append(field_name)
-        if (
-            not selected_services
-            and not User.objects.filter(email=self.cleaned_data["email"]).exists()
-        ):
+        if not selected_services and not self.user:
             # Adding the error to the email field just for the purpose of looking good in the UI
             self.add_error(
                 "email", "You need to select at least 1 service in order to signup."
