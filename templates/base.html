@@ -11,8 +11,7 @@
         <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
         <title>{{ page_title }}</title>
         <!-- Required Stylesheets -->
-        <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
-              rel="stylesheet">
+        <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
         <!-- Load polyfills to support older browsers -->
         <script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver"></script>
         <!-- Required scripts -->
@@ -23,10 +22,10 @@
         <script type="text/javascript" id="cookiebanner" src="https://cdnjs.cloudflare.com/ajax/libs/cookie-banner/1.2.2/cookiebanner.min.js"></script>
         <style>
       .gradient {
-        background: linear-gradient(90deg, #3d33d5 0%, #5188da 100%);
+        background: linear-gradient(90deg, #3d33d5 0%, #5188da 100%) !important;
       }
       .gradient-red {
-        background: linear-gradient(90deg, #d5336f 0%, #da5151 100%);
+        background: linear-gradient(90deg, #d5336f 0%, #da5151 100%) !important;
       }
         </style>
         {% analytical_head_bottom %}
