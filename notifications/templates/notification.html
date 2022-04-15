@@ -12,7 +12,9 @@
     {% endif %}
     {% if deprecated_versions %}
         Deprecated versions
-        {% for version in deprecated_versions %}- {{ version.service_label }}: {{ version.version }}{% endfor %}
+        {% for version in deprecated_versions %}
+            - {{ version.service_obj.platform.label }} {{ version.service_label }}: {{ version.version }}
+        {% endfor %}
     {% endif %}
     Brought to you by cloud-outdated.com team.
     Unsubscribe or update your subscriptions here: {{ unsubscribe_link }}
@@ -32,7 +34,9 @@
     {% if deprecated_versions %}
         <h3>Deprecated versions</h3>
         <ul>
-            {% for version in deprecated_versions %}<li>{{ version.service_label }}: {{ version.version }}</li>{% endfor %}
+            {% for version in deprecated_versions %}
+                <li>{{ version.service_obj.platform.label }} {{ version.service_label }}: {{ version.version }}</li>
+            {% endfor %}
         </ul>
     {% endif %}
     <div>
