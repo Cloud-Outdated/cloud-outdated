@@ -38,9 +38,11 @@ class NotifactionSendTestCase(TestCase):
         email = notification.send()
 
         notification.refresh_from_db()
-        notification.sent is not None
+        assert notification.sent is not None
 
-        assert email.subject == NotificationEmail.subject
+        email_template = NotificationEmail(context=email.context)
+        email_template.render()
+        assert email.subject == email_template.subject
         assert email.to == [self.user.email]
         assert "New versions" in email.html
         assert "Deprecated versions" not in email.html
@@ -55,8 +57,11 @@ class NotifactionSendTestCase(TestCase):
         email = notification.send()
 
         notification.refresh_from_db()
-        notification.sent is not None
-        assert email.subject == NotificationEmail.subject
+        assert notification.sent is not None
+
+        email_template = NotificationEmail(context=email.context)
+        email_template.render()
+        assert email.subject == email_template.subject
         assert email.to == [self.user.email]
         assert "New versions" not in email.html
         assert "Deprecated versions" in email.html
@@ -64,6 +69,39 @@ class NotifactionSendTestCase(TestCase):
         assert version.version in email.html
         assert "Unsubscribe or update your subscriptions" in email.html
         assert settings.BASE_URL + reverse("user_subscriptions") in email.html
+
+    def test_ordered_versions(self):
+        notification = NotificationFactory(user=self.user, sent=None)
+        for _ in range(10):
+            version_deprecated = VersionFactory(
+                deprecated=timezone.now() - timedelta(days=1)
+            )
+            NotificationItemFactory(
+                notification=notification, version=version_deprecated
+            )
+        for _ in range(10):
+            version_released = VersionFactory(
+                released=timezone.now() - timedelta(days=1)
+            )
+            NotificationItemFactory(notification=notification, version=version_released)
+
+        email = notification.send()
+        new_versions = email.context["new_versions"]
+        deprecated_versions = email.context["deprecated_versions"]
+
+        version_ordering_key = lambda version: (
+            version.service_obj.platform.label,
+            version.service_label,
+            version.version,
+        )
+
+        assert new_versions == sorted(new_versions, key=version_ordering_key)
+        assert deprecated_versions == sorted(
+            deprecated_versions, key=version_ordering_key
+        )
+
+        notification.refresh_from_db()
+        assert notification.sent is not None
 
     def test_new_versions_service_not_public(self):
         non_public_aws_aurora = Service(
