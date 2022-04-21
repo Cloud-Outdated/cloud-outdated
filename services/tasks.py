@@ -2,7 +2,7 @@ import datetime
 import json
 import re
 from functools import reduce
-from typing import Callable, List
+from typing import Callable
 
 import boto3
 import dateutil.parser

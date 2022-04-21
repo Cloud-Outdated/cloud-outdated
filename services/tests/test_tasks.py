@@ -1,9 +1,6 @@
-from unittest.mock import patch
-
 from django.test import TestCase
 from django.utils import timezone
-from grpc import services
-from services.base import Service, aws, services
+from services.base import services
 from services.models import Version
 from services.tasks import PollService
 from services.tests.factories import VersionFactory
