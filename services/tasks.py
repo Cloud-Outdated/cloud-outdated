@@ -1,8 +1,6 @@
 import datetime
 import json
 import re
-import sys
-import traceback
 from functools import reduce
 from typing import Callable, List
 
@@ -10,13 +8,13 @@ import boto3
 import dateutil.parser
 import requests
 import structlog
-from django.conf import settings
 from bs4 import BeautifulSoup
 from core.util import notify_operator
+from django.conf import settings
+from django.utils import timezone
 from google.cloud import container_v1
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from django.utils import timezone
 
 from services.base import Service, services
 from services.models import Version
@@ -708,19 +706,11 @@ class PollService:
                 f"Service: {self.service.name} - Supported versions {supported_versions}"
             )
 
-            current_versions = self.get_current_versions()
-
-            logger.info(
-                f"Service: {self.service.name} - Current stored versions {current_versions}"
-            )
-
             self.deprecated_versions = self.process_deprecated_versions(
-                current_versions, supported_versions
+                supported_versions
             )
 
-            self.added_versions = self.process_added_versions(
-                current_versions, supported_versions
-            )
+            self.added_versions = self.process_added_versions(supported_versions)
         except Exception as e:
             error_message = f"Error occurred while polling service {self.service.name}"
             notify_operator(
@@ -728,39 +718,53 @@ class PollService:
             )
             logger.error(error_message, exc_info=True)
 
-    def get_current_versions(self):
-        return [
-            v.version
-            for v in Version.objects.filter(service=self.service.name, deprecated=None)
-        ]
+    def process_deprecated_versions(self, supported_versions):
+        # Query versions to deprecate and then set them as deprecated
+        versions_to_deprecate = Version.objects.filter(
+            service=self.service.name, deprecated=None
+        ).exclude(version__in=supported_versions)
+        deprecated_versions = [v.version for v in versions_to_deprecate.only("version")]
+        versions_to_deprecate.update(deprecated=timezone.now())
 
-    def process_deprecated_versions(self, current_versions, supported_versions):
-        # Get newly deprecated versions
-        to_deprecate = set(current_versions) - set(supported_versions)
+        logger.info(
+            f"Service: {self.service.name} - These versions have been deprecated: {deprecated_versions}",
+        )
 
-        if to_deprecate:
-            Version.objects.filter(
-                service=self.service.name, version__in=to_deprecate
-            ).update(deprecated=timezone.now())
-            logger.info(
-                f"Service: {self.service.name} - These versions have been deprecated: {to_deprecate}",
+        return deprecated_versions
+
+    def process_added_versions(self, supported_versions):
+        # Added versions (the ones that we've never seen before)
+        seen_before = []
+        for v in Version.objects.filter(version__in=supported_versions).only("version"):
+            seen_before.append(v.version)
+        added_support = set(supported_versions) - set(seen_before)
+        for v in added_support:
+            Version.objects.create(service=self.service.name, version=v)
+        logger.info(
+            f"Service: {self.service.name} - These versions have been added {list(added_support)}"
+        )
+
+        # Renewed versions (the ones that were previously marked as deprecated but are now supported)
+        renewed_support = (
+            Version.objects.filter(version__in=supported_versions)
+            .exclude(deprecated=None)
+            .only("version")
+        )
+        renewed_versions = []
+        for v in renewed_support:
+            Version.objects.filter(service=self.service.name, version=v.version).update(
+                deprecated=None
             )
+            renewed_versions.append(v.version)
+        logger.info(
+            f"Service: {self.service.name} - These versions have been renewed {renewed_versions}"
+        )
 
-        return list(to_deprecate)
+        logger.info(
+            f"Service: {self.service.name} - These versions are now supported {list(added_support)+renewed_versions}",
+        )
 
-    def process_added_versions(self, current_versions, supported_versions):
-        # Get newly added versions
-        added_versions = set(supported_versions) - set(current_versions)
-
-        if added_versions:
-            Version.objects.bulk_create(
-                [Version(service=self.service.name, version=v) for v in added_versions]
-            )
-            logger.info(
-                f"Service: {self.service.name} - These versions have been added {added_versions}",
-            )
-
-        return list(added_versions)
+        return list(added_support) + renewed_versions
 
 
 def do_polling(executor: PollService):
