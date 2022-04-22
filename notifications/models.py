@@ -57,9 +57,17 @@ class Notification(BaseModelMixin):
             logger.info("Notification sending aborted: nothing to report")
             return None
 
+        version_ordering_key = lambda version: (
+            version.service_obj.platform.label,
+            version.service_label,
+            version.version,
+        )
+
         ctx = {
-            "new_versions": new_versions,
-            "deprecated_versions": deprecated_versions,
+            "new_versions": sorted(new_versions, key=version_ordering_key),
+            "deprecated_versions": sorted(
+                deprecated_versions, key=version_ordering_key
+            ),
             "unsubscribe_link": settings.BASE_URL
             + reverse("user_subscriptions")
             + get_query_string(self.user),
