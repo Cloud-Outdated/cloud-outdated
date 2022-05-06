@@ -1,11 +1,11 @@
-<div class="flex items-center justify-between">
+<div class="flex items-center justify-between pt-2 pb-2">
     <h3 class="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">{{ provider }}</h3>
     <div class="w-full text-gray-700">
         <ul>
             {% for service_field in form.visible_fields %}
                 {% if service_field.field.is_service %}
                     {% if service_field.field.platform.name|lower == provider|lower %}
-                        <li>
+                        <li class="my-2">
                             <label class="inline-flex items-center"
                                    for="{{ service_field.id_for_label }}">
                                 <input type="checkbox"

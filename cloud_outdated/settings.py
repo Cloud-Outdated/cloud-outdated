@@ -148,6 +148,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
 WHITENOISE_STATIC_PREFIX = "/static/"
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 ROOT_URLCONF = "cloud_outdated.urls"
 
 TEMPLATES = [
