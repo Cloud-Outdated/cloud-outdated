@@ -17,6 +17,7 @@ class BaseView(PageTitleMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["company_name"] = settings.COMPANY_NAME
+        context["site_base_url"] = settings.BASE_URL
 
         return context
 
