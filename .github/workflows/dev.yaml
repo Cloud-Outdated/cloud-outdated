@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - feature/social-tags
 
 jobs:
   build_deploy:
