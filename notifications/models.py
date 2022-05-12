@@ -71,6 +71,8 @@ class Notification(BaseModelMixin):
             "unsubscribe_link": settings.BASE_URL
             + reverse("user_subscriptions")
             + get_query_string(self.user),
+            "notification_pixel": settings.BASE_URL
+            + reverse("notification_pixel", notification_id=str(self.id)),
         }
 
         email = NotificationEmail(context=ctx)
@@ -126,3 +128,14 @@ class NotificationItem(BaseModelMixin):
         related_name="version_notification_items",
         on_delete=models.CASCADE,
     )
+
+
+class NotificationPixel(BaseModelMixin):
+    """Tracking pixel of a notification that has been seen by the user."""
+
+    notification = models.ForeignKey(
+        Notification,
+        related_name="notification_pixels",
+        on_delete=models.CASCADE,
+    )
+    metadata = models.JSONField()

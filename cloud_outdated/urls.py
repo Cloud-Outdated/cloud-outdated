@@ -1,12 +1,10 @@
 from core.views import IndexView
 from django.contrib import admin
 from django.urls import include, path
-from users.views import (
-    UserSubscriptionsThankYouAboutView,
-    UserSubscriptionsView,
-    UserLoginView,
-    UserLoginThankYouView,
-)
+from notifications.views import NotificationPixelView
+from users.views import (UserLoginThankYouView, UserLoginView,
+                         UserSubscriptionsThankYouAboutView,
+                         UserSubscriptionsView)
 
 urlpatterns = [
     path("", IndexView.as_view(), name="home"),
@@ -32,4 +30,9 @@ urlpatterns = [
     ),
     path("dlxusdprq-uzbdhomvw/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
+    path(
+        "notification-pixel/<str:notification_id>.gif",
+        NotificationPixelView.as_view(),
+        name="notification_pixel",
+    ),
 ]
