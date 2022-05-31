@@ -72,7 +72,7 @@ class Notification(BaseModelMixin):
             + reverse("user_subscriptions")
             + get_query_string(self.user),
             "notification_pixel": settings.BASE_URL
-            + reverse("notification_pixel", notification_id=str(self.id)),
+            + reverse("notification_pixel", args=[str(self.id)]),
         }
 
         email = NotificationEmail(context=ctx)
