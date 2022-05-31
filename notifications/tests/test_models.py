@@ -70,6 +70,19 @@ class NotifactionSendTestCase(TestCase):
         assert "Unsubscribe or update your subscriptions" in email.html
         assert settings.BASE_URL + reverse("user_subscriptions") in email.html
 
+    def test_notification_pixel(self):
+        notification = NotificationFactory(user=self.user, sent=None)
+        version = VersionFactory(deprecated=timezone.now() - timedelta(days=1))
+        NotificationItemFactory(notification=notification, version=version)
+
+        email = notification.send()
+
+        assert (
+            settings.BASE_URL
+            + reverse("notification_pixel", args=[str(notification.id)])
+            in email.html
+        )
+
     def test_ordered_versions(self):
         notification = NotificationFactory(user=self.user, sent=None)
         for _ in range(10):
