@@ -352,6 +352,48 @@ services = {
             "Microsoft SQL Server Web Edition",
         ],
     ),
+    "aws_lambda_nodejs": Service(
+        platform=aws,
+        name="aws_lambda_nodejs",
+        label="AWS Lambda Node.js",
+        name_alternatives=["Nodejs lambda"],
+    ),
+    "aws_lambda_python": Service(
+        platform=aws,
+        name="aws_lambda_python",
+        label="AWS Lambda Python",
+        name_alternatives=["Python lambda"],
+    ),
+    "aws_lambda_ruby": Service(
+        platform=aws,
+        name="aws_lambda_ruby",
+        label="AWS Lambda Ruby",
+        name_alternatives=["Ruby lambda"],
+    ),
+    "aws_lambda_java": Service(
+        platform=aws,
+        name="aws_lambda_java",
+        label="AWS Lambda Java",
+        name_alternatives=["Java lambda"],
+    ),
+    "aws_lambda_go": Service(
+        platform=aws,
+        name="aws_lambda_go",
+        label="AWS Lambda Go",
+        name_alternatives=["Go lambda"],
+    ),
+    "aws_lambda_dotnet": Service(
+        platform=aws,
+        name="aws_lambda_dotnet",
+        label="AWS Lambda .NET",
+        name_alternatives=["Dotnet lambda"],
+    ),
+    "aws_lambda_custom": Service(
+        platform=aws,
+        name="aws_lambda_custom",
+        label="AWS Lambda Custom",
+        name_alternatives=["Custom lambda"],
+    ),
     "azure_mariadb_server": Service(
         platform=azure,
         name="azure_mariadb_server",
