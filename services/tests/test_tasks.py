@@ -6,6 +6,27 @@ from services.tasks import PollService
 from services.tests.factories import VersionFactory
 
 
+class VersionServiceUpdate(TestCase):
+    def test_activemq_deprecated_versions(self):
+        aws_activemq = services["aws_activemq"]
+        version_to_deprecate = VersionFactory(service=aws_activemq.name)
+
+        def _activemq_pollfn():
+            return ["active"]
+
+        ps = PollService(service=aws_activemq, poll_fn=_activemq_pollfn)
+        ps.poll()
+
+        assert ps.added_versions == _activemq_pollfn()
+        assert ps.deprecated_versions == [version_to_deprecate.version]
+        assert (
+            Version.objects.filter(service=aws_activemq.name)
+            .exclude(deprecated=None)
+            .count()
+            == 1
+        )
+
+
 class VersionServiceIsDeprecatedThenSupportedAgain(TestCase):
     def test_activemq_renew_and_added_support(self):
         aws_activemq = services["aws_activemq"]
