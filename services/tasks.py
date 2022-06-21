@@ -22,6 +22,10 @@ from services.models import Version
 logger = structlog.get_logger(__name__)
 
 
+class ScrappingError(Exception):
+    pass
+
+
 def get_gcp_credentials():
     """Read GCP credentials from settings in order to use it with GCP clients."""
 
@@ -498,8 +502,103 @@ def aws_eks():
     return supported_versions
 
 
-class ScrappingError(Exception):
-    pass
+def _aws_lambda(runtime_type):
+    """Get AWS Lambda available versions by runtime type.
+
+    Args:
+        runtime_type (str): Runtime type (e.g. python)
+
+    Raises:
+        ScrappingError: When no versions are found.
+
+    Returns:
+        list[str]: Supported versions.
+    """
+
+    page = requests.get(
+        "https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html"
+    )
+    soup = BeautifulSoup(page.content, "html.parser")
+    server_version_title = soup.find(
+        string=(
+            f"{runtime_type} runtimes" if runtime_type != "Custom" else "Custom runtime"
+        )
+    )
+    server_version_table = server_version_title.parent.parent.parent.parent.parent
+    supported_versions = []
+    for child in server_version_table.findChildren("tr"):
+        data = child.findChildren("td")
+        if data:
+            version = str(data[1].text.strip())
+            supported_versions.append(version)
+    if supported_versions == []:
+        raise ScrappingError(
+            f"AWS Lambda versions not found for {runtime_type} runtime"
+        )
+    return supported_versions
+
+
+def aws_lambda_nodejs():
+    """Get AWS Lambda Node.js compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_lambda("Node.js")
+
+
+def aws_lambda_python():
+    """Get AWS Lambda Python compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_lambda("Python")
+
+
+def aws_lambda_ruby():
+    """Get AWS Lambda Ruby compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_lambda("Ruby")
+
+
+def aws_lambda_java():
+    """Get AWS Lambda Java compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_lambda("Java")
+
+
+def aws_lambda_go():
+    """Get AWS Lambda Go compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_lambda("Go")
+
+
+def aws_lambda_dotnet():
+    """Get AWS Lambda .NET compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_lambda(".NET")
+
+
+def aws_lambda_custom():
+    """Get AWS Lambda Custom compatible versions.
+
+    Returns:
+        list[str] of supported versions
+    """
+    return _aws_lambda("Custom")
 
 
 def azure_mariadb_server():
@@ -899,6 +998,13 @@ def poll_aws():
             service=services["aws_sqlserver_web"],
             poll_fn=aws_sqlserver_web,
         ),
+        PollService(service=services["aws_lambda_nodejs"], poll_fn=aws_lambda_nodejs),
+        PollService(service=services["aws_lambda_python"], poll_fn=aws_lambda_python),
+        PollService(service=services["aws_lambda_ruby"], poll_fn=aws_lambda_ruby),
+        PollService(service=services["aws_lambda_java"], poll_fn=aws_lambda_java),
+        PollService(service=services["aws_lambda_go"], poll_fn=aws_lambda_go),
+        PollService(service=services["aws_lambda_dotnet"], poll_fn=aws_lambda_dotnet),
+        PollService(service=services["aws_lambda_custom"], poll_fn=aws_lambda_custom),
     ]
 
     for service in aws_services:
