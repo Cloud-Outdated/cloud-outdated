@@ -3,14 +3,14 @@ from datetime import datetime
 
 import backoff
 import structlog
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.utils import timezone
-from django.conf import settings
+from services.models import Version
+from subscriptions.models import Subscription
 
 from notifications.models import Notification, NotificationItem
-from subscriptions.models import Subscription
-from services.models import Version
 
 UserProfile = get_user_model()
 logger = structlog.get_logger(__name__)
@@ -58,8 +58,11 @@ def send_user_notification(user):
         )
 
         new_version_ids = get_new_versions_for_user(user, subscribed_service_keys)
+        deprecated_version_ids = get_deprecated_versions_for_user(
+            user, subscribed_service_keys
+        )
 
-        notify_user(user, new_version_ids)
+        notify_user(user, new_version_ids + deprecated_version_ids)
 
 
 def get_new_versions_for_user(user, service_keys):
@@ -94,6 +97,39 @@ def get_new_versions_for_user(user, service_keys):
     new_version_ids = set(available_version_ids) - set(past_notification_version_ids)
 
     return [str(id) for id in list(new_version_ids)]
+
+
+def get_deprecated_versions_for_user(user, service_keys):
+    """Get deprecated versions about which user was not notified yet.
+
+    Args:
+        user (users.models.UserProfile): user instance
+        service_keys (list[str]): list of service keys as stored in db
+
+    Returns:
+        list: ids of newly deprecated versions
+    """
+    deprecated_version_ids = (
+        Version.objects.filter(
+            service__in=service_keys,
+        )
+        .filter(Q(deprecated__lt=timezone.now()))
+        .values_list("id", flat=True)
+    )
+
+    newly_deprecated_version_ids = []
+
+    for version_id in deprecated_version_ids:
+        if (
+            NotificationItem.objects.filter(
+                notification__user=user,
+                version=version_id,
+            ).count()
+            <= 1
+        ):
+            newly_deprecated_version_ids.append(str(version_id))
+
+    return newly_deprecated_version_ids
 
 
 @backoff.on_exception(

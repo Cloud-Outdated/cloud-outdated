@@ -1,17 +1,19 @@
-from unittest.mock import call, patch
-from django.utils import timezone
 from datetime import timedelta
+from unittest.mock import call, patch
+
+from django.test import TestCase
+from django.utils import timezone
+from notifications.models import Notification, NotificationItem
 from notifications.tasks import (
+    get_deprecated_versions_for_user,
+    get_new_versions_for_user,
     notify_user,
     send_notifications,
     send_user_notification,
-    get_new_versions_for_user,
 )
-from django.test import TestCase
-from notifications.models import Notification, NotificationItem
 from notifications.tests.factories import NotificationFactory, NotificationItemFactory
-from subscriptions.tests.factories import SubscriptionFactory
 from services.tests.factories import VersionFactory
+from subscriptions.tests.factories import SubscriptionFactory
 from users.tests.factories import UserProfileFactory
 
 
@@ -111,4 +113,26 @@ class NotifyUserTestCase(TestCase):
                 notification=user_notifications.first()
             ).count()
             == 2
+        )
+
+    @patch("notifications.models.Notification.send")
+    def test_deprecated_versions(self, mocked_notification_send):
+        user = UserProfileFactory()
+        version_1 = VersionFactory(deprecated=timezone.now() - timedelta(days=1))
+
+        assert Notification.objects.filter(user=user).count() == 0
+
+        notify_user(
+            user,
+            get_deprecated_versions_for_user(user, service_keys=[version_1.service]),
+        )
+        mocked_notification_send.assert_called_once()
+
+        user_notifications = Notification.objects.filter(user=user)
+        assert len(user_notifications) == 1
+        assert (
+            NotificationItem.objects.filter(
+                notification=user_notifications.first()
+            ).count()
+            == 1
         )
