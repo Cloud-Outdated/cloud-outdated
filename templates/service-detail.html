@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="pt-24">
+        <section class="bg-gray-100 pt-8">
+            <div class="container mx-auto px-2 pt-4 pb-12 text-gray-800">
+                <h1 class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800">
+                    {{ service.label }}
+                </h1>
+                <p class="w-full text-center">
+                    {{ service.platform.label }}
+                </p>
+            </div>
+            <div class="container mx-auto px-2 pt-4 pb-12 text-gray-800">
+                <div class="py-8 text-base leading-7 space-y-6 text-gray-600 text-center">
+                    {% if available_versions %}
+                        <h2 class="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">
+                            Available versions
+                        </h2>
+                        <table class="table-auto mx-auto">
+                            <tbody>
+                                {% for v in available_versions %}
+                                    <tr>
+                                        <td>{{ v.version }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endif %}
+                    {% if unsupported_versions %}
+                        <h2 class="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">
+                            Unsupported versions*
+                        </h2>
+                        <table class="table-auto mx-auto">
+                            <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Version</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for v in unsupported_versions %}
+                                    <tr>
+                                        <td>{{ v.deprecated }}</td>
+                                        <td>{{ v.version }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <p>
+                            *Starting from {{ started_polling }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock content %}

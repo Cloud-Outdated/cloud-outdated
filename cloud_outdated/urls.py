@@ -1,10 +1,14 @@
-from core.views import IndexView
+from core.views import IndexView, NotFoundView
 from django.contrib import admin
 from django.urls import include, path
 from notifications.views import NotificationPixelView
-from users.views import (UserLoginThankYouView, UserLoginView,
-                         UserSubscriptionsThankYouAboutView,
-                         UserSubscriptionsView)
+from services.views import ServiceDetailView
+from users.views import (
+    UserLoginThankYouView,
+    UserLoginView,
+    UserSubscriptionsThankYouAboutView,
+    UserSubscriptionsView,
+)
 
 urlpatterns = [
     path("", IndexView.as_view(), name="home"),
@@ -35,4 +39,12 @@ urlpatterns = [
         NotificationPixelView.as_view(),
         name="notification_pixel",
     ),
+    path(
+        "service/<str:platform>/<str:service_name>",
+        ServiceDetailView.as_view(),
+        name="service_detail",
+    ),
 ]
+
+
+handler404 = NotFoundView.as_view()

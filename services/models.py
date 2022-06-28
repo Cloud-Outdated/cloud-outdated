@@ -1,6 +1,10 @@
-from django.db import models
+from datetime import datetime
 
 from core.models import BaseModelMixin
+from django.db import models
+from django.db.models import Q
+from django.utils import timezone
+
 from .base import service_choices, services
 
 
@@ -26,6 +30,55 @@ class Version(BaseModelMixin):
                 name="unique_service_version",
             ),
         ]
+
+    @classmethod
+    def available(cls, service_list):
+        """List of available versions for a given service list.
+
+        Args:
+            service_list (List): Service names as stored in db
+
+        Returns:
+            QuerySet: Available versions.
+        """
+        return (
+            cls.objects.filter(
+                service__in=service_list,
+            )
+            .filter(Q(deprecated__gte=timezone.now()) | Q(deprecated=None))
+            .filter(Q(released__lte=datetime.today()) | Q(released=None))
+        )
+
+    @classmethod
+    def unsupported(cls, service_list):
+        """List of available versions for a given service list.
+
+        Args:
+            service_list (List): Service names as stored in db
+
+        Returns:
+            QuerySet: Available versions.
+        """
+        return cls.objects.filter(
+            service__in=service_list,
+        ).filter(Q(deprecated__lt=timezone.now()))
+
+    @classmethod
+    def bigbang(cls, service_name):
+        """Returns the beginning of time since we started polling for a particular service.
+
+        Args:
+            service_name (str): Service name as stored in db
+
+        Returns:
+            Optional[datetime]: Date since we started polling.
+        """
+        oldest_record = (
+            cls.objects.filter(service=service_name).order_by("created").first()
+        )
+        if oldest_record:
+            return oldest_record.created
+        return None
 
     def __str__(self) -> str:
         return f"{str(self.id)} | {self.service} {self.version}"
