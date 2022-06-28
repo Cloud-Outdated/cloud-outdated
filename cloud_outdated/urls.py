@@ -2,7 +2,7 @@ from core.views import IndexView, NotFoundView
 from django.contrib import admin
 from django.urls import include, path
 from notifications.views import NotificationPixelView
-from services.views import ServiceDetailView
+from services.views import ServiceDetailView, ServiceListView
 from users.views import (
     UserLoginThankYouView,
     UserLoginView,
@@ -43,6 +43,11 @@ urlpatterns = [
         "service/<str:platform>/<str:service_name>",
         ServiceDetailView.as_view(),
         name="service_detail",
+    ),
+    path(
+        "services/",
+        ServiceListView.as_view(),
+        name="service_list",
     ),
 ]
 

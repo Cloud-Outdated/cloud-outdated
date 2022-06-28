@@ -20,3 +20,13 @@ class ServiceDetailView(BaseView):
                 started_polling=Version.bigbang(service_key),
             )
         raise Http404
+
+
+class ServiceListView(BaseView):
+    template_name = "service-list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["services"] = services.values()
+
+        return context
