@@ -85,3 +85,8 @@ Single installation per account, not per deploy env.
 - install New Relic integration for all Lambdas in account
     - `aws-vault exec cloud-outdated-x --no-session -- newrelic-lambda integrations install --nr-account-id 3438061 --nr-api-key {REDACTED - SEE aws_ssm_parameter.new-relic-api-key} --nr-region eu`
     - `aws-vault exec cloud-outdated-x --no-session -- newrelic-lambda layers install -f all --nr-account-id 3438061 --nr-api-key {REDACTED - SEE aws_ssm_parameter.new-relic-api-key} --nr-region eu --enable-extension-function-logs --aws-region eu-central-1`
+
+
+### Adding/updating scrapped service
+
+When adding or updating a service whose versions are fetched by using webscrapping, make sure to also update the source_url in the service definition located in `services/base.py`

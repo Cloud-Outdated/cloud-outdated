@@ -37,6 +37,7 @@ class Service:
         name_alternatives: list of alternative names; service full name etc.
         lable: value displayed to the end user, name is used if not set
         public: service is visible to the users in the UI and is used in notifications
+        source_url: URL that points to the source of truth
     """
 
     platform: Platform
@@ -44,6 +45,7 @@ class Service:
     name_alternatives: list  # [Elastic Kubernetes Service, AWS Kubernetes]
     label: Optional[str] = None  # what is display to the user
     public: bool = True
+    source_url: str = ""  # URL that points to the source of truth
 
     def __post_init__(self):
         if self.label is None:
@@ -57,6 +59,7 @@ services = {
         label="EKS",
         name_alternatives=["Elastic Kubernetes Service"],
         public=True,
+        source_url="https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html",
     ),
     "gcp_gke": Service(
         platform=gcp,
@@ -71,6 +74,7 @@ services = {
         label="AKS",
         name_alternatives=["Azure Kubernetes Service"],
         public=True,
+        source_url="https://docs.microsoft.com/en-us/azure/aks/supported-kubernetes-versions",
     ),
     "gcp_cloudsql_postgres": Service(
         platform=gcp,
@@ -95,18 +99,21 @@ services = {
         name="gcp_dataproc",
         label="Dataproc",
         name_alternatives=["Dataproc"],
+        source_url="https://cloud.google.com/dataproc/docs/concepts/versioning/dataproc-versions",
     ),
     "gcp_dataproc_os": Service(
         platform=gcp,
         name="gcp_dataproc_os",
         label="Dataproc OS Images",
         name_alternatives=["Dataproc OS Images", "Dataproc OS"],
+        source_url="https://cloud.google.com/dataproc/docs/concepts/versioning/overview",
     ),
     "gcp_memorystore_redis": Service(
         platform=gcp,
         name="gcp_memorystore_redis",
         label="Memorystore Redis",
         name_alternatives=["GCP Redis", "Redis"],
+        source_url="https://cloud.google.com/memorystore/docs/redis/supported-versions",
     ),
     "aws_elasticache_redis": Service(
         platform=aws,
@@ -357,78 +364,91 @@ services = {
         name="aws_lambda_nodejs",
         label="AWS Lambda Node.js",
         name_alternatives=["Nodejs lambda"],
+        source_url="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html",
     ),
     "aws_lambda_python": Service(
         platform=aws,
         name="aws_lambda_python",
         label="AWS Lambda Python",
         name_alternatives=["Python lambda"],
+        source_url="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html",
     ),
     "aws_lambda_ruby": Service(
         platform=aws,
         name="aws_lambda_ruby",
         label="AWS Lambda Ruby",
         name_alternatives=["Ruby lambda"],
+        source_url="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html",
     ),
     "aws_lambda_java": Service(
         platform=aws,
         name="aws_lambda_java",
         label="AWS Lambda Java",
         name_alternatives=["Java lambda"],
+        source_url="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html",
     ),
     "aws_lambda_go": Service(
         platform=aws,
         name="aws_lambda_go",
         label="AWS Lambda Go",
         name_alternatives=["Go lambda"],
+        source_url="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html",
     ),
     "aws_lambda_dotnet": Service(
         platform=aws,
         name="aws_lambda_dotnet",
         label="AWS Lambda .NET",
         name_alternatives=["Dotnet lambda"],
+        source_url="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html",
     ),
     "aws_lambda_custom": Service(
         platform=aws,
         name="aws_lambda_custom",
         label="AWS Lambda Custom",
         name_alternatives=["Custom lambda"],
+        source_url="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html",
     ),
     "azure_mariadb_server": Service(
         platform=azure,
         name="azure_mariadb_server",
         label="MariaDB Server",
         name_alternatives=["MariaDB", "Azure MariaDB"],
+        source_url="https://docs.microsoft.com/en-us/rest/api/mariadb/servers/create",
     ),
     "azure_postgresql_server": Service(
         platform=azure,
         name="azure_postgresql_server",
         label="PostgreSQL Server",
         name_alternatives=["Postgres", "Azure PostgreSQL", "Azure Postgres"],
+        source_url="https://docs.microsoft.com/en-us/azure/postgresql/concepts-version-policy",
     ),
     "azure_redis_server": Service(
         platform=azure,
         name="azure_redis_server",
         label="Redis Server",
         name_alternatives=["Redis", "Azure Redis"],
+        source_url="https://docs.microsoft.com/en-us/rest/api/redis/redis/update",
     ),
     "azure_mysql_server": Service(
         platform=azure,
         name="azure_mysql_server",
         label="MySQL Server",
         name_alternatives=["MySQL", "Azure MySQL"],
+        source_url="https://docs.microsoft.com/en-us/azure/mysql/concepts-version-policy",
     ),
     "azure_hdinsight": Service(
         platform=azure,
         name="azure_hdinsight",
         label="HDInsight",
         name_alternatives=["HDInsight"],
+        source_url="https://docs.microsoft.com/en-us/azure/hdinsight/hdinsight-component-versioning",
     ),
     "azure_databricks": Service(
         platform=azure,
         name="azure_databricks",
         label="Databricks",
         name_alternatives=["Databricks"],
+        source_url="https://docs.microsoft.com/en-us/azure/databricks/release-notes/runtime/releases",
     ),
 }
 

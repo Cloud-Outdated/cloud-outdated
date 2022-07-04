@@ -9,6 +9,9 @@
                 <p class="w-full text-center">
                     {{ service.platform.label }}
                 </p>
+                <p class="w-full text-center">
+                    We started collecting information about this service on {{ started_polling }}
+                </p>
             </div>
             <div class="container mx-auto px-2 pt-4 pb-12 text-gray-800">
                 <div class="py-8 text-base leading-7 space-y-6 text-gray-600 text-center">
@@ -28,7 +31,7 @@
                     {% endif %}
                     {% if unsupported_versions %}
                         <h2 class="w-full my-2 text-3xl font-bold leading-tight text-center text-gray-800">
-                            Unsupported versions*
+                            Unsupported versions
                         </h2>
                         <table class="table-auto mx-auto">
                             <thead>
@@ -46,9 +49,6 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                        <p>
-                            *Starting from {{ started_polling }}
-                        </p>
                     {% endif %}
                 </div>
             </div>
