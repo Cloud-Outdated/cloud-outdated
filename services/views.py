@@ -11,7 +11,7 @@ class ServiceDetailView(BaseView):
 
     def get(self, request, platform, service_name):
         service_key = f"{platform}_{service_name}"
-        if service_key in services:
+        if service_key in services and services[service_key].public:
             return super().get(
                 request,
                 service=services[service_key],
@@ -27,6 +27,6 @@ class ServiceListView(BaseView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["services"] = services.values()
+        context["services"] = [s for s in services.values() if s.public]
 
         return context
