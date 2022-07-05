@@ -2,6 +2,9 @@
 {% block content %}
     <div class="pt-24">
         <section class="bg-gray-100 pt-8">
+            <p class="w-full text-center text-sm text-gray-400">
+                We started collecting information about this service on {{ started_polling }}
+            </p>
             <div class="container mx-auto px-2 pt-4 pb-12 text-gray-800">
                 <h1 class="w-full my-2 text-5xl font-bold leading-tight text-center text-gray-800">
                     {{ service.label }}
@@ -9,11 +12,8 @@
                         <a href="{{ service.source_url }}" class="text-xl" title="Source of information" target="_blank">ℹ️</a>
                     {% endif %}
                 </h1>
-                <p class="w-full text-center">
+                <p class="w-full text-center text-xl">
                     {{ service.platform.label }}
-                </p>
-                <p class="w-full text-center">
-                    We started collecting information about this service on {{ started_polling }}
                 </p>
             </div>
             <div class="container mx-auto px-2 pt-4 pb-12 text-gray-800">
