@@ -20,6 +20,7 @@ sitemaps = {
 }
 
 urlpatterns = [
+    path("robots.txt", include("robots.urls")),
     path(
         "sitemap.xml",
         sitemap,

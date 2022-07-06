@@ -17,3 +17,4 @@ backoff
 beautifulsoup4
 requests
 python-dateutil
+django-robots
