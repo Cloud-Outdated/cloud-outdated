@@ -15,7 +15,7 @@ class ServiceDetailViewSitemap(sitemaps.Sitemap):
     def location(self, item):
         return reverse(
             "service_detail",
-            args=[item.platform.name, "_".join(item.name.split("_")[1:])],
+            args=[item.name_clean],
         )
 
     def lastmod(self, item):

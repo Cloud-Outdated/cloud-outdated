@@ -9,8 +9,8 @@ from .base import services
 class ServiceDetailView(BaseView):
     template_name = "service-detail.html"
 
-    def get(self, request, platform, service_name):
-        service_key = f"{platform}_{service_name}"
+    def get(self, request, service_name):
+        service_key = service_name.replace("-", "_")
         if service_key in services and services[service_key].public:
             return super().get(
                 request,

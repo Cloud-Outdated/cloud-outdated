@@ -56,7 +56,7 @@ urlpatterns = [
         name="notification_pixel",
     ),
     path(
-        "service/<str:platform>/<str:service_name>",
+        "service/<str:service_name>",
         ServiceDetailView.as_view(),
         name="service_detail",
     ),

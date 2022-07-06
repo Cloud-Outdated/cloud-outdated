@@ -51,6 +51,11 @@ class Service:
         if self.label is None:
             self.label = self.name
 
+    @property
+    def name_clean(self):
+        """Name as required to boast SEO. Using dashes instead of underscores."""
+        return self.name.replace("_", "-")
+
 
 services = {
     "aws_eks": Service(

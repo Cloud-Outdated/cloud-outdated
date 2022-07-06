@@ -39,7 +39,7 @@ class Version(BaseModelMixin):
             service_list (List): Service names as stored in db
 
         Returns:
-            QuerySet: Available versions.
+            QuerySet: Available versions ordered by 'version' desc.
         """
         return (
             cls.objects.filter(
@@ -47,21 +47,25 @@ class Version(BaseModelMixin):
             )
             .filter(Q(deprecated__gte=timezone.now()) | Q(deprecated=None))
             .filter(Q(released__lte=datetime.today()) | Q(released=None))
-        )
+        ).order_by("-version")
 
     @classmethod
     def unsupported(cls, service_list):
-        """List of available versions for a given service list.
+        """List of unsupported versions for a given service list.
 
         Args:
             service_list (List): Service names as stored in db
 
         Returns:
-            QuerySet: Available versions.
+            QuerySet: Unsupported versions ordered by 'version' desc.
         """
-        return cls.objects.filter(
-            service__in=service_list,
-        ).filter(Q(deprecated__lt=timezone.now()))
+        return (
+            cls.objects.filter(
+                service__in=service_list,
+            )
+            .filter(Q(deprecated__lt=timezone.now()))
+            .order_by("-version")
+        )
 
     @classmethod
     def bigbang(cls, service_name):
