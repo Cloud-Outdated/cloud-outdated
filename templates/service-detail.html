@@ -15,6 +15,11 @@
                 <p class="w-full text-center text-xl">
                     {{ service.platform.label }}
                 </p>
+                <div class="w-full flex justify-center">
+                    <button class="mx-auto lg:mx-0 hover:underline gradient text-white font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+                        <a href="{% url "user_subscriptions" %}">Subscribe</a>
+                    </button>
+                </div>
             </div>
             <div class="container mx-auto px-2 pt-4 pb-12 text-gray-800">
                 <div class="py-8 text-base leading-7 space-y-6 text-gray-600 text-center">
