@@ -24,3 +24,11 @@ class BaseView(PageTitleMixin, TemplateView):
 
 class IndexView(BaseView):
     template_name = "index.html"
+
+
+class NotFoundView(BaseView):
+    template_name = "not-found.html"
+
+    def get(self, *args, **kwargs):
+        context = self.get_context_data(**kwargs)
+        return self.render_to_response(context, status=404)

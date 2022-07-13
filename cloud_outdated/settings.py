@@ -34,7 +34,7 @@ environ.FileAwareEnv.read_env(os.path.join(BASE_DIR, env.str("ENV_PATH", ".env")
 
 COMPANY_NAME = "Cloud Outdated"
 BASE_URL_ENVS = {
-    "local": "http://localhost",
+    "local": "http://localhost:8020",
     "dev": "https://dev.cloud-outdated.com",
     "prod": "https://cloud-outdated.com",
 }
@@ -84,7 +84,10 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "django.contrib.sitemaps",
+    "django.contrib.sites",
     "django.contrib.staticfiles",
+    "robots",
     "analytical",
     "anymail",
     "captcha",
@@ -94,6 +97,10 @@ INSTALLED_APPS = [
     "subscriptions",
     "users",
 ]
+
+# Configuration for Site framework
+SITE_ID = 1
+
 
 # used by SES
 # poll_aws uses zappa managed role

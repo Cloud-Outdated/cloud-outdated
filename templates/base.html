@@ -31,10 +31,6 @@
         <!-- Required Stylesheets -->
         <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
         <link rel="stylesheet" href="https://unpkg.com/flowbite@1.4.5/dist/flowbite.min.css" />
-        <!-- Required scripts -->
-        <script src="https://unpkg.com/vue@2.6.14/dist/vue.min.js"></script>
-        <!-- Load utilities -->
-        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
         <!-- Cookie banner -->
         <script type="text/javascript" id="cookiebanner" src="https://cdnjs.cloudflare.com/ajax/libs/cookie-banner/1.2.2/cookiebanner.min.js"></script>
         <style>
@@ -76,6 +72,11 @@
                                 <a class="{% if request.path == home %}text-black{% else %}text-gray-800 opacity-75{% endif %} inline-block py-2 px-4 font-bold no-underline"
                                    href="{{ home }}">Home</a>
                             </li>
+                            <li class="mr-3">
+                                {% url "service_list" as service_list %}
+                                <a class="{% if request.path == service_list %}text-black{% else %}text-gray-800 opacity-75{% endif %} inline-block py-2 px-4 font-bold no-underline"
+                                   href="{{ service_list }}">Services</a>
+                            </li>
                             {% if user.is_authenticated is False %}
                                 <li class="mr-3">
                                     {% url "user_login" as login %}
@@ -110,7 +111,7 @@
                         </div>
                         <div class="flex-1">
                             <p class="uppercase text-gray-500 md:mb-6">
-                                Company
+                                Team
                             </p>
                             <ul class="list-reset mb-6">
                                 <li class="mt-2 inline-block mr-2 md:block md:mr-0">
