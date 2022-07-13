@@ -1,12 +1,9 @@
 import logging
-from datetime import datetime
 
 import backoff
 import structlog
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.db.models import Q
-from django.utils import timezone
 from services.models import Version
 from subscriptions.models import Subscription
 
@@ -75,14 +72,7 @@ def get_new_versions_for_user(user, service_keys):
     Returns:
         list: ids of new versions
     """
-    available_version_ids = (
-        Version.objects.filter(
-            service__in=service_keys,
-        )
-        .filter(Q(deprecated__gte=timezone.now()) | Q(deprecated=None))
-        .filter(Q(released__lte=datetime.today()) | Q(released=None))
-        .values_list("id", flat=True)
-    )
+    available_version_ids = Version.available(service_keys).values_list("id", flat=True)
 
     past_notification_version_ids = (
         NotificationItem.objects.filter(
@@ -109,12 +99,8 @@ def get_deprecated_versions_for_user(user, service_keys):
     Returns:
         list: ids of newly deprecated versions
     """
-    deprecated_version_ids = (
-        Version.objects.filter(
-            service__in=service_keys,
-        )
-        .filter(Q(deprecated__lt=timezone.now()))
-        .values_list("id", flat=True)
+    deprecated_version_ids = Version.unsupported(service_keys).values_list(
+        "id", flat=True
     )
 
     newly_deprecated_version_ids = []

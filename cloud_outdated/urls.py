@@ -1,12 +1,33 @@
-from core.views import IndexView
+from core.views import IndexView, NotFoundView
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path
 from notifications.views import NotificationPixelView
-from users.views import (UserLoginThankYouView, UserLoginView,
-                         UserSubscriptionsThankYouAboutView,
-                         UserSubscriptionsView)
+from services.sitemaps import ServiceDetailViewSitemap
+from services.views import ServiceDetailView, ServiceListView
+from users.views import (
+    UserLoginThankYouView,
+    UserLoginView,
+    UserSubscriptionsThankYouAboutView,
+    UserSubscriptionsView,
+)
+
+from .sitemaps import ContentPagesSitemap, LoginViewSitemap
+
+sitemaps = {
+    "login": LoginViewSitemap,
+    "content": ContentPagesSitemap,
+    "services": ServiceDetailViewSitemap,
+}
 
 urlpatterns = [
+    path("robots.txt", include("robots.urls")),
+    path(
+        "sitemap.xml",
+        sitemap,
+        {"sitemaps": sitemaps},
+        name="django.contrib.sitemaps.views.sitemap",
+    ),
     path("", IndexView.as_view(), name="home"),
     path(
         "user-subscriptions-thank-you/",
@@ -35,4 +56,17 @@ urlpatterns = [
         NotificationPixelView.as_view(),
         name="notification_pixel",
     ),
+    path(
+        "service/<str:service_name>",
+        ServiceDetailView.as_view(),
+        name="service_detail",
+    ),
+    path(
+        "services/",
+        ServiceListView.as_view(),
+        name="service_list",
+    ),
 ]
+
+
+handler404 = NotFoundView.as_view()
