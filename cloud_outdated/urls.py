@@ -12,10 +12,11 @@ from users.views import (
     UserSubscriptionsView,
 )
 
-from .sitemaps import StaticViewSitemap
+from .sitemaps import ContentPagesSitemap, LoginViewSitemap
 
 sitemaps = {
-    "static": StaticViewSitemap,
+    "login": LoginViewSitemap,
+    "content": ContentPagesSitemap,
     "services": ServiceDetailViewSitemap,
 }
 
