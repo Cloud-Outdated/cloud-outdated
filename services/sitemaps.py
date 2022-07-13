@@ -7,7 +7,7 @@ from services.models import Version
 
 class ServiceDetailViewSitemap(sitemaps.Sitemap):
     priority = 0.6
-    changefreq = "monthly"
+    changefreq = "weekly"
 
     def items(self):
         return [s for s in services.values() if s.public]
