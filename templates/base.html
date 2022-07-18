@@ -76,7 +76,7 @@
                             <li class="mr-3">
                                 {% url "service_list" as service_list %}
                                 <a class="{% if request.path == service_list %}text-black{% else %}text-gray-800 opacity-75{% endif %} inline-block py-2 px-4 font-bold no-underline"
-                                   href="{{ service_list }}">Services</a>
+                                   href="{{ service_list }}">Service versions</a>
                             </li>
                             {% if user.is_authenticated is False %}
                                 <li class="mr-3">
