@@ -57,7 +57,7 @@ jobs:
       # official recommendation is to re-run New Relic lambda layer after every deploy
       - name: New Relic lambda layer
         run: |
-          pip install --upgrade newrelic-lambda-cli
+          pip install --upgrade newrelic-lambda-cli emoji==1.7.0
           export NEW_RELIC_ACCOUNT_ID=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/${{ inputs.ENVIRONMENT }} --pristine -- printenv NEW_RELIC_ACCOUNT_ID)
           export NEW_RELIC_API_KEY=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/${{ inputs.ENVIRONMENT }} --pristine -- printenv NEW_RELIC_API_KEY)
           export NEW_RELIC_REGION=$(AWS_PROFILE=cloud-outdated-deploy-dev ./chamber exec cloud-outdated/${{ inputs.ENVIRONMENT }} --pristine -- printenv NEW_RELIC_REGION)
