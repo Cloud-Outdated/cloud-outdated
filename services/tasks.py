@@ -1,6 +1,5 @@
 import datetime
 import json
-import re
 from functools import reduce
 from typing import Callable
 
@@ -672,11 +671,8 @@ def azure_redis_server():
         prop = str(data[0].text.strip())
         if prop != "properties.redisVersion":
             continue
-        value = str(data[2].text.strip())
-        matched = re.search("\([0-9]+(,\s?[0-9]+)*\)", value)
-        return [
-            v.strip() for v in value[matched.start() + 1 : matched.end() - 1].split(",")
-        ]
+        value = str(data[2].text.strip()).strip(".").split("Supported versions:")[1]
+        return [v.strip() for v in value.split(",")]
     raise ScrappingError("Azure Redis version not found")
 
 
