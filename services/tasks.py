@@ -518,23 +518,27 @@ def _aws_lambda(runtime_type):
         "https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html"
     )
     soup = BeautifulSoup(page.content, "html.parser")
-    server_version_title = soup.find(
-        string=(
-            f"{runtime_type} runtimes" if runtime_type != "Custom" else "Custom runtime"
-        )
-    )
+    server_version_title = soup.find(string=("Supported Runtimes"))
     server_version_table = server_version_title.parent.parent.parent.parent.parent
     supported_versions = []
     for child in server_version_table.findChildren("tr"):
         data = child.findChildren("td")
         if data:
-            version = str(data[1].text.strip())
-            supported_versions.append(version)
+            supported_versions.append(
+                {
+                    "name": str(data[0].text.strip()),
+                    "version": str(data[1].text.strip()),
+                }
+            )
     if supported_versions == []:
         raise ScrappingError(
             f"AWS Lambda versions not found for {runtime_type} runtime"
         )
-    return supported_versions
+    return [
+        v["version"]
+        for v in supported_versions
+        if v["name"].lower().startswith(runtime_type.lower())
+    ]
 
 
 def aws_lambda_nodejs():
