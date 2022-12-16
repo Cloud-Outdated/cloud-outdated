@@ -8,13 +8,13 @@ import dateutil.parser
 import requests
 import structlog
 from bs4 import BeautifulSoup
-from core.util import notify_operator
 from django.conf import settings
 from django.utils import timezone
 from google.cloud import container_v1
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
+from core.util import notify_operator
 from services.base import Service, services
 from services.models import Version
 
@@ -772,10 +772,10 @@ def azure_databricks():
     )
     soup = BeautifulSoup(page.content, "html.parser")
     server_version_title = soup.find(
-        id="--supported-databricks-runtime-releases-and-support-schedule"
+        id="--supported-azure-databricks-runtime-releases-and-support-schedule"
     )
     server_version_table = (
-        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling
+        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling
     )
     supported_versions = []
     for child in server_version_table.findChildren("tr"):
