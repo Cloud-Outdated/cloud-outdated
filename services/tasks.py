@@ -720,14 +720,19 @@ def azure_aks():
     soup = BeautifulSoup(page.content, "html.parser")
     server_version_title = soup.find(id="aks-kubernetes-release-calendar")
     server_version_table = (
-        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling
+        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling
     )
     supported_versions = []
     for child in server_version_table.findChildren("tr"):
         data = child.findChildren("td")
         if data:
             version = str(data[0].text.strip())
-            if not version.lower().endswith("*"):
+            ga_date = str(data[3].text.strip())
+            if (
+                ga_date != "*"
+                and dateutil.parser.parse(ga_date).replace(day=1).timestamp()
+                <= datetime.datetime.now().timestamp()
+            ):
                 supported_versions.append(version)
     if supported_versions == []:
         raise ScrappingError("Azure Kubernetes versions not found")
