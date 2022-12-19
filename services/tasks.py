@@ -8,13 +8,13 @@ import dateutil.parser
 import requests
 import structlog
 from bs4 import BeautifulSoup
-from core.util import notify_operator
 from django.conf import settings
 from django.utils import timezone
 from google.cloud import container_v1
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
+from core.util import notify_operator
 from services.base import Service, services
 from services.models import Version
 
@@ -720,14 +720,19 @@ def azure_aks():
     soup = BeautifulSoup(page.content, "html.parser")
     server_version_title = soup.find(id="aks-kubernetes-release-calendar")
     server_version_table = (
-        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling
+        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling
     )
     supported_versions = []
     for child in server_version_table.findChildren("tr"):
         data = child.findChildren("td")
         if data:
             version = str(data[0].text.strip())
-            if not version.lower().endswith("*"):
+            ga_date = str(data[3].text.strip())
+            if (
+                ga_date != "*"
+                and dateutil.parser.parse(ga_date).replace(day=1).timestamp()
+                <= datetime.datetime.now().timestamp()
+            ):
                 supported_versions.append(version)
     if supported_versions == []:
         raise ScrappingError("Azure Kubernetes versions not found")
