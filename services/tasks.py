@@ -720,7 +720,7 @@ def azure_aks():
     soup = BeautifulSoup(page.content, "html.parser")
     server_version_title = soup.find(id="aks-kubernetes-release-calendar")
     server_version_table = (
-        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling
+        server_version_title.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling
     )
     supported_versions = []
     for child in server_version_table.findChildren("tr"):
