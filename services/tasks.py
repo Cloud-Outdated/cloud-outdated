@@ -947,18 +947,18 @@ def poll_aws():
             service=services["aws_activemq"],
             poll_fn=aws_activemq,
         ),
-        PollService(
-            service=services["aws_aurora"],
-            poll_fn=aws_aurora,
-        ),
-        PollService(
-            service=services["aws_aurora_mysql"],
-            poll_fn=aws_aurora_mysql,
-        ),
-        PollService(
-            service=services["aws_aurora_postgres"],
-            poll_fn=aws_aurora_postgres,
-        ),
+        # PollService(
+        #     service=services["aws_aurora"],
+        #     poll_fn=aws_aurora,
+        # ),
+        # PollService(
+        #     service=services["aws_aurora_mysql"],
+        #     poll_fn=aws_aurora_mysql,
+        # ),
+        # PollService(
+        #     service=services["aws_aurora_postgres"],
+        #     poll_fn=aws_aurora_postgres,
+        # ),
         PollService(
             service=services["aws_mariadb"],
             poll_fn=aws_mariadb,
