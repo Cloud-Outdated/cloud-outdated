@@ -947,62 +947,62 @@ def poll_aws():
             service=services["aws_activemq"],
             poll_fn=aws_activemq,
         ),
-        PollService(
-            service=services["aws_aurora"],
-            poll_fn=aws_aurora,
-        ),
-        PollService(
-            service=services["aws_aurora_mysql"],
-            poll_fn=aws_aurora_mysql,
-        ),
-        PollService(
-            service=services["aws_aurora_postgres"],
-            poll_fn=aws_aurora_postgres,
-        ),
-        PollService(
-            service=services["aws_mariadb"],
-            poll_fn=aws_mariadb,
-        ),
-        PollService(
-            service=services["aws_mysql"],
-            poll_fn=aws_mysql,
-        ),
-        PollService(
-            service=services["aws_postgres"],
-            poll_fn=aws_postgres,
-        ),
-        PollService(
-            service=services["aws_oracle_ee"],
-            poll_fn=aws_oracle_ee,
-        ),
-        PollService(
-            service=services["aws_oracle_ee_cdb"],
-            poll_fn=aws_oracle_ee_cdb,
-        ),
-        PollService(
-            service=services["aws_oracle_se2"],
-            poll_fn=aws_oracle_se2,
-        ),
-        PollService(
-            service=services["aws_oracle_se2_cdb"],
-            poll_fn=aws_oracle_se2_cdb,
-        ),
-        PollService(
-            service=services["aws_sqlserver_ee"],
-            poll_fn=aws_sqlserver_ee,
-        ),
-        PollService(
-            service=services["aws_sqlserver_se"],
-            poll_fn=aws_sqlserver_se,
-        ),
-        PollService(
-            service=services["aws_sqlserver_ex"],
-            poll_fn=aws_sqlserver_ex,
-        ),
-        PollService(
-            service=services["aws_sqlserver_web"],
-            poll_fn=aws_sqlserver_web,
-        ),
+        # PollService(
+        #     service=services["aws_aurora"],
+        #     poll_fn=aws_aurora,
+        # ),
+        # PollService(
+        #     service=services["aws_aurora_mysql"],
+        #     poll_fn=aws_aurora_mysql,
+        # ),
+        # PollService(
+        #     service=services["aws_aurora_postgres"],
+        #     poll_fn=aws_aurora_postgres,
+        # ),
+        # PollService(
+        #     service=services["aws_mariadb"],
+        #     poll_fn=aws_mariadb,
+        # ),
+        # PollService(
+        #     service=services["aws_mysql"],
+        #     poll_fn=aws_mysql,
+        # ),
+        # PollService(
+        #     service=services["aws_postgres"],
+        #     poll_fn=aws_postgres,
+        # ),
+        # PollService(
+        #     service=services["aws_oracle_ee"],
+        #     poll_fn=aws_oracle_ee,
+        # ),
+        # PollService(
+        #     service=services["aws_oracle_ee_cdb"],
+        #     poll_fn=aws_oracle_ee_cdb,
+        # ),
+        # PollService(
+        #     service=services["aws_oracle_se2"],
+        #     poll_fn=aws_oracle_se2,
+        # ),
+        # PollService(
+        #     service=services["aws_oracle_se2_cdb"],
+        #     poll_fn=aws_oracle_se2_cdb,
+        # ),
+        # PollService(
+        #     service=services["aws_sqlserver_ee"],
+        #     poll_fn=aws_sqlserver_ee,
+        # ),
+        # PollService(
+        #     service=services["aws_sqlserver_se"],
+        #     poll_fn=aws_sqlserver_se,
+        # ),
+        # PollService(
+        #     service=services["aws_sqlserver_ex"],
+        #     poll_fn=aws_sqlserver_ex,
+        # ),
+        # PollService(
+        #     service=services["aws_sqlserver_web"],
+        #     poll_fn=aws_sqlserver_web,
+        # ),
         PollService(service=services["aws_lambda_nodejs"], poll_fn=aws_lambda_nodejs),
         PollService(service=services["aws_lambda_python"], poll_fn=aws_lambda_python),
         PollService(service=services["aws_lambda_ruby"], poll_fn=aws_lambda_ruby),
