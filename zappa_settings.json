@@ -2,6 +2,7 @@
     "common": {
         "aws_region": "eu-central-1",
         "debug": false,
+        "slim_handler": true,
         "django_settings": "cloud_outdated.settings",
         "project_name": "cloud-outdated",
         "runtime": "python3.8",
