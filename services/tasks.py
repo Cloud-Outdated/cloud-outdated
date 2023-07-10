@@ -777,7 +777,7 @@ def azure_databricks():
     )
     soup = BeautifulSoup(page.content, "html.parser")
     server_version_title = soup.find(
-        id="--supported-databricks-runtime-releases-and-support-schedule"
+        id="--supported-azure-databricks-runtime-releases-and-support-schedule"
     )
     server_version_table = (
         server_version_title.nextSibling.nextSibling.nextSibling.nextSibling
